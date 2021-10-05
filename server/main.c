@@ -26,11 +26,13 @@ typedef struct {
 } Client_, *Client;
 
 enum StatusCode {
+    UNKNOWN = -2,
     ERROR = -1,
     DISCONNECT = 0,
     CONNECT = 1,
     CHAT = 2,
-    SETUSERNAME = 3
+    SETUSERNAME = 3,
+            OK = 4
 };
 struct CommonData {
     enum StatusCode Code;
@@ -74,7 +76,6 @@ bool Set(ConnectionTable table, Client client) {
         } else if (table->clients[flag + i]->address.sin_addr.s_addr == client->address.sin_addr.s_addr
                    && table->clients[flag + i]->address.sin_port == client->address.sin_port) {
             *table->clients[flag + i] = *client;
-            table->Size++;
             return true;
         }
         if (table->clients[flag - i] == NULL) {
@@ -85,7 +86,6 @@ bool Set(ConnectionTable table, Client client) {
         } else if (table->clients[flag - i]->address.sin_addr.s_addr == client->address.sin_addr.s_addr
                    && table->clients[flag - i]->address.sin_port == client->address.sin_port) {
             *table->clients[flag - i] = *client;
-            table->Size++;
             return true;
         }
         i++;
@@ -101,7 +101,6 @@ bool Set(ConnectionTable table, Client client) {
             } else if (table->clients[i]->address.sin_addr.s_addr == client->address.sin_addr.s_addr
                        && table->clients[i]->address.sin_port == client->address.sin_port) {
                 *table->clients[i] = *client;
-                table->Size++;
                 return true;
             }
             i++;
@@ -117,7 +116,6 @@ bool Set(ConnectionTable table, Client client) {
             } else if (table->clients[i]->address.sin_addr.s_addr == client->address.sin_addr.s_addr
                        && table->clients[i]->address.sin_port == client->address.sin_port) {
                 *table->clients[i] = *client;
-                table->Size++;
                 return true;
             }
             i--;
@@ -242,60 +240,73 @@ int main(int argc, char *argv[]) {
     }
 
     ConnectionTable table = NewTable();
-    Client_ client;
+    Client_ clientBuf;
     struct CommonData buf;
+    clientBuf.length = sizeof(clientBuf.address);
     while (true) {
-        client.length = sizeof(client.address);
         long int count = recvfrom(serverFileDescriptor, &buf, sizeof(struct CommonData), 0,
-                                  (struct sockaddr *) &client.address, &client.length);  //recvfrom是拥塞函数，没有数据就一直拥塞
+                                  (struct sockaddr *) &clientBuf.address, &clientBuf.length);
         if (count == -1) {
             printf("receive data fail!\n");
             return 0;
         }
-        if (Get(table, &client) == NULL) {
-            strcpy(client.NickName,"Unnamed");
-            Set(table, &client);
-            Get(table, &client)->time = time(NULL);
-            strcpy(buf.Message,"Server : Connected !");
+        printf("%hhu.", *(char *) (&clientBuf.address.sin_addr.s_addr));
+        printf("%hhu.", *((char *) (&clientBuf.address.sin_addr.s_addr) + 1));
+        printf("%hhu.", *((char *) (&clientBuf.address.sin_addr.s_addr) + 2));
+        printf("%hhu:", *((char *) (&clientBuf.address.sin_addr.s_addr) + 3));
+        printf("%d---->", clientBuf.address.sin_port);
+        printf(":%d %s \n", buf.Code, buf.Message);
+        printf("size: %d\n",table->Size);
+        if (Get(table, &clientBuf) == NULL) {
+            if(buf.Code != CONNECT){
+                continue;
+            }
+            strcpy(clientBuf.NickName, "Unnamed");
+            clientBuf.time = time(NULL);
+            Set(table, &clientBuf);
+            buf.Code = CONNECT;
+            strcpy(buf.Message, "Server : Connected !");
+            strcpy(buf.Data, "");
             sendto(serverFileDescriptor, &buf, sizeof(struct CommonData), 0,
-                   (struct sockaddr *) &client.address, client.length);
-            continue;
-        }
-        printf("%d.", *(char *) (&client.address.sin_addr.s_addr));
-        printf("%d.", *((char *) (&client.address.sin_addr.s_addr) + 1));
-        printf("%d.", *((char *) (&client.address.sin_addr.s_addr) + 2));
-        printf("%d:", *((char *) (&client.address.sin_addr.s_addr) + 3));
-        printf("%d---->", client.address.sin_port);
-        printf(":%s\n", buf.Message);
-        printf("size : %d\n", table->Size);
-        if (buf.Code == DISCONNECT) {
-            Erase(table, &client);
-            continue;
-        }
-        if (buf.Code == SETUSERNAME) {
-            strcpy(Get(table, &client)->NickName, buf.Data);
-            continue;
-        }
-        if (buf.Code == CHAT) {
-            sprintf(buf.Message,"From %d.%d.%d.%d:%d Name:%s", *((char *) (&client.address.sin_addr.s_addr) + 0),
-                    *((char *) (&client.address.sin_addr.s_addr) + 1),
-                    *((char *) (&client.address.sin_addr.s_addr) + 2),
-                    *((char *) (&client.address.sin_addr.s_addr) + 3),
-                    client.address.sin_port,
-                    Get(table, &client)->NickName);
+                   (struct sockaddr *) &clientBuf.address, clientBuf.length);
+        } else if (buf.Code == DISCONNECT) {
+            buf.Code = DISCONNECT;
+            strcpy(buf.Message, "Server : Disconnected !");
+            strcpy(buf.Data, "");
+            sendto(serverFileDescriptor, &buf, sizeof(struct CommonData), 0,
+                   (struct sockaddr *) &clientBuf.address, clientBuf.length);
+            Erase(table, &clientBuf);
+        } else if (buf.Code == SETUSERNAME) {
+            strcpy(Get(table, &clientBuf)->NickName, buf.Data);
+            buf.Code = OK;
+            strcpy(buf.Message, "Server : Set username successful !");
+            strcpy(buf.Data, "");
+            sendto(serverFileDescriptor, &buf, sizeof(struct CommonData), 0,
+                   (struct sockaddr *) &clientBuf.address, clientBuf.length);
+        } else if (buf.Code == CHAT) {
+            sprintf(buf.Message, "From %hhu.%hhu.%hhu.%hhu:%d Name:%s", *((char *) (&clientBuf.address.sin_addr.s_addr) + 0),
+                    *((char *) (&clientBuf.address.sin_addr.s_addr) + 1),
+                    *((char *) (&clientBuf.address.sin_addr.s_addr) + 2),
+                    *((char *) (&clientBuf.address.sin_addr.s_addr) + 3),
+                    clientBuf.address.sin_port,
+                    Get(table, &clientBuf)->NickName);
             for (int i = 0; i < MAXPORTNUM; i++) {
                 if (table->clients[i] != NULL) {
-                    client = *table->clients[i];
-                    if (time(NULL) - client.time > TIMEOUT) {
+                    clientBuf = *table->clients[i];
+                    if (time(NULL) - clientBuf.time > TIMEOUT) {
                         Erase(table, table->clients[i]);
                         continue;
                     }
                     sendto(serverFileDescriptor, &buf, sizeof(struct CommonData), 0,
-                           (struct sockaddr *) &client.address, client.length);
+                           (struct sockaddr *) &clientBuf.address, clientBuf.length);
                 }
             }
-            strcpy(buf.Message, "");
+        } else {
+            buf.Code = UNKNOWN;
+            strcpy(buf.Message, "unknown");
             strcpy(buf.Data, "");
+            sendto(serverFileDescriptor, &buf, sizeof(struct CommonData), 0,
+                   (struct sockaddr *) &clientBuf.address, clientBuf.length);
         }
     }
     Destroy(table);

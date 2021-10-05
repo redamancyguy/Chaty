@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/mnt/c/Users/sunwenli/Documents/GitHub/CommunicationTogether/client/main.c
+/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/main.c
 stdio.h
 -
 sys/types.h

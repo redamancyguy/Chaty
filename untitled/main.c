@@ -25,6 +25,7 @@ struct Client{
 };
 
 enum StatusCode {
+    UNKNOWN = -2,
     ERROR = -1,
     DISCONNECT = 0,
     CONNECT = 1,
@@ -39,19 +40,17 @@ struct CommonData{
 int client_fd;
 socklen_t len = sizeof(struct sockaddr_in);
 struct sockaddr_in src;
-struct CommonData buf;
 void receive(){
+    struct CommonData buff;
     while(1){
-        recvfrom(client_fd, &buf, sizeof(struct CommonData), 0, (struct sockaddr*)&src, &len);  //接收来自server的信息
-        puts(buf.Message);
-        puts(buf.Data);
-        strcpy(buf.Message,"");
-        strcpy(buf.Data,"");
+        recvfrom(client_fd, &buff, sizeof(struct CommonData), 0, (struct sockaddr*)&src, &len);  //接收来自server的信息
+        puts(buff.Message);
+        puts(buff.Data);
     }
 }
 int main(int argc, char* argv[])
 {
-
+    struct CommonData buf;
     struct sockaddr_in ser_addr;
 
     client_fd = socket(AF_INET, SOCK_DGRAM, 0);
@@ -75,10 +74,10 @@ int main(int argc, char* argv[])
     pthread_create(&pid, NULL, (void *(*)(void *)) receive, NULL);
     while(1)
     {
-        buf.Code = CHAT;
         strcpy(buf.Message,"");
         strcpy(buf.Data,"");
         scanf("%[^\n]*?",buf.Data);
+        buf.Code = CHAT;
         if(strcmp(buf.Data,"exit") == 0){
             break;
         }
