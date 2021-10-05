@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/mnt/c/Users/sunwenli/Documents/GitHub/CommunicationTogether/server/main.c
+stdio.h
+-
+sys/types.h
+-
+sys/socket.h
+-
+netinet/in.h
+-
+string.h
+-
+malloc.h
+-
+unistd.h
+-
+stdbool.h
+-
+arpa/inet.h
+-
+time.h
+-
+
