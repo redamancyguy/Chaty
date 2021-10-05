@@ -81,7 +81,8 @@ int main(int argc, char* argv[])
 
 
 
-    ser_addr.sin_addr.s_addr = inet_addr("39.104.209.232");  //注意网络序转换
+    ser_addr.sin_addr.s_addr = inet_addr("172.27.222.59");  //注意网络序转换
+   // ser_addr.sin_addr.s_addr = inet_addr("39.104.209.232");  //注意网络序转换
     ser_addr.sin_port = htons(SERVER_PORT);  //注意网络序转换
 
 

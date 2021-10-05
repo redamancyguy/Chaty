@@ -25,11 +25,12 @@ struct Client{
 };
 
 enum StatusCode {
-    ERROR = -1,
-    DISCONNECT = 0,
+    ERROR = -2,
+    DISCONNECT = -1,
+    UNKNOWN = 0,
     CONNECT = 1,
     CHAT = 2,
-    SETUSERNAME = 3
+    RENAME = 3,
 };
 struct CommonData{
     enum StatusCode Code;
@@ -75,7 +76,6 @@ int main(int argc, char* argv[])
     pthread_create(&pid, NULL, (void *(*)(void *)) receive, NULL);
     while(1)
     {
-        buf.Code = CHAT;
         strcpy(buf.Message,"");
         strcpy(buf.Data,"");
         scanf("%[^\n]*?",buf.Data);
@@ -83,12 +83,18 @@ int main(int argc, char* argv[])
             break;
         }
         if(strcmp(buf.Data,"set username") == 0){
-            buf.Code = SETUSERNAME;
+            buf.Code = RENAME;
             puts("input your username(except blank !)");
             scanf("%s",buf.Data);
             sendto(client_fd, &buf, sizeof(struct CommonData), 0, (struct sockaddr*)&ser_addr, len);
             continue;
         }
+        if(strcmp(buf.Data,"reconnect") == 0){
+            buf.Code = CONNECT;
+            sendto(client_fd, &buf, sizeof(struct CommonData), 0, (struct sockaddr*)&ser_addr, len);
+            continue;
+        }
+        buf.Code = CHAT;
         sendto(client_fd, &buf, sizeof(struct CommonData), 0, (struct sockaddr*)&ser_addr, len);
         getchar();
     }
