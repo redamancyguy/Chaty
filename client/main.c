@@ -31,6 +31,7 @@ enum StatusCode {
     RENAME = 3,
 };
 struct CommonData {
+    unsigned int group;
     enum StatusCode Code;
     char Message[64];
     char Data[1024];
@@ -68,6 +69,8 @@ int main(int argc, char* argv[])
 
 
     buf.Code = CONNECT;
+    unsigned group = 1;
+    buf.group = group;
     strcpy(buf.Message,"connect");
     sendto(client_fd, &buf, sizeof(struct CommonData), 0, (struct sockaddr*)&ser_addr, len);
     pthread_t pid;
@@ -84,19 +87,23 @@ int main(int argc, char* argv[])
             buf.Code = RENAME;
             puts("input your username(except blank !)");
             scanf("%s",buf.Data);
+            buf.group = group;
             sendto(client_fd, &buf, sizeof(struct CommonData), 0, (struct sockaddr*)&ser_addr, len);
             continue;
         }
         if(strcmp(buf.Data,"reconnect") == 0){
             buf.Code = CONNECT;
+            buf.group = group;
             sendto(client_fd, &buf, sizeof(struct CommonData), 0, (struct sockaddr*)&ser_addr, len);
             continue;
         }
         buf.Code = CHAT;
+        buf.group = group;
         sendto(client_fd, &buf, sizeof(struct CommonData), 0, (struct sockaddr*)&ser_addr, len);
         getchar();
     }
     buf.Code = DISCONNECT;
+    buf.Code = SHUTDOWN;
     strcpy(buf.Message,"disconnect");
     sendto(client_fd, &buf, sizeof(struct CommonData), 0, (struct sockaddr*)&ser_addr, len);
     close(client_fd);

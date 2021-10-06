@@ -32,6 +32,7 @@ enum StatusCode {
     RENAME = 3,
 };
 struct CommonData {
+    unsigned int group;
     enum StatusCode Code;
     char Message[64];
     char Data[1024];
@@ -234,6 +235,7 @@ bool TableErase(ConnectionTable table, const struct Client *client) {
 
 
 int main(int argc, char *argv[]) {
+    unsigned int groupNum = 1024;
     unsigned int groupSize = 1024;
     int serverFileDescriptor;
     struct sockaddr_in serverAddress;
@@ -252,10 +254,13 @@ int main(int argc, char *argv[]) {
         return -2;
     }
     puts("Bind successfully");
-    ConnectionTable table = TableNew(groupSize);
-    if (table == NULL) {
-        puts("Create table failed");
-        return -3;
+    ConnectionTable tables[groupNum];
+    for(unsigned int i=0;i<1024;i++){
+        tables[i] = TableNew(groupSize);
+        if(tables[i] == NULL){
+            puts("Create table failed");
+            return -3;
+        }
     }
     printf("Create group successfully and group Size is : %d\n", groupSize);
     puts("Turn on successfully");
@@ -269,14 +274,18 @@ int main(int argc, char *argv[]) {
             puts("Receive data fail");
             return -4;
         }
-        printf("count: %ld\n", count);
         printf("%hhu.", *(char *) (&clientBuf.address.sin_addr.s_addr));
         printf("%hhu.", *((char *) (&clientBuf.address.sin_addr.s_addr) + 1));
         printf("%hhu.", *((char *) (&clientBuf.address.sin_addr.s_addr) + 2));
         printf("%hhu:", *((char *) (&clientBuf.address.sin_addr.s_addr) + 3));
         printf("%d---->", clientBuf.address.sin_port);
-        printf("\t Code : %d\n", buf.Code);
+        printf("\t Code : %d group : %d\n", buf.Code,buf.group);
+        if(buf.group >= groupSize){
+            continue;
+        }
+        ConnectionTable table = tables[buf.group];
         printf("size: %d\n", table->Size);
+
         struct Client *client = TableGet(table, &clientBuf);
         if (client == NULL) {
             if (buf.Code == CONNECT) {
@@ -285,47 +294,33 @@ int main(int argc, char *argv[]) {
                 if (!TableSet(table, &clientBuf)) {
                     buf.Code = ERROR;
                     strcpy(buf.Message, "Server : Connect Unsuccessfully");
-                    strcpy(buf.Data, "");
-                    sendto(serverFileDescriptor, &buf, sizeof(struct CommonData), 0,
-                           (struct sockaddr *) &clientBuf.address, clientBuf.length);
-                    continue;
+                    goto Send;
                 }
                 strcpy(buf.Message, "Server : Connected");
-                strcpy(buf.Data, "");
-                sendto(serverFileDescriptor, &buf, sizeof(struct CommonData), 0,
-                       (struct sockaddr *) &clientBuf.address, clientBuf.length);
+                goto Send;
             } else {
                 strcpy(buf.Message, "Server : Disconnected");
-                strcpy(buf.Data, "");
-                sendto(serverFileDescriptor, &buf, sizeof(struct CommonData), 0,
-                       (struct sockaddr *) &clientBuf.address, clientBuf.length);
+                goto Send;
             }
 
         } else {
             if (time(NULL) - client->time > TIMEOUT) {
                 strcpy(buf.Message, "Server : Time out");
-                strcpy(buf.Data, "");
-                sendto(serverFileDescriptor, &buf, sizeof(struct CommonData), 0,
-                       (struct sockaddr *) &clientBuf.address, clientBuf.length);
                 TableErase(table, client);
-                continue;
+                goto Send;
             }
             client->time = time(NULL);
             if (buf.Code == SHUTDOWN) {
                 break;
             }
             if (buf.Code == DISCONNECT) {
-                strcpy(buf.Message, "Server : Disconnect successfully");
-                strcpy(buf.Data, "");
-                sendto(serverFileDescriptor, &buf, sizeof(struct CommonData), 0,
-                       (struct sockaddr *) &clientBuf.address, clientBuf.length);
                 TableErase(table, &clientBuf);
+                strcpy(buf.Message, "Server : Disconnect successfully");
+                goto Send;
             } else if (buf.Code == RENAME) {
                 strcpy(TableGet(table, &clientBuf)->NickName, buf.Data);
                 strcpy(buf.Message, "Server : Set username successfully");
-                strcpy(buf.Data, "");
-                sendto(serverFileDescriptor, &buf, sizeof(struct CommonData), 0,
-                       (struct sockaddr *) &clientBuf.address, clientBuf.length);
+                goto Send;
             } else if (buf.Code == CHAT) {
                 sprintf(buf.Message, "From %hhu.%hhu.%hhu.%hhu:%d NickName:%s",
                         *((char *) (&clientBuf.address.sin_addr.s_addr) + 0),
@@ -349,14 +344,18 @@ int main(int argc, char *argv[]) {
             } else {
                 buf.Code = UNKNOWN;
                 strcpy(buf.Message, "Unknown");
-                strcpy(buf.Data, "");
-                sendto(serverFileDescriptor, &buf, sizeof(struct CommonData), 0,
-                       (struct sockaddr *) &clientBuf.address, clientBuf.length);
+                goto Send;
             }
         }
+        Send:
+        strcpy(buf.Data, "");
+        sendto(serverFileDescriptor, &buf, sizeof(struct CommonData), 0,
+               (struct sockaddr *) &clientBuf.address, clientBuf.length);
     }
     puts("Shut down successfully");
-    TableDestroy(table);
+    for(unsigned int i=0;i<1024;i++){
+        TableDestroy(tables[i]);
+    }
     close(serverFileDescriptor);
     return 0;
 }
