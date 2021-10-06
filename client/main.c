@@ -25,7 +25,7 @@ struct Client{
 };
 
 enum StatusCode {
-    ERROR = -2,
+    SHUTDOWN = -2,
     DISCONNECT = -1,
     UNKNOWN = 0,
     CONNECT = 1,

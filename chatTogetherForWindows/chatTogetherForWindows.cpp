@@ -29,12 +29,13 @@ struct Client {
 };
 
 enum StatusCode {
-    UNKNOWN = -2,
-    ERROR_ = -1,
-    DISCONNECT = 0,
+    ERROR___ = -3,
+    SHUTDOWN = -2,
+    DISCONNECT = -1,
+    UNKNOWN = 0,
     CONNECT = 1,
     CHAT = 2,
-    SETUSERNAME = 3
+    RENAME = 3,
 };
 struct CommonData {
     enum StatusCode Code;
@@ -81,7 +82,7 @@ int main(int argc, char* argv[])
 
 
 
-    ser_addr.sin_addr.s_addr = inet_addr("172.27.222.59");  //注意网络序转换
+    ser_addr.sin_addr.s_addr = inet_addr("172.27.216.235");  //注意网络序转换
    // ser_addr.sin_addr.s_addr = inet_addr("39.104.209.232");  //注意网络序转换
     ser_addr.sin_port = htons(SERVER_PORT);  //注意网络序转换
 
@@ -105,7 +106,7 @@ int main(int argc, char* argv[])
             break;
         }
         if (strcmp(buf.Data, "set username") == 0) {
-            buf.Code = SETUSERNAME;
+            buf.Code = RENAME;
             puts("input your username(except blank !)");
             scanf("%s", buf.Data);
             sendto(client_fd, (char*)&buf, sizeof(struct CommonData), 0, (struct sockaddr*)&ser_addr, len);

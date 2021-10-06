@@ -8,21 +8,23 @@
 #include <stdbool.h>
 #include <arpa/inet.h>
 #include <time.h>
+
 short SERVER_PORT = 9999;
-int TIMEOUT = 7;
+int TIMEOUT = 300;
 enum PrivilegesCode {
     SUPERUSER, USER, ANONYMOUS
 };
-typedef struct {
+struct Client {
     socklen_t length;
     struct sockaddr_in address;
     enum PrivilegesCode privileges;
     long long time;
     char NickName[20];
-} Client_, *Client;
+};
 
 enum StatusCode {
-    ERROR = -2,
+    ERROR = -3,
+    SHUTDOWN = -2,
     DISCONNECT = -1,
     UNKNOWN = 0,
     CONNECT = 1,
@@ -37,41 +39,51 @@ struct CommonData {
 typedef struct {
     unsigned int Size;
     unsigned int Capacity;
-    Client *clients;
+    struct Client **clients;
 } ConnectionTable_, *ConnectionTable;
 
 ConnectionTable TableNew(unsigned int capacity) {
-    ConnectionTable table = malloc(sizeof(ConnectionTable_));
+    ConnectionTable table = (ConnectionTable_ *) malloc(sizeof(ConnectionTable_));
     if (table == NULL) {
         return NULL;
     }
-    table->clients = malloc(sizeof(Client) * capacity);
+    table->clients = (struct Client **) malloc(sizeof(struct Client *) * capacity);
     if (table->clients == NULL) {
         free(table);
         return NULL;
     }
     table->Size = 0;
     table->Capacity = capacity;
-    memset(table->clients, 0, sizeof(Client) * capacity);
+    memset(table->clients, 0, sizeof(struct Client *) * capacity);
     return table;
 }
 
-void TableDestroy(ConnectionTable table) {
-    for (int i = 0; i < table->Capacity; i++) {
+void TableClear(ConnectionTable table) {
+    for (unsigned int i = 0; i < table->Capacity; i++) {
         if (table->clients[i] != NULL) {
             free(table->clients[i]);
         }
     }
+    table->Size = 0;
+}
+
+void TableDestroy(ConnectionTable table) {
+    for (unsigned int i = 0; i < table->Capacity; i++) {
+        if (table->clients[i] != NULL) {
+            free(table->clients[i]);
+        }
+    }
+    free(table->clients);
     free(table);
 }
 
-bool TableSet(ConnectionTable table, Client client) {
+bool TableSet(ConnectionTable table, const struct Client *client) {
     unsigned int flag = client->address.sin_port % table->Capacity;
     unsigned int doubleLength = table->Capacity - flag < flag ? table->Capacity - flag : flag;
     int i = 0;
     while (i < doubleLength) {
         if (table->clients[flag + i] == NULL) {
-            table->clients[flag + i] = malloc(sizeof(Client_));
+            table->clients[flag + i] = (struct Client *) malloc(sizeof(struct Client));
             *table->clients[flag + i] = *client;
             table->Size++;
             return true;
@@ -81,7 +93,7 @@ bool TableSet(ConnectionTable table, Client client) {
             return true;
         }
         if (table->clients[flag - i] == NULL) {
-            table->clients[flag - i] = malloc(sizeof(Client_));
+            table->clients[flag - i] = (struct Client *) malloc(sizeof(struct Client));
             *table->clients[flag - i] = *client;
             table->Size++;
             return true;
@@ -93,10 +105,10 @@ bool TableSet(ConnectionTable table, Client client) {
         i++;
     }
     if (flag - i == 0) {
-        i = (int)(flag + i);
+        i = (int) (flag + i);
         while (i < table->Capacity) {
             if (table->clients[i] == NULL) {
-                table->clients[i] = malloc(sizeof(Client_));
+                table->clients[i] = (struct Client *) malloc(sizeof(struct Client));
                 *table->clients[i] = *client;
                 table->Size++;
                 return true;
@@ -108,10 +120,10 @@ bool TableSet(ConnectionTable table, Client client) {
             i++;
         }
     } else {
-        i = (int)(flag - i - 1);
+        i = (int) (flag - i - 1);
         while (i >= 0) {
             if (table->clients[i] == NULL) {
-                table->clients[i] = malloc(sizeof(Client_));
+                table->clients[i] = (struct Client *) malloc(sizeof(struct Client));
                 *table->clients[i] = *client;
                 table->Size++;
                 return true;
@@ -126,7 +138,7 @@ bool TableSet(ConnectionTable table, Client client) {
     return false;
 }
 
-Client TableGet(ConnectionTable table, Client client) {
+struct Client *TableGet(ConnectionTable table, const struct Client *client) {
     unsigned int flag = client->address.sin_port % table->Capacity;
     unsigned int doubleLength = table->Capacity - flag < flag ? table->Capacity - flag : flag;
     int i = 0;
@@ -136,15 +148,15 @@ Client TableGet(ConnectionTable table, Client client) {
             && table->clients[flag + i]->address.sin_port == client->address.sin_port) {
             return table->clients[flag + i];
         }
-        if (table->clients[flag - i] != NULL &&
-            table->clients[flag - i]->address.sin_addr.s_addr == client->address.sin_addr.s_addr
+        if (table->clients[flag - i] != NULL
+            && table->clients[flag - i]->address.sin_addr.s_addr == client->address.sin_addr.s_addr
             && table->clients[flag - i]->address.sin_port == client->address.sin_port) {
             return table->clients[flag - i];
         }
         i++;
     }
     if (flag - i == 0) {
-        i = (int)(flag + i);
+        i = (int) (flag + i);
         while (i < table->Capacity) {
             if (table->clients[i] != NULL
                 && table->clients[i]->address.sin_addr.s_addr == client->address.sin_addr.s_addr
@@ -154,7 +166,7 @@ Client TableGet(ConnectionTable table, Client client) {
             i++;
         }
     } else {
-        i = (int)(flag - i - 1);
+        i = (int) (flag - i - 1);
         while (i >= 0) {
             if (table->clients[i] != NULL
                 && table->clients[i]->address.sin_addr.s_addr == client->address.sin_addr.s_addr
@@ -167,7 +179,7 @@ Client TableGet(ConnectionTable table, Client client) {
     return NULL;
 }
 
-bool TableErase(ConnectionTable table, Client client) {
+bool TableErase(ConnectionTable table, const struct Client *client) {
     unsigned int flag = client->address.sin_port % table->Capacity;
     unsigned int doubleLength = table->Capacity - flag < flag ? table->Capacity - flag : flag;
     int i = 0;
@@ -180,8 +192,8 @@ bool TableErase(ConnectionTable table, Client client) {
             table->Size--;
             return true;
         }
-        if (table->clients[flag - i] != NULL &&
-            table->clients[flag - i]->address.sin_addr.s_addr == client->address.sin_addr.s_addr
+        if (table->clients[flag - i] != NULL
+            && table->clients[flag - i]->address.sin_addr.s_addr == client->address.sin_addr.s_addr
             && table->clients[flag - i]->address.sin_port == client->address.sin_port) {
             free(table->clients[flag - i]);
             table->clients[flag - i] = NULL;
@@ -191,7 +203,7 @@ bool TableErase(ConnectionTable table, Client client) {
         i++;
     }
     if (flag - i == 0) {
-        i = (int)(flag + i);
+        i = (int) (flag + i);
         while (i < table->Capacity) {
             if (table->clients[i] != NULL
                 && table->clients[i]->address.sin_addr.s_addr == client->address.sin_addr.s_addr
@@ -204,7 +216,7 @@ bool TableErase(ConnectionTable table, Client client) {
             i++;
         }
     } else {
-        i = (int)(flag - i - 1);
+        i = (int) (flag - i - 1);
         while (i >= 0) {
             if (table->clients[i] != NULL
                 && table->clients[i]->address.sin_addr.s_addr == client->address.sin_addr.s_addr
@@ -224,71 +236,74 @@ bool TableErase(ConnectionTable table, Client client) {
 int main(int argc, char *argv[]) {
     int serverFileDescriptor;
     struct sockaddr_in serverAddress;
-
     serverFileDescriptor = socket(AF_INET, SOCK_DGRAM, 0); //AF_INET:IPV4;SOCK_DGRAM:UDP
     if (serverFileDescriptor < 0) {
-        printf("create socket fail!\n");
+        puts("Create socket fail!");
         return -1;
     }
-
+    puts("Create socket successfully");
     memset(&serverAddress, 0, sizeof(serverFileDescriptor));
     serverAddress.sin_family = AF_INET;
-    serverAddress.sin_addr.s_addr = INADDR_ANY; //IP地址，需要进行网络序转换，INADDR_ANY：本地地址
-//    serverAddress.sin_addr.s_addr = htonl(INADDR_ANY); //IP地址，需要进行网络序转换，INADDR_ANY：本地地址
-    serverAddress.sin_port = htons(SERVER_PORT);  //端口号，需要网络序转换
+    serverAddress.sin_addr.s_addr = htonl(INADDR_ANY);
+    serverAddress.sin_port = htons(SERVER_PORT);
     if (bind(serverFileDescriptor, (struct sockaddr *) &serverAddress, sizeof(serverAddress)) < 0) {
-        printf("socket bind fail!\n");
-        return -1;
+        puts("Socket bind fail");
+        return -2;
     }
-
-    ConnectionTable table = TableNew(65536);
-    if(table == NULL){
-        puts("create table failed !");
-        return -1;
+    puts("Bind successfully");
+    ConnectionTable table = TableNew(1024);
+    if (table == NULL) {
+        puts("Create table failed");
+        return -3;
     }
-    Client_ clientBuf;
+    puts("Turn on successfully");
+    struct Client clientBuf;
     struct CommonData buf;
     clientBuf.length = sizeof(clientBuf.address);
     while (true) {
         long int count = recvfrom(serverFileDescriptor, &buf, sizeof(struct CommonData), 0,
                                   (struct sockaddr *) &clientBuf.address, &clientBuf.length);
         if (count == -1) {
-            printf("receive data fail!\n");
-            return 0;
+            puts("Receive data fail");
+            return -4;
         }
+        printf("count: %ld\n", count);
         printf("%hhu.", *(char *) (&clientBuf.address.sin_addr.s_addr));
         printf("%hhu.", *((char *) (&clientBuf.address.sin_addr.s_addr) + 1));
         printf("%hhu.", *((char *) (&clientBuf.address.sin_addr.s_addr) + 2));
         printf("%hhu:", *((char *) (&clientBuf.address.sin_addr.s_addr) + 3));
         printf("%d---->", clientBuf.address.sin_port);
-        printf(":%d %s \n", buf.Code, buf.Message);
+        printf("\t Code : %d\n", buf.Code);
         printf("size: %d\n", table->Size);
-        Client client = TableGet(table, &clientBuf);
+        struct Client *client = TableGet(table, &clientBuf);
         if (client == NULL) {
-            puts("1");
             if (buf.Code == CONNECT) {
-                puts("2");
                 strcpy(clientBuf.NickName, "Unnamed");
                 clientBuf.time = time(NULL);
-                TableSet(table, &clientBuf);
+                if (!TableSet(table, &clientBuf)) {
+                    buf.Code = ERROR;
+                    strcpy(buf.Message, "Server : Connect Unsuccessfully");
+                    strcpy(buf.Data, "");
+                    sendto(serverFileDescriptor, &buf, sizeof(struct CommonData), 0,
+                           (struct sockaddr *) &clientBuf.address, clientBuf.length);
+                    continue;
+                }
                 buf.Code = CONNECT;
-                strcpy(buf.Message, "Server : Connected !");
+                strcpy(buf.Message, "Server : Connected");
                 strcpy(buf.Data, "");
                 sendto(serverFileDescriptor, &buf, sizeof(struct CommonData), 0,
                        (struct sockaddr *) &clientBuf.address, clientBuf.length);
-            }else{
-                strcpy(buf.Message, "Server : Disconnected !");
+            } else {
+                strcpy(buf.Message, "Server : Disconnected");
                 strcpy(buf.Data, "");
                 sendto(serverFileDescriptor, &buf, sizeof(struct CommonData), 0,
                        (struct sockaddr *) &clientBuf.address, clientBuf.length);
-
-                puts("3");
             }
 
-        } else{
-            if(time(NULL) - client->time > TIMEOUT){
+        } else {
+            if (time(NULL) - client->time > TIMEOUT) {
                 buf.Code = DISCONNECT;
-                strcpy(buf.Message, "Server : time out !");
+                strcpy(buf.Message, "Server : Time out");
                 strcpy(buf.Data, "");
                 sendto(serverFileDescriptor, &buf, sizeof(struct CommonData), 0,
                        (struct sockaddr *) &clientBuf.address, clientBuf.length);
@@ -296,51 +311,52 @@ int main(int argc, char *argv[]) {
                 continue;
             }
             client->time = time(NULL);
+            if (buf.Code == SHUTDOWN) {
+                break;
+            }
             if (buf.Code == DISCONNECT) {
-                puts("4");
                 buf.Code = DISCONNECT;
-                strcpy(buf.Message, "Server : Disconnected !");
+                strcpy(buf.Message, "Server : Disconnect successfully");
                 strcpy(buf.Data, "");
                 sendto(serverFileDescriptor, &buf, sizeof(struct CommonData), 0,
                        (struct sockaddr *) &clientBuf.address, clientBuf.length);
                 TableErase(table, &clientBuf);
             } else if (buf.Code == RENAME) {
-                puts("5");
                 strcpy(TableGet(table, &clientBuf)->NickName, buf.Data);
-                strcpy(buf.Message, "Server : Set username successful !");
+                strcpy(buf.Message, "Server : Set username successfully");
                 strcpy(buf.Data, "");
                 sendto(serverFileDescriptor, &buf, sizeof(struct CommonData), 0,
                        (struct sockaddr *) &clientBuf.address, clientBuf.length);
             } else if (buf.Code == CHAT) {
-                puts("6");
-                sprintf(buf.Message, "From %hhu.%hhu.%hhu.%hhu:%d Name:%s",
+                sprintf(buf.Message, "From %hhu.%hhu.%hhu.%hhu:%d NickName:%s",
                         *((char *) (&clientBuf.address.sin_addr.s_addr) + 0),
                         *((char *) (&clientBuf.address.sin_addr.s_addr) + 1),
                         *((char *) (&clientBuf.address.sin_addr.s_addr) + 2),
                         *((char *) (&clientBuf.address.sin_addr.s_addr) + 3),
                         clientBuf.address.sin_port,
-                        TableGet(table, &clientBuf)->NickName);
+                        client->NickName);
                 for (int i = 0; i < table->Capacity; i++) {
                     if (table->clients[i] != NULL) {
-                        clientBuf = *table->clients[i];
-                        if (time(NULL) - clientBuf.time > TIMEOUT) {
-                            TableErase(table, table->clients[i]);
+                        if (time(NULL) - table->clients[i]->time > TIMEOUT) {
+                            free(table->clients[i]);
+                            table->clients[i] = NULL;
+                            table->Size--;
                             continue;
                         }
                         sendto(serverFileDescriptor, &buf, sizeof(struct CommonData), 0,
-                               (struct sockaddr *) &clientBuf.address, clientBuf.length);
+                               (struct sockaddr *) &table->clients[i]->address, table->clients[i]->length);
                     }
                 }
             } else {
-                puts("7");
                 buf.Code = UNKNOWN;
-                strcpy(buf.Message, "unknown");
+                strcpy(buf.Message, "Unknown");
                 strcpy(buf.Data, "");
                 sendto(serverFileDescriptor, &buf, sizeof(struct CommonData), 0,
                        (struct sockaddr *) &clientBuf.address, clientBuf.length);
             }
         }
     }
+    puts("Shut down successfully");
     TableDestroy(table);
     close(serverFileDescriptor);
     return 0;
