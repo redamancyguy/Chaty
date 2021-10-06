@@ -10,13 +10,10 @@
 #define SERVER_PORT 9999
 #define BUFF_LEN 512
 #define SERVER_IP "172.0.5.182"
-
-enum PrivilegesCode{
-    SUPERUSER = 1,
-    USER = 2,
-    ANONYMOUS = 3
+enum PrivilegesCode {
+    SUPERUSER, USER, ANONYMOUS
 };
-struct Client{
+struct Client {
     socklen_t length;
     struct sockaddr_in address;
     enum PrivilegesCode privileges;
@@ -25,6 +22,7 @@ struct Client{
 };
 
 enum StatusCode {
+    ERROR = -3,
     SHUTDOWN = -2,
     DISCONNECT = -1,
     UNKNOWN = 0,
@@ -32,7 +30,7 @@ enum StatusCode {
     CHAT = 2,
     RENAME = 3,
 };
-struct CommonData{
+struct CommonData {
     enum StatusCode Code;
     char Message[64];
     char Data[1024];

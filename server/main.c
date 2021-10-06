@@ -234,6 +234,7 @@ bool TableErase(ConnectionTable table, const struct Client *client) {
 
 
 int main(int argc, char *argv[]) {
+    unsigned int groupSize = 1024;
     int serverFileDescriptor;
     struct sockaddr_in serverAddress;
     serverFileDescriptor = socket(AF_INET, SOCK_DGRAM, 0); //AF_INET:IPV4;SOCK_DGRAM:UDP
@@ -251,11 +252,12 @@ int main(int argc, char *argv[]) {
         return -2;
     }
     puts("Bind successfully");
-    ConnectionTable table = TableNew(1024);
+    ConnectionTable table = TableNew(groupSize);
     if (table == NULL) {
         puts("Create table failed");
         return -3;
     }
+    printf("Create group successfully and group Size is : %d\n", groupSize);
     puts("Turn on successfully");
     struct Client clientBuf;
     struct CommonData buf;
@@ -288,7 +290,6 @@ int main(int argc, char *argv[]) {
                            (struct sockaddr *) &clientBuf.address, clientBuf.length);
                     continue;
                 }
-                buf.Code = CONNECT;
                 strcpy(buf.Message, "Server : Connected");
                 strcpy(buf.Data, "");
                 sendto(serverFileDescriptor, &buf, sizeof(struct CommonData), 0,
@@ -302,7 +303,6 @@ int main(int argc, char *argv[]) {
 
         } else {
             if (time(NULL) - client->time > TIMEOUT) {
-                buf.Code = DISCONNECT;
                 strcpy(buf.Message, "Server : Time out");
                 strcpy(buf.Data, "");
                 sendto(serverFileDescriptor, &buf, sizeof(struct CommonData), 0,
@@ -315,7 +315,6 @@ int main(int argc, char *argv[]) {
                 break;
             }
             if (buf.Code == DISCONNECT) {
-                buf.Code = DISCONNECT;
                 strcpy(buf.Message, "Server : Disconnect successfully");
                 strcpy(buf.Data, "");
                 sendto(serverFileDescriptor, &buf, sizeof(struct CommonData), 0,
