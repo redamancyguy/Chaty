@@ -1,0 +1,4 @@
+﻿  chatTogetherForWindows.c
+C:\Users\sunwenli\Documents\GitHub\ChatTogether\chatTogetherForWindows\chatTogetherForWindows.c(50,23): warning C4101: “buff”: 未引用的局部变量
+C:\Users\sunwenli\Documents\GitHub\ChatTogether\chatTogetherForWindows\chatTogetherForWindows.c(83,23): warning C4244: “=”: 从“SOCKET”转换到“int”，可能丢失数据
+  chatTogetherForWindows.vcxproj -> C:\Users\sunwenli\Documents\GitHub\ChatTogether\chatTogetherForWindows\x64\Debug\chatTogetherForWindows.exe

@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="chatTogetherForWindows.cpp">
+    <ClCompile Include="chatTogetherForWindows.c">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

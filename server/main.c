@@ -278,14 +278,14 @@ int main(int argc, char *argv[]) {
         printf("%hhu.", *((char *) (&clientBuf.address.sin_addr.s_addr) + 1));
         printf("%hhu.", *((char *) (&clientBuf.address.sin_addr.s_addr) + 2));
         printf("%hhu:", *((char *) (&clientBuf.address.sin_addr.s_addr) + 3));
-        printf("%d---->", clientBuf.address.sin_port);
-        printf("\t Code : %d group : %d\n", buf.Code,buf.group);
+        printf("%d", clientBuf.address.sin_port);
+        printf("\t Code : %d\tgroup : %d\t", buf.Code,buf.group);
         if(buf.group >= groupSize){
+            puts("");
             continue;
         }
         ConnectionTable table = tables[buf.group];
         printf("size: %d\n", table->Size);
-
         struct Client *client = TableGet(table, &clientBuf);
         if (client == NULL) {
             if (buf.Code == CONNECT) {
@@ -297,10 +297,8 @@ int main(int argc, char *argv[]) {
                     goto Send;
                 }
                 strcpy(buf.Message, "Server : Connected");
-                goto Send;
             } else {
                 strcpy(buf.Message, "Server : Disconnected");
-                goto Send;
             }
 
         } else {
@@ -313,14 +311,12 @@ int main(int argc, char *argv[]) {
             if (buf.Code == SHUTDOWN) {
                 break;
             }
-            if (buf.Code == DISCONNECT) {
+            else if (buf.Code == DISCONNECT) {
                 TableErase(table, &clientBuf);
                 strcpy(buf.Message, "Server : Disconnect successfully");
-                goto Send;
             } else if (buf.Code == RENAME) {
                 strcpy(TableGet(table, &clientBuf)->NickName, buf.Data);
-                strcpy(buf.Message, "Server : Set username successfully");
-                goto Send;
+                sprintf(buf.Message, "Server : Set username (Name:%s) successfully",buf.Data);
             } else if (buf.Code == CHAT) {
                 sprintf(buf.Message, "From %hhu.%hhu.%hhu.%hhu:%d NickName:%s",
                         *((char *) (&clientBuf.address.sin_addr.s_addr) + 0),
@@ -341,10 +337,10 @@ int main(int argc, char *argv[]) {
                                (struct sockaddr *) &table->clients[i]->address, table->clients[i]->length);
                     }
                 }
+                continue;
             } else {
                 buf.Code = UNKNOWN;
                 strcpy(buf.Message, "Unknown");
-                goto Send;
             }
         }
         Send:
