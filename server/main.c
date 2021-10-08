@@ -8,53 +8,9 @@
 #include <stdbool.h>
 #include <arpa/inet.h>
 #include <time.h>
-#include <sys/stat.h>
-
+#include "user.h"
 short SERVER_PORT = 9999;
 int TIMEOUT = 300;
-enum PrivilegesCode {
-    SUPERUSER, USER, ANONYMOUS
-};
-const char *fileName = "users";
-struct User {
-    unsigned int id;
-    char nickname[20];
-    char password[20];
-    char email[20];
-};
-
-long GetUserCount(char *fileStr) {
-    struct stat fileStat;
-    stat(fileStr, &fileStat);
-    return fileStat.st_size;
-}
-
-struct User GetUserById(unsigned int id) {
-    FILE *userFile;
-    struct User user;
-    if ((userFile = fopen(fileName, "rb")) == 0) {
-        memset(&user, 0, sizeof(struct User));
-        return user;
-    }
-    fseek(userFile, sizeof(struct User) * id, SEEK_SET);
-    fread(&user, sizeof(struct User), 1, userFile);
-    fseek(userFile, 0, SEEK_END);
-    fclose(userFile);
-    return user;
-}
-
-bool SetUserById(struct User user) {
-    FILE *userFile;
-    if ((userFile = fopen(fileName, "rb+")) == 0) {
-        if ((userFile = fopen(fileName, "wb")) == 0) {
-            return false;
-        }
-    }
-    fseek(userFile, sizeof(struct User) * user.id, SEEK_SET);
-    fwrite(&user, sizeof(struct User), 1, userFile);
-    fclose(userFile);
-    return true;
-}
 
 struct Client {
     socklen_t length;
@@ -65,7 +21,7 @@ struct Client {
 
 enum StatusCode {
     ERROR = -3,
-    SHUTDOWN = -2,
+    EXIT = -2,
     DISCONNECT = -1,
     UNKNOWN = 0,
     CONNECT = 1,
@@ -276,8 +232,9 @@ bool TableErase(ConnectionTable table, const struct Client *client) {
 
 
 int main(int argc, char *argv[]) {
-    struct User user;
-    user.id = 0;
+    for(int i=0;i<argc;i++){
+        puts(argv[i]);
+    }
     unsigned int groupNum = 1024;
     unsigned int groupSize = 1024;
     int serverFileDescriptor;
@@ -294,30 +251,44 @@ int main(int argc, char *argv[]) {
     serverAddress.sin_port = htons(SERVER_PORT);
     if (bind(serverFileDescriptor, (struct sockaddr *) &serverAddress, sizeof(serverAddress)) < 0) {
         puts("Socket bind fail");
+        close(serverFileDescriptor);
         return -2;
     }
     puts("Bind successfully");
     ConnectionTable tables[groupNum];
+    memset(tables,0,sizeof(ConnectionTable)*groupNum);
     for (unsigned int i = 0; i < 1024; i++) {
         tables[i] = TableNew(groupSize);
         if (tables[i] == NULL) {
             puts("Create table failed");
+            for (unsigned int j = 0; j < i; j++){
+                TableDestroy(tables[j]);
+            }
+            close(serverFileDescriptor);
             return -3;
         }
     }
-    printf("Create Group successfully and Group Size is : %d\n", groupSize);
+    printf("Create Group table successfully \nThe size of each group is : %d\n", groupSize);
     puts("Turn on successfully");
     struct Client clientBuf;
-    struct CommonData buf;
+    struct DataBuf {
+        enum StatusCode code;
+        unsigned int group;
+        char message[64];
+        char data[1024];
+        char others[1024];
+    };
+    struct DataBuf buf;
     clientBuf.length = sizeof(clientBuf.address);
-    int count=0;
     while (true) {
-        printf("%d\n",count++);
-        long int count = recvfrom(serverFileDescriptor, &buf, sizeof(struct CommonData), 0,
+        long int count = recvfrom(serverFileDescriptor, &buf, sizeof(struct DataBuf), 0,
                                   (struct sockaddr *) &clientBuf.address, &clientBuf.length);
         if (count == -1) {
             puts("Receive data fail");
-            return -4;
+            break;
+        } else if (count != sizeof(struct CommonData)) {
+            puts("Invalid data package");
+            continue;
         }
         printf("%hhu.", *(char *) (&clientBuf.address.sin_addr.s_addr));
         printf("%hhu.", *((char *) (&clientBuf.address.sin_addr.s_addr) + 1));
@@ -338,12 +309,12 @@ int main(int argc, char *argv[]) {
                 clientBuf.time = time(NULL);
                 if (!TableSet(table, &clientBuf)) {
                     buf.code = ERROR;
-                    strcpy(buf.message, "Server : Connect Unsuccessfully");
+                    strcpy(buf.message, "Server : Connect unsuccessfully");
                 } else {
-                    strcpy(buf.message, "Server : Connected");
+                    strcpy(buf.message, "Server : Connect successfully");
                 }
             } else {
-                strcpy(buf.message, "Server : Disconnected");
+                strcpy(buf.message, "Server : You haven't connected yet");
             }
 
         } else {
@@ -352,7 +323,7 @@ int main(int argc, char *argv[]) {
                 TableErase(table, client);
             } else {
                 client->time = time(NULL);
-                if (buf.code == SHUTDOWN) {
+                if (buf.code == EXIT) {
                     break;
                 } else if (buf.code == DISCONNECT) {
                     TableErase(table, &clientBuf);
@@ -391,10 +362,12 @@ int main(int argc, char *argv[]) {
         sendto(serverFileDescriptor, &buf, sizeof(struct CommonData), 0,
                (struct sockaddr *) &clientBuf.address, clientBuf.length);
     }
-    puts("Shut down successfully");
+    puts("Shutdown server successfully");
     for (unsigned int i = 0; i < 1024; i++) {
         TableDestroy(tables[i]);
     }
+    puts("Delete table successfully");
     close(serverFileDescriptor);
+    puts("Close socket successfully");
     return 0;
 }

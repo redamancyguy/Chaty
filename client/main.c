@@ -7,11 +7,12 @@
 #include <unistd.h>
 #include <pthread.h>
 #include <stdlib.h>
+
 #define SERVER_PORT 9999
 
 enum StatusCode {
     ERROR = -3,
-    SHUTDOWN = -2,
+    EXIT = -2,
     DISCONNECT = -1,
     UNKNOWN = 0,
     CONNECT = 1,
@@ -27,7 +28,6 @@ struct CommonData {
 int client_fd;
 
 
-
 void receive() {
     struct sockaddr_in src;
     socklen_t len = sizeof(struct sockaddr_in);
@@ -39,28 +39,39 @@ void receive() {
         puts(buff.Data);
     }
 }
-void Connect(struct CommonData buf,struct sockaddr *ser_addr){
+
+void Connect(struct CommonData buf, struct sockaddr *ser_addr) {
     socklen_t len = sizeof(struct sockaddr_in);
     buf.Code = CONNECT;
     strcpy(buf.Message, "connect");
     sendto(client_fd, &buf, sizeof(struct CommonData), 0, ser_addr, len);
 }
-void Disconnect(struct CommonData buf,struct sockaddr *ser_addr){
+
+void Disconnect(struct CommonData buf, struct sockaddr *ser_addr) {
     socklen_t len = sizeof(struct sockaddr_in);
     buf.Code = DISCONNECT;
     strcpy(buf.Message, "disconnect");
     sendto(client_fd, &buf, sizeof(struct CommonData), 0, ser_addr, len);
 }
-void SetGroup(struct CommonData buf,struct sockaddr *ser_addr,unsigned group){
-    Disconnect(buf,ser_addr);
+
+void SetGroup(struct CommonData buf, struct sockaddr *ser_addr, unsigned group) {
+    Disconnect(buf, ser_addr);
     buf.group = group;
-    Connect(buf,ser_addr);
+    Connect(buf, ser_addr);
 }
-void Chat(struct CommonData buf,struct sockaddr *ser_addr){
+
+void Chat(struct CommonData buf, struct sockaddr *ser_addr) {
     socklen_t len = sizeof(struct sockaddr_in);
     buf.Code = CHAT;
     sendto(client_fd, &buf, sizeof(struct CommonData), 0, ser_addr, len);
 }
+
+void SetNickName(struct CommonData buf, struct sockaddr *ser_addr) {
+    socklen_t len = sizeof(struct sockaddr_in);
+    buf.Code = RENAME;
+    sendto(client_fd, &buf, sizeof(struct CommonData), 0, ser_addr, len);
+}
+
 int main(int argc, char *argv[]) {
     struct CommonData buf;
     const char *p = "Connect again       :reconnect\n"
@@ -81,19 +92,27 @@ int main(int argc, char *argv[]) {
 //    ser_addr.sin_addr.s_addr = inet_addr("39.104.209.232");  //注意网络序转换
     ser_addr.sin_port = htons(SERVER_PORT);  //注意网络序转换
     puts("input your group number (0 ~ 1023)");
-    while(1){
-        if(scanf("%u",&buf.group) >0){
-            if(buf.group>1023){
+    while (1) {
+        if (scanf("%u", &buf.group) > 0) {
+            if (buf.group > 1023) {
                 puts("Wrong group number");
                 continue;
             }
             break;
+        }
+        puts("Please input a num !");
+        int ch;
+        while ((ch = getchar())) {
+            if (ch == '\n') {
+                break;
+            }
         }
     }
 
     pthread_t pid;
     pthread_create(&pid, NULL, (void *(*)(void *)) receive, NULL);
     Connect(buf, (struct sockaddr *) &ser_addr);
+
     while (1) {
         strcpy(buf.Message, "");
         strcpy(buf.Data, "");
@@ -103,17 +122,17 @@ int main(int argc, char *argv[]) {
             break;
         } else if (strcmp(buf.Data, "help") == 0) {
             puts(p);
-        } else if (strncmp(buf.Data, "set username", 12) == 0) {
-            buf.Code = RENAME;
+        } else if (strncmp(buf.Data, "set nickname", 12) == 0) {
             strcpy(buf.Data, buf.Data + 12);
-        }else if (strncmp(buf.Data, "set group", 9) == 0) {
+            SetNickName(buf, (struct sockaddr *) &ser_addr);
+        } else if (strncmp(buf.Data, "set group", 9) == 0) {
             strcpy(buf.Data, buf.Data + 9);
-            if((unsigned int)atoi(buf.Data) > 1023){
+            if ((unsigned int) atoi(buf.Data) > 1023) {
                 puts("Wrong group number");
                 continue;
             }
-            buf.group =  (unsigned int)atoi(buf.Data);
-            SetGroup(buf, (struct sockaddr *) &ser_addr, (unsigned int)atoi(buf.Data));
+            SetGroup(buf, (struct sockaddr *) &ser_addr, (unsigned int) atoi(buf.Data));
+            buf.group = (unsigned int) atoi(buf.Data);
         } else if (strcmp(buf.Data, "disconnect") == 0) {
             Disconnect(buf, (struct sockaddr *) &ser_addr);
         } else if (strcmp(buf.Data, "connect") == 0) {

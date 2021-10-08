@@ -79,6 +79,12 @@
 		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server/main.c">
 			<Option target="server"/>
 		</Unit>
+		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server/user.c">
+			<Option target="server"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server/user.h">
+			<Option target="server"/>
+		</Unit>
 		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>

@@ -27,6 +27,10 @@ arpa/inet.h
 -
 time.h
 -
-sys/stat.h
+user.h
+/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server/user.h
+
+/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server/user.h
+stdbool.h
 -
 
