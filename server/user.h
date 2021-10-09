@@ -11,16 +11,17 @@ enum PrivilegesCode {
 struct User {
     unsigned int id;
     char nickname[20];
+    char username[20];
     char password[20];
     char email[20];
 };
 
 long GetUserCount();
 
-struct User *GetUserById(unsigned int id);
-struct User *GetUserByNickName(char *nickname);
-bool SetUserById(struct User *user);
-
-
+struct User *GetUserByPlace(unsigned int place);
+struct User *GetUserByUserName(char *nickname);
+bool SetUserByPlace(struct User *user,unsigned int place);
+bool RemoveUserByPlace(unsigned int place);
+bool InsertUserByPlace(struct User *user,unsigned int place);
 
 #endif //USER_H

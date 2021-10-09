@@ -8,16 +8,20 @@
 #include <pthread.h>
 #include <stdlib.h>
 
-#define SERVER_PORT 9999
+short SERVER_PORT = 9999;
 
 enum StatusCode {
-    ERROR = -3,
-    EXIT = -2,
-    DISCONNECT = -1,
-    UNKNOWN = 0,
-    CONNECT = 1,
-    CHAT = 2,
-    RENAME = 3,
+    ERROR,
+    EXIT,
+    DISCONNECT,
+    UNKNOWN,
+    CONNECT,
+    CHAT,
+    RENAME,
+    LOGIN,
+    LOGOUT,
+    REGISTER,
+    UNREGISTER,
 };
 struct CommonData {
     enum StatusCode Code;
@@ -39,7 +43,25 @@ void receive() {
         puts(buff.Data);
     }
 }
+void Login(struct CommonData buf, struct sockaddr *ser_addr) {
+    puts("input your username");
+    scanf("%s",buf.Message);
+    puts("input your password");
+    scanf("%s",buf.Data);
+    socklen_t len = sizeof(struct sockaddr_in);
+    buf.Code = LOGIN;
+    sendto(client_fd, &buf, sizeof(struct CommonData), 0, ser_addr, len);
+}
 
+void Register(struct CommonData buf, struct sockaddr *ser_addr) {
+    puts("input your username");
+    scanf("%s",buf.Message);
+    puts("input your password");
+    scanf("%s",buf.Data);
+    socklen_t len = sizeof(struct sockaddr_in);
+    buf.Code = REGISTER;
+    sendto(client_fd, &buf, sizeof(struct CommonData), 0, ser_addr, len);
+}
 void Connect(struct CommonData buf, struct sockaddr *ser_addr) {
     socklen_t len = sizeof(struct sockaddr_in);
     buf.Code = CONNECT;
@@ -91,6 +113,9 @@ int main(int argc, char *argv[]) {
     ser_addr.sin_addr.s_addr = inet_addr("0.0.0.0");  //注意网络序转换
 //    ser_addr.sin_addr.s_addr = inet_addr("39.104.209.232");  //注意网络序转换
     ser_addr.sin_port = htons(SERVER_PORT);  //注意网络序转换
+
+
+
     puts("input your group number (0 ~ 1023)");
     while (1) {
         if (scanf("%u", &buf.group) > 0) {
@@ -118,6 +143,12 @@ int main(int argc, char *argv[]) {
             break;
         }
     }
+
+//    while ((ch = getchar())) {
+//        if (ch == '\n') {
+//            break;
+//        }
+//    }
     while (1) {
         strcpy(buf.Message, "");
         strcpy(buf.Data, "");
@@ -130,6 +161,10 @@ int main(int argc, char *argv[]) {
         } else if (strncmp(buf.Data, "set nickname", 12) == 0) {
             strcpy(buf.Data, buf.Data + 12);
             SetNickName(buf, (struct sockaddr *) &ser_addr);
+        }else if (strcmp(buf.Data, "login") == 0) {
+            Login(buf, (struct sockaddr *) &ser_addr);
+        } else if (strcmp(buf.Data, "register") == 0) {
+            Register(buf, (struct sockaddr *) &ser_addr);
         } else if (strncmp(buf.Data, "set group", 9) == 0) {
             strcpy(buf.Data, buf.Data + 9);
             if ((unsigned int) atoi(buf.Data) > 1023) {

@@ -7,10 +7,15 @@
 
 #ifndef CLIENT_H
 #define CLIENT_H
+enum ClientStatus{
+    LoggedIN,
+    UnLoggedIN,
+};
 struct Client {
     socklen_t length;
     struct sockaddr_in address;
     struct User user;
+    enum ClientStatus status;
     long long time;
 };
 typedef struct {

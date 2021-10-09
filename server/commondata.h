@@ -5,13 +5,17 @@
 #ifndef COMMONDATA_H
 #define COMMONDATA_H
 enum StatusCode {
-    ERROR = -3,
-    EXIT = -2,
-    DISCONNECT = -1,
-    UNKNOWN = 0,
-    CONNECT = 1,
-    CHAT = 2,
-    RENAME = 3,
+    ERROR,
+    EXIT,
+    DISCONNECT,
+    UNKNOWN,
+    CONNECT,
+    CHAT,
+    RENAME,
+    LOGIN,
+    LOGOUT,
+    REGISTER,
+    UNREGISTER,
 };
 struct CommonData {
     enum StatusCode code;

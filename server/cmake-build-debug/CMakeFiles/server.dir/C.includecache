@@ -31,8 +31,6 @@ unistd.h
 -
 stdbool.h
 -
-arpa/inet.h
--
 time.h
 -
 user.h
