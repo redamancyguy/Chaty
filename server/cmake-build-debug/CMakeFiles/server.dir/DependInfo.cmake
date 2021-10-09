@@ -4,6 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
+  "/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server/client.c" "/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server/cmake-build-debug/CMakeFiles/server.dir/client.c.o"
   "/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server/main.c" "/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server/cmake-build-debug/CMakeFiles/server.dir/main.c.o"
   "/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server/user.c" "/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server/cmake-build-debug/CMakeFiles/server.dir/user.c.o"
   )

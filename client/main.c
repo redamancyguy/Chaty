@@ -112,7 +112,12 @@ int main(int argc, char *argv[]) {
     pthread_t pid;
     pthread_create(&pid, NULL, (void *(*)(void *)) receive, NULL);
     Connect(buf, (struct sockaddr *) &ser_addr);
-
+    int ch;
+    while ((ch = getchar())) {
+        if (ch == '\n') {
+            break;
+        }
+    }
     while (1) {
         strcpy(buf.Message, "");
         strcpy(buf.Data, "");

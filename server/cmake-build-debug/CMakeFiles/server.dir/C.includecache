@@ -6,10 +6,18 @@
 
 #IncludeRegexTransform: 
 
+/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server/client.h
+sys/socket.h
+-
+netinet/in.h
+-
+user.h
+/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server/user.h
+
+/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server/commondata.h
+
 /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server/main.c
 stdio.h
--
-sys/types.h
 -
 sys/socket.h
 -
@@ -29,6 +37,10 @@ time.h
 -
 user.h
 /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server/user.h
+client.h
+/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server/client.h
+commondata.h
+/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server/commondata.h
 
 /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server/user.h
 stdbool.h

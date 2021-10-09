@@ -76,6 +76,15 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server/client.c">
+			<Option target="server"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server/client.h">
+			<Option target="server"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server/commondata.h">
+			<Option target="server"/>
+		</Unit>
 		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server/main.c">
 			<Option target="server"/>
 		</Unit>
