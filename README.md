@@ -1,3 +1,5 @@
+##### tips : Please don't try to attack our server,To create a simple and clean chat environment
+
 ## Code By Wenli Sun
 
 ## Just for learning

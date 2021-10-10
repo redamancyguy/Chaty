@@ -1,0 +1,3 @@
+/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/cmake-build-release/CMakeFiles/rebuild_cache.dir
+/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/cmake-build-release/CMakeFiles/edit_cache.dir
+/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/cmake-build-release/CMakeFiles/client.dir

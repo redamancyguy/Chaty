@@ -43,6 +43,12 @@ void receive() {
         puts(buff.Data);
     }
 }
+
+void Logout(struct CommonData buf, struct sockaddr *ser_addr) {
+    socklen_t len = sizeof(struct sockaddr_in);
+    buf.Code = LOGOUT;
+    sendto(client_fd, &buf, sizeof(struct CommonData), 0, ser_addr, len);
+}
 void Login(struct CommonData buf, struct sockaddr *ser_addr) {
     puts("input your username");
     scanf("%s",buf.Message);
@@ -52,7 +58,15 @@ void Login(struct CommonData buf, struct sockaddr *ser_addr) {
     buf.Code = LOGIN;
     sendto(client_fd, &buf, sizeof(struct CommonData), 0, ser_addr, len);
 }
-
+void Unregister(struct CommonData buf, struct sockaddr *ser_addr) {
+    puts("input your username");
+    scanf("%s",buf.Message);
+    puts("input your password");
+    scanf("%s",buf.Data);
+    socklen_t len = sizeof(struct sockaddr_in);
+    buf.Code = UNREGISTER;
+    sendto(client_fd, &buf, sizeof(struct CommonData), 0, ser_addr, len);
+}
 void Register(struct CommonData buf, struct sockaddr *ser_addr) {
     puts("input your username");
     scanf("%s",buf.Message);
@@ -77,7 +91,7 @@ void Disconnect(struct CommonData buf, struct sockaddr *ser_addr) {
 }
 
 void SetGroup(struct CommonData buf, struct sockaddr *ser_addr, unsigned group) {
-    Disconnect(buf, ser_addr);
+//    Disconnect(buf, ser_addr);
     buf.group = group;
     Connect(buf, ser_addr);
 }
@@ -163,8 +177,12 @@ int main(int argc, char *argv[]) {
             SetNickName(buf, (struct sockaddr *) &ser_addr);
         }else if (strcmp(buf.Data, "login") == 0) {
             Login(buf, (struct sockaddr *) &ser_addr);
+        }else if (strcmp(buf.Data, "logout") == 0) {
+            Logout(buf, (struct sockaddr *) &ser_addr);
         } else if (strcmp(buf.Data, "register") == 0) {
             Register(buf, (struct sockaddr *) &ser_addr);
+        }else if (strcmp(buf.Data, "unregister") == 0) {
+            Unregister(buf, (struct sockaddr *) &ser_addr);
         } else if (strncmp(buf.Data, "set group", 9) == 0) {
             strcpy(buf.Data, buf.Data + 9);
             if ((unsigned int) atoi(buf.Data) > 1023) {

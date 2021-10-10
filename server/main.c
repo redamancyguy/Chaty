@@ -14,32 +14,16 @@ short SERVER_PORT = 9999;
 int TIMEOUT = 300;
 
 int main(int argc, char *argv[]) {
-//    struct User *user = malloc(sizeof(struct User));
-//    memset(user,0,sizeof(struct User));
-//    for(int i=0;i<5;i++){
-//        user->id = 100*i;
-//        strcpy(user->nickname,"sunwenli");
-//        strcpy(user->username,"sunwenli");
-//        strcpy(user->password,"zxc.cf.1213");
-//        SetUserByPlace(user,i);
-//    }
-//    user->id=999;
-//    InsertUserByPlace(user,2);
-//    free(user);
-////    printf("bool : %d\n",RemoveUserByPlace(4));
-////    printf("bool : %d\n",RemoveUserByPlace(2));
-//    for(int i=0,count =(int)GetUserCount();i<count;i++){
-//        user = GetUserByPlace(i);
-//        if(user != NULL){
-//            printf("%d\n",user->id);
-//            printf("%s\n",user->username);
-//            printf("%s\n",user->nickname);
-//            printf("%s\n",user->password);
-//            free(user);
-//        }
-//    }
-
-
+    struct User user;
+    memset(&user,0,sizeof(struct User));
+    for(int i=0;i<5;i++){
+        user.id = 100*i;
+        sprintf(user.username,"sunwenli%d",i);
+        strcpy(user.password,"zxc.cf.1213");
+        SetUserByPlace(&user,i);
+    }
+//    CLearUsers();
+    Show();
 //    return 0;
     for (int i = 0; i < argc; i++) {
         puts(argv[i]);
@@ -83,6 +67,7 @@ int main(int argc, char *argv[]) {
     printf("There are %d groups\n", groupNumber);
     puts("Turn on successfully");
     struct Client clientBuf;
+    struct User userBuf;
     struct DataBuf {
         enum StatusCode code;
         unsigned int group;
@@ -110,7 +95,7 @@ int main(int argc, char *argv[]) {
         struct Client *client = TableGet(table, &clientBuf);
         if (client == NULL) {
             if (buf.code == CONNECT) {
-                strcpy(clientBuf.user.nickname, "Unnamed");
+                strcpy(clientBuf.nickname, "Unnamed");
                 clientBuf.time = time(NULL);
                 clientBuf.status = UnLoggedIN;
                 if (!TableSet(table, &clientBuf)) {
@@ -130,9 +115,11 @@ int main(int argc, char *argv[]) {
             } else {
                 client->time = time(NULL);
                 if (buf.code == CHAT) {
-                    char temp[16];
-                    client->status == LoggedIN ? strcpy(temp, "Logged in") : strcpy(temp, "Not logged in");
-                    sprintf(buf.message, "Status : %s | NickName:%s", temp, client->user.nickname);
+                    if(client->status == LoggedIN ){
+                        sprintf(buf.message, "Status : %s | NickName:%s", "Logged in", client->nickname);
+                    }else{
+                        sprintf(buf.message, "Status : %s | NickName:%s", "Not logged in", client->nickname);
+                    }
                     for (int i = 0; i < table->capacity; i++) {
                         if (table->clients[i] != NULL) {
                             if (time(NULL) - table->clients[i]->time > TIMEOUT) {
@@ -147,41 +134,52 @@ int main(int argc, char *argv[]) {
                     }
                     goto PRINT;
                 } else if (buf.code == RENAME) {
-                    strcpy(TableGet(table, &clientBuf)->user.nickname, buf.data);
+                    strcpy(TableGet(table, &clientBuf)->nickname, buf.data);
                     sprintf(buf.message, "Server : Set username (Name:%s) successfully", buf.data);
-                } else if (buf.code == LOGIN) {
-                    struct User *user = GetUserByUserName(buf.message);
-                    if (user != NULL) {
-                        if (strcmp(user->password, buf.data) == 0) {
+                }  else if (buf.code == DISCONNECT) {
+                    TableErase(table, &clientBuf);
+                    strcpy(buf.message, "Server : Disconnect successfully");
+                }else if (buf.code == LOGIN) {
+                    if (GetUserByUserName(&userBuf, buf.message) != -1) {
+                        if (strcmp(userBuf.password, buf.data) == 0) {
                             client->status = LoggedIN;
                             strcpy(buf.message, "Server : Login successfully");
                         } else {
                             strcpy(buf.message, "Server : Wrong password");
                         }
-                        free(user);
                     } else {
                         strcpy(buf.message, "Server : None username");
                     }
+                } else if (buf.code == LOGOUT) {
+                    client->status = UnLoggedIN;
+                    strcpy(buf.message, "Server : Logout successfully");
                 } else if (buf.code == REGISTER) {
-                    struct User *user = (struct User *)malloc(sizeof(struct User));
-                    if (user != NULL) {
-                        strcpy(user->username,buf.message);
-                        strcpy(user->password,buf.data);
-                        user->id = GetUserCount();
-                        printf("id : %d\n",user->id);
-                        if (SetUserByPlace(user,user->id)) {
+                    strcpy(userBuf.username, buf.message);
+                    strcpy(userBuf.password, buf.data);
+                    if (GetUserByUserName(&userBuf, buf.message) == -1) {
+                        if (SetUserByPlace(&userBuf, GetUserCount())) {
                             strcpy(buf.message, "Server : Register successfully");
                         } else {
                             strcpy(buf.message, "Server : Register unsuccessfully");
                         }
-                        free(user);
                     } else {
-                        buf.code = ERROR;
-                        strcpy(buf.message, "Server : ERROR");
+                        strcpy(buf.message, "Server : Duplicate username");
                     }
-                } else if (buf.code == DISCONNECT) {
-                    TableErase(table, &clientBuf);
-                    strcpy(buf.message, "Server : Disconnect successfully");
+                } else if (buf.code == UNREGISTER) {
+                    long temp = GetUserByUserName(&userBuf, buf.message);
+                    if (temp == -1) {
+                        strcpy(buf.message, "Server : None username");
+                    } else {
+                        if (strcmp(userBuf.password, buf.data) == 0) {
+                            if(RemoveUserByPlace(temp)!=-1){
+                                strcpy(buf.message, "Server : Unregister successfully");
+                            }else{
+                                strcpy(buf.message, "Server : Unregister unsuccessfully");
+                            }
+                        } else {
+                            strcpy(buf.message, "Server : Wrong password");
+                        }
+                    }
                 } else {
                     buf.code = UNKNOWN;
                     strcpy(buf.message, "Unknown");
@@ -192,6 +190,7 @@ int main(int argc, char *argv[]) {
         sendto(serverFileDescriptor, &buf, sizeof(struct CommonData), 0,
                (struct sockaddr *) &clientBuf.address, clientBuf.length);
         PRINT:
+        Show();
         printf("%hhu.", *(char *) (&clientBuf.address.sin_addr.s_addr));
         printf("%hhu.", *((char *) (&clientBuf.address.sin_addr.s_addr) + 1));
         printf("%hhu.", *((char *) (&clientBuf.address.sin_addr.s_addr) + 2));

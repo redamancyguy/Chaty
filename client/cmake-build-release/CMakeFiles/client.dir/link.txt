@@ -1,0 +1,1 @@
+/usr/bin/cc -pthread -O3 -DNDEBUG   CMakeFiles/client.dir/main.c.o  -o client 
