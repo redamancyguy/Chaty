@@ -195,6 +195,7 @@ int main(int argc, char *argv[]) {
             Chat(buf, (struct sockaddr *) &ser_addr);
         }
         getchar();
+        memset(&buf,0,sizeof(struct CommonData));
     }
     Disconnect(buf, (struct sockaddr *) &ser_addr);
     close(client_fd);
