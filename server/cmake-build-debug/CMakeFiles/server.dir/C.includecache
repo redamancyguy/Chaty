@@ -19,6 +19,8 @@ user.h
 /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server/main.c
 stdio.h
 -
+stdlib.h
+-
 sys/socket.h
 -
 netinet/in.h

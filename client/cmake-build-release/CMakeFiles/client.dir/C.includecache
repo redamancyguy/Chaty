@@ -6,6 +6,8 @@
 
 #IncludeRegexTransform: 
 
+/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/commondata.h
+
 /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/main.c
 stdio.h
 -
@@ -25,4 +27,6 @@ pthread.h
 -
 stdlib.h
 -
+commondata.h
+/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/commondata.h
 

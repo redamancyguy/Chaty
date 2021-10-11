@@ -14,7 +14,7 @@ enum ClientStatus{
 struct Client {
     socklen_t length;
     struct sockaddr_in address;
-    struct User user;
+    struct User *user;
     char nickname[20];
     enum ClientStatus status;
     long long time;

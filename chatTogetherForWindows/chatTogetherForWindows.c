@@ -96,6 +96,7 @@ int main(int argc, char* argv[])
     unsigned dwChildId;
     _beginthreadex(NULL, 0, (_beginthreadex_proc_type)&receive, NULL, 0, &dwChildId);
     buf.Code = CONNECT;
+    printf("%p\n", &buf);
     puts("input your group number (0 ~ 1023)");
     while (1) {
         scanf("%u", &buf.group);

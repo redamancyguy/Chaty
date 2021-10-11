@@ -27,7 +27,9 @@ long GetUserByPlace(struct User *user, unsigned long place) {
         return -1;
     }
     fseek(userFile, (long) (sizeof(struct User) * place), SEEK_SET);
-    fread(user, sizeof(struct User), 1, userFile);
+    if(fread(user, sizeof(struct User), 1, userFile) < 0){
+        return -1;
+    }
     fclose(userFile);
     return (long) place;
 }
@@ -37,8 +39,7 @@ void Show() {
     if ((userFile = fopen(fileName, "rb")) == 0) {
         return;
     }
-    for (long i = 0, count = GetUserCount(); i < count; i++) {
-        fread(&temp, sizeof(struct User), 1, userFile);
+    while(fread(&temp, sizeof(struct User), 1, userFile) > 0){
         printf("%ld %s %s\n",temp.id,temp.username,temp.password);
     }
     fclose(userFile);
@@ -50,13 +51,14 @@ long GetUserByUserName(struct User *user, char *username) {
     if ((userFile = fopen(fileName, "rb")) == 0) {
         return -1;
     }
-    for (long i = 0, count = GetUserCount(); i < count; i++) {
-        fread(&temp, sizeof(struct User), 1, userFile);
+    long i=0;
+    while(fread(&temp, sizeof(struct User), 1, userFile) >0) {
         if (strcmp(username, temp.username) == 0) {
             memcpy(user, &temp, sizeof(struct User));
             fclose(userFile);
             return i;
         }
+        i++;
     }
     fclose(userFile);
     return -1;
@@ -79,12 +81,18 @@ long RemoveUserByPlace(unsigned long place) {
     }
     long i;
     for (i = 0; i < place; i++) {
-        fread(&temp, sizeof(struct User), 1, userFile);
+        if(fread(&temp, sizeof(struct User), 1, userFile)<0 ){
+            return -1;
+        }
         fwrite(&temp, sizeof(struct User), 1, tempFile);
     }
-    fread(&temp, sizeof(struct User), 1, userFile);
+    if(fread(&temp, sizeof(struct User), 1, userFile)<0 ){
+        return -1;
+    }
     for (; i < count - 1; i++) {
-        fread(&temp, sizeof(struct User), 1, userFile);
+        if(fread(&temp, sizeof(struct User), 1, userFile)<0 ){
+            return -1;
+        }
         fwrite(&temp, sizeof(struct User), 1, tempFile);
     }
     fclose(userFile);
@@ -110,12 +118,16 @@ long InsertUserByPlace(struct User *user, unsigned long place) {
     }
     long i;
     for (i = 0; i < place; i++) {
-        fread(&temp, sizeof(struct User), 1, userFile);
+        if(fread(&temp, sizeof(struct User), 1, userFile)<0 ){
+            return -1;
+        }
         fwrite(&temp, sizeof(struct User), 1, tempFile);
     }
     fwrite(user, sizeof(struct User), 1, tempFile);
     for (; i < count; i++) {
-        fread(&temp, sizeof(struct User), 1, userFile);
+        if(fread(&temp, sizeof(struct User), 1, userFile)<0 ){
+            return -1;
+        }
         fwrite(&temp, sizeof(struct User), 1, tempFile);
     }
     fclose(userFile);

@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <string.h>
@@ -10,27 +11,36 @@
 #include "client.h"
 #include "commondata.h"
 
-short SERVER_PORT = 9999;
-int TIMEOUT = 300;
-
 int main(int argc, char *argv[]) {
-    struct User user;
-    memset(&user,0,sizeof(struct User));
-    for(int i=0;i<5;i++){
-        user.id = 100*i;
-        sprintf(user.username,"sunwenli%d",i);
-        strcpy(user.password,"zxc.cf.1213");
-        SetUserByPlace(&user,i);
-    }
-//    CLearUsers();
-    Show();
-//    return 0;
-    for (int i = 0; i < argc; i++) {
-        puts(argv[i]);
-    }
-    puts("====================================");
+    short SERVER_PORT = 9999;
+    int TIMEOUT = 300;
     unsigned int groupNumber = 1024;
     unsigned int groupSize = 1024;
+    for (int i = 0; i < argc; i++) {
+        if(argv[i][0] == '-'){
+            if(strncmp(argv[i]+1,"port",4) == 0){
+                char *temp;
+                SERVER_PORT = (short)strtol(argv[i]+5,&temp,10);
+            }
+            else if(strncmp(argv[i]+1,"groupSize",9) == 0){
+                char *temp;
+                groupSize = (unsigned int)strtol(argv[i]+10,&temp,10);
+            }
+            else if(strncmp(argv[i]+1,"groupNumber",11) == 0){
+                char *temp;
+                groupNumber = (unsigned int)strtol(argv[i]+12,&temp,10);
+            }
+            else if(strncmp(argv[i]+1,"timeOut",7) == 0){
+                char *temp;
+                TIMEOUT = (int)strtol(argv[i]+8,&temp,10);
+            }
+        }
+        puts(argv[i]);
+    }
+    printf("serverPort : %d\n",SERVER_PORT);
+    printf("groupSize : %d\n",groupSize);
+    printf("groupNumber : %d\n",groupNumber);
+    printf("TIMEOUT : %d\n",TIMEOUT);
     int serverFileDescriptor;
     struct sockaddr_in serverAddress;
     serverFileDescriptor = socket(AF_INET, SOCK_DGRAM, 0); //AF_INET:IPV4;SOCK_DGRAM:UDP
@@ -51,7 +61,7 @@ int main(int argc, char *argv[]) {
     puts("Bind successfully");
     ConnectionTable tables[groupNumber];
     memset(tables, 0, sizeof(ConnectionTable) * groupNumber);
-    for (unsigned int i = 0; i < 1024; i++) {
+    for (unsigned int i = 0; i < groupNumber; i++) {
         tables[i] = TableNew(groupSize);
         if (tables[i] == NULL) {
             puts("Create table failed");
@@ -66,8 +76,6 @@ int main(int argc, char *argv[]) {
     printf("The size of each group is : %d\n", groupSize);
     printf("There are %d groups\n", groupNumber);
     puts("Turn on successfully");
-    struct Client clientBuf;
-    struct User userBuf;
     struct DataBuf {
         enum StatusCode code;
         unsigned int group;
@@ -75,50 +83,53 @@ int main(int argc, char *argv[]) {
         char data[1024];
         char others[1024];
     };
-    struct DataBuf buf;
+    struct Client clientBuf;
+    struct User userBuf;
+    struct DataBuf dataBuf;
     clientBuf.length = sizeof(clientBuf.address);
     while (true) {
-        long int count = recvfrom(serverFileDescriptor, &buf, sizeof(struct DataBuf), 0,
+        long int count = recvfrom(serverFileDescriptor, &dataBuf, sizeof(struct DataBuf), 0,
                                   (struct sockaddr *) &clientBuf.address, &clientBuf.length);
         if (count == -1) {
             puts("Receive data fail");
             break;
         } else if (count != sizeof(struct CommonData)) {
-            puts("Invalid data package");
             continue;
         }
-        if (buf.group >= groupNumber) {
-            puts("");
+        if (dataBuf.group >= groupNumber) {
+            strcpy(dataBuf.message,"Server : Wrong group");
+            sendto(serverFileDescriptor, &dataBuf, sizeof(struct CommonData), 0,
+                   (struct sockaddr *) &clientBuf.address, clientBuf.length);
             goto PRINT;
         }
-        ConnectionTable table = tables[buf.group];
+        ConnectionTable table = tables[dataBuf.group];
         struct Client *client = TableGet(table, &clientBuf);
         if (client == NULL) {
-            if (buf.code == CONNECT) {
+            if (dataBuf.code == CONNECT) {
                 strcpy(clientBuf.nickname, "Unnamed");
                 clientBuf.time = time(NULL);
                 clientBuf.status = UnLoggedIN;
                 if (!TableSet(table, &clientBuf)) {
-                    buf.code = ERROR;
-                    strcpy(buf.message, "Server : This group is full");
+                    dataBuf.code = ERROR;
+                    strcpy(dataBuf.message, "Server : This group is full");
                 } else {
-                    strcpy(buf.message, "Server : Connect successfully");
+                    strcpy(dataBuf.message, "Server : Connect successfully");
                 }
             } else {
-                strcpy(buf.message, "Server : You haven't connected yet");
+                strcpy(dataBuf.message, "Server : You haven't connected yet");
             }
 
         } else {
             if (time(NULL) - client->time > TIMEOUT) {
-                strcpy(buf.message, "Server : Time out");
+                strcpy(dataBuf.message, "Server : Time out");
                 TableErase(table, client);
             } else {
                 client->time = time(NULL);
-                if (buf.code == CHAT) {
-                    if(client->status == LoggedIN ){
-                        sprintf(buf.message, "Status : %s | NickName:%s", "Logged in", client->nickname);
-                    }else{
-                        sprintf(buf.message, "Status : %s | NickName:%s", "Not logged in", client->nickname);
+                if (dataBuf.code == CHAT) {
+                    if (client->status == LoggedIN) {
+                        sprintf(dataBuf.message, "Status : %s | NickName:%s", "Logged in", client->nickname);
+                    } else {
+                        sprintf(dataBuf.message, "Status : %s | NickName:%s", "Not logged in", client->nickname);
                     }
                     for (int i = 0; i < table->capacity; i++) {
                         if (table->clients[i] != NULL) {
@@ -128,79 +139,78 @@ int main(int argc, char *argv[]) {
                                 table->size--;
                                 continue;
                             }
-                            sendto(serverFileDescriptor, &buf, sizeof(struct CommonData), 0,
+                            sendto(serverFileDescriptor, &dataBuf, sizeof(struct CommonData), 0,
                                    (struct sockaddr *) &table->clients[i]->address, table->clients[i]->length);
                         }
                     }
                     goto PRINT;
-                } else if (buf.code == RENAME) {
-                    strcpy(TableGet(table, &clientBuf)->nickname, buf.data);
-                    sprintf(buf.message, "Server : Set username (Name:%s) successfully", buf.data);
-                }  else if (buf.code == DISCONNECT) {
+                } else if (dataBuf.code == RENAME) {
+                    strcpy(TableGet(table, &clientBuf)->nickname, dataBuf.data);
+                    sprintf(dataBuf.message, "Server : Set username (Name:%s) successfully", dataBuf.data);
+                } else if (dataBuf.code == DISCONNECT) {
                     TableErase(table, &clientBuf);
-                    strcpy(buf.message, "Server : Disconnect successfully");
-                }else if (buf.code == LOGIN) {
-                    if (GetUserByUserName(&userBuf, buf.message) != -1) {
-                        if (strcmp(userBuf.password, buf.data) == 0) {
+                    strcpy(dataBuf.message, "Server : Disconnect successfully");
+                } else if (dataBuf.code == LOGIN) {
+                    if (GetUserByUserName(&userBuf, dataBuf.message) != -1) {
+                        if (strcmp(userBuf.password, dataBuf.data) == 0) {
                             client->status = LoggedIN;
-                            strcpy(buf.message, "Server : Login successfully");
+                            strcpy(dataBuf.message, "Server : Login successfully");
                         } else {
-                            strcpy(buf.message, "Server : Wrong password");
+                            strcpy(dataBuf.message, "Server : Wrong password");
                         }
                     } else {
-                        strcpy(buf.message, "Server : None username");
+                        strcpy(dataBuf.message, "Server : None username");
                     }
-                } else if (buf.code == LOGOUT) {
+                } else if (dataBuf.code == LOGOUT) {
                     client->status = UnLoggedIN;
-                    strcpy(buf.message, "Server : Logout successfully");
-                } else if (buf.code == REGISTER) {
-                    strcpy(userBuf.username, buf.message);
-                    strcpy(userBuf.password, buf.data);
-                    if (GetUserByUserName(&userBuf, buf.message) == -1) {
+                    strcpy(dataBuf.message, "Server : Logout successfully");
+                } else if (dataBuf.code == REGISTER) {
+                    strcpy(userBuf.username, dataBuf.message);
+                    strcpy(userBuf.password, dataBuf.data);
+                    if (GetUserByUserName(&userBuf, dataBuf.message) == -1) {
                         if (SetUserByPlace(&userBuf, GetUserCount())) {
-                            strcpy(buf.message, "Server : Register successfully");
+                            strcpy(dataBuf.message, "Server : Register successfully");
                         } else {
-                            strcpy(buf.message, "Server : Register unsuccessfully");
+                            strcpy(dataBuf.message, "Server : Register unsuccessfully");
                         }
                     } else {
-                        strcpy(buf.message, "Server : Duplicate username");
+                        strcpy(dataBuf.message, "Server : Duplicate username");
                     }
-                } else if (buf.code == UNREGISTER) {
-                    long temp = GetUserByUserName(&userBuf, buf.message);
+                } else if (dataBuf.code == UNREGISTER) {
+                    long temp = GetUserByUserName(&userBuf, dataBuf.message);
                     if (temp == -1) {
-                        strcpy(buf.message, "Server : None username");
+                        strcpy(dataBuf.message, "Server : None username");
                     } else {
-                        if (strcmp(userBuf.password, buf.data) == 0) {
-                            if(RemoveUserByPlace(temp)!=-1){
-                                strcpy(buf.message, "Server : Unregister successfully");
-                            }else{
-                                strcpy(buf.message, "Server : Unregister unsuccessfully");
+                        if (strcmp(userBuf.password, dataBuf.data) == 0) {
+                            if (RemoveUserByPlace(temp) != -1) {
+                                strcpy(dataBuf.message, "Server : Unregister successfully");
+                            } else {
+                                strcpy(dataBuf.message, "Server : Unregister unsuccessfully");
                             }
                         } else {
-                            strcpy(buf.message, "Server : Wrong password");
+                            strcpy(dataBuf.message, "Server : Wrong password");
                         }
                     }
                 } else {
-                    buf.code = UNKNOWN;
-                    strcpy(buf.message, "Unknown");
+                    dataBuf.code = UNKNOWN;
+                    strcpy(dataBuf.message, "Unknown");
                 }
             }
         }
-        strcpy(buf.data, "");
-        sendto(serverFileDescriptor, &buf, sizeof(struct CommonData), 0,
+        strcpy(dataBuf.data, "");
+        sendto(serverFileDescriptor, &dataBuf, sizeof(struct CommonData), 0,
                (struct sockaddr *) &clientBuf.address, clientBuf.length);
         PRINT:
-        Show();
         printf("%hhu.", *(char *) (&clientBuf.address.sin_addr.s_addr));
         printf("%hhu.", *((char *) (&clientBuf.address.sin_addr.s_addr) + 1));
         printf("%hhu.", *((char *) (&clientBuf.address.sin_addr.s_addr) + 2));
         printf("%hhu:", *((char *) (&clientBuf.address.sin_addr.s_addr) + 3));
         printf("%d", clientBuf.address.sin_port);
-        printf("\t Code : %d\tGroup : %d\t", buf.code, buf.group);
-        printf("size: %d\n", table->size);
+        printf("\t Code : %d\tGroup : %d\t", dataBuf.code, dataBuf.group);
+        printf("size: %d\n", dataBuf.group<groupNumber?table->size:-1);
     }
     puts("Shutdown server successfully");
-    for (unsigned int i = 0; i < 1024; i++) {
+    for (unsigned int i = 0; i < groupNumber; i++) {
         TableDestroy(tables[i]);
     }
     puts("Delete table successfully");

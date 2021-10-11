@@ -5,7 +5,6 @@
 #include <string.h>
 #include <malloc.h>
 #include "client.h"
-
 ConnectionTable TableNew(unsigned int capacity) {
     ConnectionTable table = (ConnectionTable_ *) malloc(sizeof(ConnectionTable_));
     if (table == NULL) {
@@ -48,6 +47,7 @@ bool TableSet(ConnectionTable table, const struct Client *client) {
     while (i < doubleLength) {
         if (table->clients[flag + i] == NULL) {
             table->clients[flag + i] = (struct Client *) malloc(sizeof(struct Client));
+            memset(table->clients[flag + i],0,sizeof(struct Client));
             *table->clients[flag + i] = *client;
             table->size++;
             return true;
@@ -58,6 +58,7 @@ bool TableSet(ConnectionTable table, const struct Client *client) {
         }
         if (table->clients[flag - i] == NULL) {
             table->clients[flag - i] = (struct Client *) malloc(sizeof(struct Client));
+            memset(table->clients[flag - i],0,sizeof(struct Client));
             *table->clients[flag - i] = *client;
             table->size++;
             return true;
@@ -73,6 +74,7 @@ bool TableSet(ConnectionTable table, const struct Client *client) {
         while (i < table->capacity) {
             if (table->clients[i] == NULL) {
                 table->clients[i] = (struct Client *) malloc(sizeof(struct Client));
+                memset(table->clients[i],0,sizeof(struct Client));
                 *table->clients[i] = *client;
                 table->size++;
                 return true;
@@ -88,6 +90,7 @@ bool TableSet(ConnectionTable table, const struct Client *client) {
         while (i >= 0) {
             if (table->clients[i] == NULL) {
                 table->clients[i] = (struct Client *) malloc(sizeof(struct Client));
+                memset(table->clients[i],0,sizeof(struct Client));
                 *table->clients[i] = *client;
                 table->size++;
                 return true;
