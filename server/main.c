@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
     printf("serverPort : %d\n",SERVER_PORT);
     printf("groupSize : %d\n",groupSize);
     printf("groupNumber : %d\n",groupNumber);
-    printf("TIMEOUT : %d\n",TIMEOUT);
+    printf("timeout : %d\n",TIMEOUT);
     int serverFileDescriptor;
     struct sockaddr_in serverAddress;
     serverFileDescriptor = socket(AF_INET, SOCK_DGRAM, 0); //AF_INET:IPV4;SOCK_DGRAM:UDP
@@ -73,8 +73,6 @@ int main(int argc, char *argv[]) {
         }
     }
     puts("Create Group table successfully");
-    printf("The size of each group is : %d\n", groupSize);
-    printf("There are %d groups\n", groupNumber);
     puts("Turn on successfully");
     struct DataBuf {
         enum StatusCode code;
