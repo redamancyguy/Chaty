@@ -177,6 +177,33 @@ main.c.s:
 	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/main.c.s
 .PHONY : main.c.s
 
+messagequeue.o: messagequeue.c.o
+
+.PHONY : messagequeue.o
+
+# target to build an object file
+messagequeue.c.o:
+	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/messagequeue.c.o
+.PHONY : messagequeue.c.o
+
+messagequeue.i: messagequeue.c.i
+
+.PHONY : messagequeue.i
+
+# target to preprocess a source file
+messagequeue.c.i:
+	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/messagequeue.c.i
+.PHONY : messagequeue.c.i
+
+messagequeue.s: messagequeue.c.s
+
+.PHONY : messagequeue.s
+
+# target to generate assembly for a file
+messagequeue.c.s:
+	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/messagequeue.c.s
+.PHONY : messagequeue.c.s
+
 user.o: user.c.o
 
 .PHONY : user.o
@@ -219,6 +246,9 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... messagequeue.o"
+	@echo "... messagequeue.i"
+	@echo "... messagequeue.s"
 	@echo "... user.o"
 	@echo "... user.i"
 	@echo "... user.s"

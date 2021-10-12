@@ -10,13 +10,17 @@
 #include <pthread.h>
 #include "user.h"
 #include "client.h"
+#include "messagequeue.h"
 #include "commondata.h"
 #include "messagequeue.h"
 unsigned int G_TIMEOUT = 300;
 unsigned int G_groupSize = 1024;
 int G_serverFileDescriptor;
-
-void *groupServer(void *pointer) {
+struct Transmission{
+    pthread_mutex_t *mutex;
+    MessageQueue queue;
+};
+void *groupServer(struct Transmission *pointer) {
     const unsigned int TIMEOUT = G_TIMEOUT;
     int serverFileDescriptor = G_serverFileDescriptor;
     ConnectionTable table = TableNew(G_groupSize);
@@ -27,14 +31,18 @@ void *groupServer(void *pointer) {
     struct Message message;
     message.client.length = sizeof(struct sockaddr_in);
     MessageQueue queue = New_Queue();
-    *((MessageQueue*)pointer) = queue;
+    pointer->queue = queue;
+    pthread_mutex_t mutex;
+    pointer->mutex = &mutex;
     while (true) {
         if (Empty_Queue(queue)) {
             usleep(100000);
             continue;
         }
         message = Front_Queue(queue);
+        pthread_mutex_lock(&mutex);
         Pop_Queue(queue);
+        pthread_mutex_unlock(&mutex);
         struct Client *client = TableGet(table, &message.client);
         if (client == NULL) {
             if (message.data.code == CONNECT) {
@@ -144,11 +152,13 @@ void *groupServer(void *pointer) {
         printf("\t Code : %d\tGroup : %d\t", message.data.code, message.data.group);
         printf("size: %d\n", table->size);
     }
+    if(pthread_mutex_destroy(&mutex)) {
+        perror("Destroy mutex failed");
+    }
     Destroy_Queue(queue);
     TableDestroy(table);
     return NULL;
 }
-#include "messagequeue.h"
 int main(int argc, char *argv[]) {
     unsigned int TIMEOUT = 300;
     unsigned int groupSize = 1024;
@@ -176,22 +186,20 @@ int main(int argc, char *argv[]) {
     struct sockaddr_in serverAddress;
     int serverFileDescriptor = socket(AF_INET, SOCK_DGRAM, 0); //AF_INET:IPV4;SOCK_DGRAM:UDP
     if (serverFileDescriptor < 0) {
-        puts("Create socket fail!");
+        perror("Create socket fail!");
         return -1;
     }
-    puts("Create socket successfully");
     memset(&serverAddress, 0, sizeof(struct sockaddr_in));
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_addr.s_addr = htonl(INADDR_ANY);
     serverAddress.sin_port = htons(SERVER_PORT);
     if (bind(serverFileDescriptor, (struct sockaddr *) &serverAddress, sizeof(serverAddress)) < 0) {
-        puts("Socket bind fail");
+        perror("Socket bind fail");
         close(serverFileDescriptor);
         return -2;
     }
-    puts("Bind successfully");
     puts("Turn on successfully");
-    MessageQueue queues[groupNumber];
+    struct Transmission transmissions[groupNumber];
 
     G_serverFileDescriptor = serverFileDescriptor;
     G_groupSize = groupSize;
@@ -199,7 +207,7 @@ int main(int argc, char *argv[]) {
 
     pthread_t pid[groupNumber];
     for (unsigned int i = 0; i < groupNumber; i++) {
-        pthread_create(&pid[i], NULL, (void *(*)(void *)) groupServer, &queues[i]);
+        pthread_create(&pid[i], NULL, (void *(*)(void *)) groupServer, &transmissions[i]);
     }
     struct DataBuf {
         struct CommonData data;
@@ -212,7 +220,7 @@ int main(int argc, char *argv[]) {
         long int count = recvfrom(serverFileDescriptor, &dataBuf, sizeof(struct DataBuf), 0,
                                   (struct sockaddr *) &clientBuf.address, &clientBuf.length);
         if (count == -1) {
-            puts("Receive data fail");
+            perror("Receive data fail");
             break;
         } else if (count != sizeof(struct CommonData)) {
             continue;
@@ -226,7 +234,18 @@ int main(int argc, char *argv[]) {
         struct Message message;
         message.client = clientBuf;
         message.data = dataBuf.data;
-        Push_Queue(queues[dataBuf.data.group],message);
+        if(dataBuf.data.code == EXIT){
+            for(int i=0;i<groupNumber;i++){
+                dataBuf.data.code = EXIT;
+                message.client = clientBuf;
+                message.data = dataBuf.data;
+                Push_Queue(transmissions[i].queue,message);
+            }
+            break;
+        }
+        pthread_mutex_lock(transmissions[dataBuf.data.group].mutex);
+        Push_Queue(transmissions[dataBuf.data.group].queue,message);
+        pthread_mutex_unlock(transmissions[dataBuf.data.group].mutex);
     }
     puts("Shutdown server successfully");
     close(serverFileDescriptor);

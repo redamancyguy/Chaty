@@ -6,6 +6,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_C
   "/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/client.c" "/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/CMakeFiles/server.dir/client.c.o"
   "/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/main.c" "/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/CMakeFiles/server.dir/main.c.o"
+  "/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/messagequeue.c" "/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/CMakeFiles/server.dir/messagequeue.c.o"
   "/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/user.c" "/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/CMakeFiles/server.dir/user.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
