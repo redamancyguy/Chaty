@@ -17,7 +17,9 @@ int client_fd;
 void receive() {
     struct sockaddr_in src;
     socklen_t len = sizeof(struct sockaddr_in);
+    int i=0;
     while (1) {
+        printf("%d\n",i++);
         struct CommonData buff;
         recvfrom(client_fd, &buff, sizeof(struct CommonData), 0, (struct sockaddr *) &src, &len);
         time_t now;
@@ -159,7 +161,9 @@ int main(int argc, char *argv[]) {
             break;
         }
     }
+    unsigned int group = buf.group;
     while (1) {
+        buf.group = group;
         strcpy(buf.message, "");
         strcpy(buf.data, "");
         if (scanf("%[^\n]*?", buf.data) < 0) { break; }
@@ -187,6 +191,7 @@ int main(int argc, char *argv[]) {
             }
             SetGroup(buf, (struct sockaddr *) &ser_addr, (unsigned int) atoi(buf.data));
             buf.group = (unsigned int) atoi(buf.data);
+            group = buf.group;
         } else if (strcmp(buf.data, "disconnect") == 0) {
             Disconnect(buf, (struct sockaddr *) &ser_addr);
         } else if (strcmp(buf.data, "connect") == 0) {

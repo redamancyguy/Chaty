@@ -10,7 +10,6 @@
 #include "user.h"
 #include "client.h"
 #include "commondata.h"
-
 int main(int argc, char *argv[]) {
     short SERVER_PORT = 9999;
     int TIMEOUT = 300;
@@ -192,6 +191,9 @@ int main(int argc, char *argv[]) {
                 } else {
                     dataBuf.code = UNKNOWN;
                     strcpy(dataBuf.message, "Unknown");
+
+
+
                 }
             }
         }

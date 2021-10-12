@@ -1,1 +1,0 @@
-/usr/bin/c++  -pthread -g   CMakeFiles/untitled.dir/main.cpp.o  -o untitled 
