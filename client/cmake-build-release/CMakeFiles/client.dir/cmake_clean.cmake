@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/client.dir/include/Stack.c.o"
+  "CMakeFiles/client.dir/include/TreeMap.c.o"
   "CMakeFiles/client.dir/main.c.o"
   "client"
   "client.pdb"

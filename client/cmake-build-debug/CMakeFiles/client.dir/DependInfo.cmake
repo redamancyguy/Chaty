@@ -4,6 +4,12 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
+  "/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/include/ArrayList.c" "/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/cmake-build-debug/CMakeFiles/client.dir/include/ArrayList.c.o"
+  "/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/include/DCQueue.c" "/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/cmake-build-debug/CMakeFiles/client.dir/include/DCQueue.c.o"
+  "/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/include/HashMap.c" "/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/cmake-build-debug/CMakeFiles/client.dir/include/HashMap.c.o"
+  "/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/include/Stack.c" "/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/cmake-build-debug/CMakeFiles/client.dir/include/Stack.c.o"
+  "/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/include/String.c" "/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/cmake-build-debug/CMakeFiles/client.dir/include/String.c.o"
+  "/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/include/TreeMap.c" "/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/cmake-build-debug/CMakeFiles/client.dir/include/TreeMap.c.o"
   "/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/main.c" "/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/cmake-build-debug/CMakeFiles/client.dir/main.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")

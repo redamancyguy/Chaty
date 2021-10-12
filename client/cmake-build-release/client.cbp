@@ -76,6 +76,18 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/include/Stack.c">
+			<Option target="client"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/include/Stack.h">
+			<Option target="client"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/include/TreeMap.c">
+			<Option target="client"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/include/TreeMap.h">
+			<Option target="client"/>
+		</Unit>
 		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/main.c">
 			<Option target="client"/>
 		</Unit>

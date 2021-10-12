@@ -123,6 +123,168 @@ client/fast:
 	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/build
 .PHONY : client/fast
 
+include/ArrayList.o: include/ArrayList.c.o
+
+.PHONY : include/ArrayList.o
+
+# target to build an object file
+include/ArrayList.c.o:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/include/ArrayList.c.o
+.PHONY : include/ArrayList.c.o
+
+include/ArrayList.i: include/ArrayList.c.i
+
+.PHONY : include/ArrayList.i
+
+# target to preprocess a source file
+include/ArrayList.c.i:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/include/ArrayList.c.i
+.PHONY : include/ArrayList.c.i
+
+include/ArrayList.s: include/ArrayList.c.s
+
+.PHONY : include/ArrayList.s
+
+# target to generate assembly for a file
+include/ArrayList.c.s:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/include/ArrayList.c.s
+.PHONY : include/ArrayList.c.s
+
+include/DCQueue.o: include/DCQueue.c.o
+
+.PHONY : include/DCQueue.o
+
+# target to build an object file
+include/DCQueue.c.o:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/include/DCQueue.c.o
+.PHONY : include/DCQueue.c.o
+
+include/DCQueue.i: include/DCQueue.c.i
+
+.PHONY : include/DCQueue.i
+
+# target to preprocess a source file
+include/DCQueue.c.i:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/include/DCQueue.c.i
+.PHONY : include/DCQueue.c.i
+
+include/DCQueue.s: include/DCQueue.c.s
+
+.PHONY : include/DCQueue.s
+
+# target to generate assembly for a file
+include/DCQueue.c.s:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/include/DCQueue.c.s
+.PHONY : include/DCQueue.c.s
+
+include/HashMap.o: include/HashMap.c.o
+
+.PHONY : include/HashMap.o
+
+# target to build an object file
+include/HashMap.c.o:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/include/HashMap.c.o
+.PHONY : include/HashMap.c.o
+
+include/HashMap.i: include/HashMap.c.i
+
+.PHONY : include/HashMap.i
+
+# target to preprocess a source file
+include/HashMap.c.i:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/include/HashMap.c.i
+.PHONY : include/HashMap.c.i
+
+include/HashMap.s: include/HashMap.c.s
+
+.PHONY : include/HashMap.s
+
+# target to generate assembly for a file
+include/HashMap.c.s:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/include/HashMap.c.s
+.PHONY : include/HashMap.c.s
+
+include/Stack.o: include/Stack.c.o
+
+.PHONY : include/Stack.o
+
+# target to build an object file
+include/Stack.c.o:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/include/Stack.c.o
+.PHONY : include/Stack.c.o
+
+include/Stack.i: include/Stack.c.i
+
+.PHONY : include/Stack.i
+
+# target to preprocess a source file
+include/Stack.c.i:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/include/Stack.c.i
+.PHONY : include/Stack.c.i
+
+include/Stack.s: include/Stack.c.s
+
+.PHONY : include/Stack.s
+
+# target to generate assembly for a file
+include/Stack.c.s:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/include/Stack.c.s
+.PHONY : include/Stack.c.s
+
+include/String.o: include/String.c.o
+
+.PHONY : include/String.o
+
+# target to build an object file
+include/String.c.o:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/include/String.c.o
+.PHONY : include/String.c.o
+
+include/String.i: include/String.c.i
+
+.PHONY : include/String.i
+
+# target to preprocess a source file
+include/String.c.i:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/include/String.c.i
+.PHONY : include/String.c.i
+
+include/String.s: include/String.c.s
+
+.PHONY : include/String.s
+
+# target to generate assembly for a file
+include/String.c.s:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/include/String.c.s
+.PHONY : include/String.c.s
+
+include/TreeMap.o: include/TreeMap.c.o
+
+.PHONY : include/TreeMap.o
+
+# target to build an object file
+include/TreeMap.c.o:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/include/TreeMap.c.o
+.PHONY : include/TreeMap.c.o
+
+include/TreeMap.i: include/TreeMap.c.i
+
+.PHONY : include/TreeMap.i
+
+# target to preprocess a source file
+include/TreeMap.c.i:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/include/TreeMap.c.i
+.PHONY : include/TreeMap.c.i
+
+include/TreeMap.s: include/TreeMap.c.s
+
+.PHONY : include/TreeMap.s
+
+# target to generate assembly for a file
+include/TreeMap.c.s:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/include/TreeMap.c.s
+.PHONY : include/TreeMap.c.s
+
 main.o: main.c.o
 
 .PHONY : main.o
@@ -159,6 +321,24 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... client"
+	@echo "... include/ArrayList.o"
+	@echo "... include/ArrayList.i"
+	@echo "... include/ArrayList.s"
+	@echo "... include/DCQueue.o"
+	@echo "... include/DCQueue.i"
+	@echo "... include/DCQueue.s"
+	@echo "... include/HashMap.o"
+	@echo "... include/HashMap.i"
+	@echo "... include/HashMap.s"
+	@echo "... include/Stack.o"
+	@echo "... include/Stack.i"
+	@echo "... include/Stack.s"
+	@echo "... include/String.o"
+	@echo "... include/String.i"
+	@echo "... include/String.s"
+	@echo "... include/TreeMap.o"
+	@echo "... include/TreeMap.i"
+	@echo "... include/TreeMap.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

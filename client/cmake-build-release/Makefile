@@ -123,6 +123,60 @@ client/fast:
 	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/build
 .PHONY : client/fast
 
+include/Stack.o: include/Stack.c.o
+
+.PHONY : include/Stack.o
+
+# target to build an object file
+include/Stack.c.o:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/include/Stack.c.o
+.PHONY : include/Stack.c.o
+
+include/Stack.i: include/Stack.c.i
+
+.PHONY : include/Stack.i
+
+# target to preprocess a source file
+include/Stack.c.i:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/include/Stack.c.i
+.PHONY : include/Stack.c.i
+
+include/Stack.s: include/Stack.c.s
+
+.PHONY : include/Stack.s
+
+# target to generate assembly for a file
+include/Stack.c.s:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/include/Stack.c.s
+.PHONY : include/Stack.c.s
+
+include/TreeMap.o: include/TreeMap.c.o
+
+.PHONY : include/TreeMap.o
+
+# target to build an object file
+include/TreeMap.c.o:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/include/TreeMap.c.o
+.PHONY : include/TreeMap.c.o
+
+include/TreeMap.i: include/TreeMap.c.i
+
+.PHONY : include/TreeMap.i
+
+# target to preprocess a source file
+include/TreeMap.c.i:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/include/TreeMap.c.i
+.PHONY : include/TreeMap.c.i
+
+include/TreeMap.s: include/TreeMap.c.s
+
+.PHONY : include/TreeMap.s
+
+# target to generate assembly for a file
+include/TreeMap.c.s:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/include/TreeMap.c.s
+.PHONY : include/TreeMap.c.s
+
 main.o: main.c.o
 
 .PHONY : main.o
@@ -159,6 +213,12 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... client"
+	@echo "... include/Stack.o"
+	@echo "... include/Stack.i"
+	@echo "... include/Stack.s"
+	@echo "... include/TreeMap.o"
+	@echo "... include/TreeMap.i"
+	@echo "... include/TreeMap.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

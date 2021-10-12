@@ -8,6 +8,22 @@
 
 /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/commondata.h
 
+/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/include/Stack.h
+stdbool.h
+-
+
+/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/include/TreeMap.c
+malloc.h
+-
+Stack.h
+/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/include/Stack.h
+TreeMap.h
+/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/include/TreeMap.h
+
+/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/include/TreeMap.h
+stdbool.h
+-
+
 /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/main.c
 stdio.h
 -
@@ -29,4 +45,6 @@ stdlib.h
 -
 commondata.h
 /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/commondata.h
+include/TreeMap.h
+/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/include/TreeMap.h
 

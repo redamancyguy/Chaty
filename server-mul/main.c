@@ -238,6 +238,9 @@ int main(int argc, char *argv[]) {
             } else if (strncmp(argv[i] + 1, "timeOut", 7) == 0) {
                 char *temp;
                 TIMEOUT = (int) strtol(argv[i] + 8, &temp, 10);
+            }else if (strncmp(argv[i] + 1, "listenThread", 12) == 0) {
+                char *temp;
+                listenNumber = (unsigned int) strtol(argv[i] + 13, &temp, 10);
             }
         }
         puts(argv[i]);
