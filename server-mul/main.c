@@ -18,6 +18,7 @@ unsigned int G_TIMEOUT = 300;
 unsigned int G_groupSize = 1024;
 unsigned int G_groupNumber = 1024;
 int G_serverFileDescriptor;
+pthread_mutex_t databaseMutex;
 struct Transmission {
     pthread_mutex_t *mutex;
     MessageQueue queue;
@@ -36,6 +37,11 @@ void *groupSendServer(struct Transmission *pointer) {
     MessageQueue queue = New_Queue();
     pointer->queue = queue;
     pthread_mutex_t mutex;
+    if(pthread_mutex_init(&mutex,NULL))
+    {
+        perror("Init mutex failed");
+        exit(-1);
+    }
     pointer->mutex = &mutex;
     while (true) {
         if (Empty_Queue(queue)) {
@@ -110,6 +116,7 @@ void *groupSendServer(struct Transmission *pointer) {
                 } else if (message.data.code == REGISTER) {
                     strcpy(userBuf.username, message.data.message);
                     strcpy(userBuf.password, message.data.data);
+                    pthread_mutex_lock(&databaseMutex);
                     if (GetUserByUserName(&userBuf, message.data.message) == -1) {
                         if (SetUserByPlace(&userBuf, GetUserCount())) {
                             strcpy(message.data.message, "Server : Register successfully");
@@ -119,17 +126,20 @@ void *groupSendServer(struct Transmission *pointer) {
                     } else {
                         strcpy(message.data.message, "Server : Duplicate username");
                     }
+                    pthread_mutex_unlock(&databaseMutex);
                 } else if (message.data.code == UNREGISTER) {
                     long temp = GetUserByUserName(&userBuf, message.data.message);
                     if (temp == -1) {
                         strcpy(message.data.message, "Server : None username");
                     } else {
                         if (strcmp(userBuf.password, message.data.data) == 0) {
+                            pthread_mutex_lock(&databaseMutex);
                             if (RemoveUserByPlace(temp) != -1) {
                                 strcpy(message.data.message, "Server : Unregister successfully");
                             } else {
                                 strcpy(message.data.message, "Server : Unregister unsuccessfully");
                             }
+                            pthread_mutex_unlock(&databaseMutex);
                         } else {
                             strcpy(message.data.message, "Server : Wrong password");
                         }
@@ -256,6 +266,11 @@ int main(int argc, char *argv[]) {
     G_TIMEOUT = TIMEOUT;
     G_groupNumber = groupNumber;
     pthread_t groupSendThreads[groupNumber];
+    if(pthread_mutex_init(&databaseMutex,NULL))
+    {
+        perror("mutex init failed");
+        exit(-1);
+    }
     for (unsigned int i = 0; i < groupNumber; i++) {
         if (pthread_create(&groupSendThreads[i], NULL, (void *(*)(void *)) groupSendServer, &transmissions[i]) != 0) {
             perror("create thread failed");
@@ -274,7 +289,9 @@ int main(int argc, char *argv[]) {
             exit(-1);
         }
     }
-
+    if (pthread_mutex_destroy(&databaseMutex)) {
+        perror("Destroy mutex failed");
+    }
     free(transmissions);
     puts("Shutdown server successfully");
     close(serverFileDescriptor);
