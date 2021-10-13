@@ -243,9 +243,7 @@ int main(int argc, char *argv[]) {
                 listenNumber = (unsigned int) strtol(argv[i] + 13, &temp, 10);
             }
         }
-        puts(argv[i]);
     }
-
     struct sockaddr_in serverAddress;
     int serverFileDescriptor = socket(AF_INET, SOCK_DGRAM, 0); //AF_INET:IPV4;SOCK_DGRAM:UDP
     if (serverFileDescriptor < 0) {
@@ -296,8 +294,7 @@ int main(int argc, char *argv[]) {
         perror("Destroy mutex failed");
     }
     free(transmissions);
-    puts("Shutdown server successfully");
     close(serverFileDescriptor);
-    puts("Close socket successfully");
+    puts("Shutdown server successfully");
     return 0;
 }
