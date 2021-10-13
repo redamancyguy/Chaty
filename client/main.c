@@ -19,7 +19,7 @@ void receive() {
     socklen_t len = sizeof(struct sockaddr_in);
     int i=0;
     while (1) {
-//        printf("%d\n",i++);
+        printf("%d\n",i++);
         struct CommonData buff;
         recvfrom(client_fd, &buff, sizeof(struct CommonData), 0, (struct sockaddr *) &src, &len);
         time_t now;

@@ -184,7 +184,7 @@ void *receiveAll(struct Transmission *transmissions) {
     struct DataBuf dataBuf;
     clientBuf.length = sizeof(clientBuf.address);
     while (true) {
-        printf("thread: %lu\n", pthread_self());
+//        printf("thread: %lu\n", pthread_self());
         long int count = recvfrom(serverFileDescriptor, &dataBuf, sizeof(struct DataBuf), 0,
                                   (struct sockaddr *) &clientBuf.address, &clientBuf.length);
         if (count == -1) {
@@ -222,7 +222,7 @@ int main(int argc, char *argv[]) {
     unsigned int TIMEOUT = 300;
     unsigned int groupSize = 1024;
     unsigned int groupNumber = 1024;
-    unsigned int listenNumber = 4;
+    unsigned int listenNumber = 24;
     short SERVER_PORT = 9999;
     for (int i = 0; i < argc; i++) {
         if (argv[i][0] == '-') {

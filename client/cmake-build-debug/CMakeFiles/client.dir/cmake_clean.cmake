@@ -1,9 +1,5 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/client.dir/include/ArrayList.c.o"
-  "CMakeFiles/client.dir/include/DCQueue.c.o"
-  "CMakeFiles/client.dir/include/HashMap.c.o"
   "CMakeFiles/client.dir/include/Stack.c.o"
-  "CMakeFiles/client.dir/include/String.c.o"
   "CMakeFiles/client.dir/include/TreeMap.c.o"
   "CMakeFiles/client.dir/main.c.o"
   "client"

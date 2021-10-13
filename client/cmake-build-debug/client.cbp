@@ -76,43 +76,16 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/include/ArrayList.c">
-			<Option target="client"/>
-		</Unit>
-		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/include/ArrayList.h">
-			<Option target="client"/>
-		</Unit>
-		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/include/DCQueue.c">
-			<Option target="client"/>
-		</Unit>
-		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/include/DCQueue.h">
-			<Option target="client"/>
-		</Unit>
-		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/include/HashMap.c">
-			<Option target="client"/>
-		</Unit>
-		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/include/HashMap.h">
-			<Option target="client"/>
-		</Unit>
 		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/include/Stack.c">
 			<Option target="client"/>
 		</Unit>
 		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/include/Stack.h">
 			<Option target="client"/>
 		</Unit>
-		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/include/String.c">
-			<Option target="client"/>
-		</Unit>
-		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/include/String.h">
-			<Option target="client"/>
-		</Unit>
 		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/include/TreeMap.c">
 			<Option target="client"/>
 		</Unit>
 		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/include/TreeMap.h">
-			<Option target="client"/>
-		</Unit>
-		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/include/random.h">
 			<Option target="client"/>
 		</Unit>
 		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/main.c">
