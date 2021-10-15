@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/client.h
+/mnt/c/Users/sunwenli/Desktop/server-mul/client.h
 sys/socket.h
 -
 netinet/in.h
@@ -14,13 +14,13 @@ netinet/in.h
 stdbool.h
 -
 user.h
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/user.h
+/mnt/c/Users/sunwenli/Desktop/server-mul/user.h
 
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/commondata.h
+/mnt/c/Users/sunwenli/Desktop/server-mul/commondata.h
 client.h
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/client.h
+/mnt/c/Users/sunwenli/Desktop/server-mul/client.h
 
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/main.c
+/mnt/c/Users/sunwenli/Desktop/server-mul/main.c
 stdio.h
 -
 stdlib.h
@@ -42,27 +42,21 @@ time.h
 pthread.h
 -
 user.h
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/user.h
+/mnt/c/Users/sunwenli/Desktop/server-mul/user.h
 client.h
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/client.h
+/mnt/c/Users/sunwenli/Desktop/server-mul/client.h
 messagequeue.h
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/messagequeue.h
+/mnt/c/Users/sunwenli/Desktop/server-mul/messagequeue.h
 commondata.h
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/commondata.h
+/mnt/c/Users/sunwenli/Desktop/server-mul/commondata.h
 messagequeue.h
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/messagequeue.h
+/mnt/c/Users/sunwenli/Desktop/server-mul/messagequeue.h
 
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/messagequeue.c
-messagequeue.h
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/messagequeue.h
-malloc.h
--
-
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/messagequeue.h
+/mnt/c/Users/sunwenli/Desktop/server-mul/messagequeue.h
 commondata.h
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/commondata.h
+/mnt/c/Users/sunwenli/Desktop/server-mul/commondata.h
 stdbool.h
 -
 
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/user.h
+/mnt/c/Users/sunwenli/Desktop/server-mul/user.h
 

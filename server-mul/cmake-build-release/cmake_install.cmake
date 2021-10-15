@@ -1,4 +1,4 @@
-# Install script for directory: /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul
+# Install script for directory: /mnt/c/Users/sunwenli/Desktop/server-mul
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/mnt/c/Users/sunwenli/Desktop/server-mul/cmake-build-release/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

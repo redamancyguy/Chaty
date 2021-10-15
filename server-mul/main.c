@@ -17,18 +17,19 @@
 unsigned int G_TIMEOUT = 300;
 unsigned int G_groupSize = 1024;
 unsigned int G_groupNumber = 1024;
-int G_serverFileDescriptor;
+int G_serverFileDescriptor = -1;
 pthread_mutex_t databaseMutex;
 struct Transmission {
     pthread_mutex_t *mutex;
     MessageQueue queue;
 };
 
-void *groupSendServer(struct Transmission *pointer) {
+_Noreturn void *groupSendServer(struct Transmission *pointer) {
     const unsigned int TIMEOUT = G_TIMEOUT;
     int serverFileDescriptor = G_serverFileDescriptor;
     ConnectionTable table = TableNew(G_groupSize);
     if (table == NULL) {
+        perror("Create table failed");
         exit(-1);
     }
     struct User userBuf;
@@ -37,8 +38,7 @@ void *groupSendServer(struct Transmission *pointer) {
     MessageQueue queue = New_Queue();
     pointer->queue = queue;
     pthread_mutex_t mutex;
-    if(pthread_mutex_init(&mutex,NULL))
-    {
+    if (pthread_mutex_init(&mutex, NULL)) {
         perror("Init mutex failed");
         exit(-1);
     }
@@ -67,88 +67,108 @@ void *groupSendServer(struct Transmission *pointer) {
             } else {
                 strcpy(message.data.message, "Server : You haven't connected yet");
             }
-
         } else {
             if (time(NULL) - client->time > TIMEOUT) {
                 strcpy(message.data.message, "Server : Time out");
                 TableErase(table, client);
             } else {
                 client->time = time(NULL);
-                if (message.data.code == CHAT) {
-                    if (client->status == LoggedIN) {
-                        sprintf(message.data.message, "Status : %s | NickName:%s", "Logged in", client->nickname);
-                    } else {
-                        sprintf(message.data.message, "Status : %s | NickName:%s", "Not logged in", client->nickname);
-                    }
-                    for (int i = 0; i < table->capacity; i++) {
-                        if (table->clients[i] != NULL) {
-                            if (time(NULL) - table->clients[i]->time > TIMEOUT) {
-                                free(table->clients[i]);
-                                table->clients[i] = NULL;
-                                table->size--;
-                                continue;
+                switch (message.data.code) {
+                    case CHAT: {
+                        if (client->status == LoggedIN) {
+                            sprintf(message.data.message, "Status : %s | NickName:%s", "Logged in", client->nickname);
+                        } else {
+                            sprintf(message.data.message, "Status : %s | NickName:%s", "Not logged in",
+                                    client->nickname);
+                        }
+                        for (int i = 0; i < table->capacity; i++) {
+                            if (table->clients[i] != NULL) {
+                                if (time(NULL) - table->clients[i]->time > TIMEOUT) {
+                                    free(table->clients[i]);
+                                    table->clients[i] = NULL;
+                                    table->size--;
+                                    continue;
+                                }
+                                sendto(serverFileDescriptor, &message.data, sizeof(struct CommonData), 0,
+                                       (struct sockaddr *) &table->clients[i]->address, table->clients[i]->length);
                             }
-                            sendto(serverFileDescriptor, &message.data, sizeof(struct CommonData), 0,
-                                   (struct sockaddr *) &table->clients[i]->address, table->clients[i]->length);
                         }
+                        goto PRINT;
                     }
-                    goto PRINT;
-                } else if (message.data.code == RENAME) {
-                    strcpy(TableGet(table, &message.client)->nickname, message.data.data);
-                    sprintf(message.data.message, "Server : Set username (Name:%s) successfully", message.data.data);
-                } else if (message.data.code == DISCONNECT) {
-                    TableErase(table, &message.client);
-                    strcpy(message.data.message, "Server : Disconnect successfully");
-                } else if (message.data.code == LOGIN) {
-                    if (GetUserByUserName(&userBuf, message.data.message) != -1) {
-                        if (strcmp(userBuf.password, message.data.data) == 0) {
-                            client->status = LoggedIN;
-                            strcpy(message.data.message, "Server : Login successfully");
-                        } else {
-                            strcpy(message.data.message, "Server : Wrong password");
-                        }
-                    } else {
-                        strcpy(message.data.message, "Server : None username");
+                    case RENAME: {
+                        strcpy(TableGet(table, &message.client)->nickname, message.data.data);
+                        sprintf(message.data.message, "Server : Set username (Name:%s) successfully",
+                                message.data.data);
+                        break;
                     }
-                } else if (message.data.code == LOGOUT) {
-                    client->status = UnLoggedIN;
-                    strcpy(message.data.message, "Server : Logout successfully");
-                } else if (message.data.code == REGISTER) {
-                    strcpy(userBuf.username, message.data.message);
-                    strcpy(userBuf.password, message.data.data);
-                    pthread_mutex_lock(&databaseMutex);
-                    if (GetUserByUserName(&userBuf, message.data.message) == -1) {
-                        if (SetUserByPlace(&userBuf, GetUserCount())) {
-                            strcpy(message.data.message, "Server : Register successfully");
-                        } else {
-                            strcpy(message.data.message, "Server : Register unsuccessfully");
-                        }
-                    } else {
-                        strcpy(message.data.message, "Server : Duplicate username");
+                    case CONNECT: {
+                        TableErase(table, &message.client);
+                        strcpy(message.data.message, "Server : You have connected");
+                        break;
                     }
-                    pthread_mutex_unlock(&databaseMutex);
-                } else if (message.data.code == UNREGISTER) {
-                    long temp = GetUserByUserName(&userBuf, message.data.message);
-                    if (temp == -1) {
-                        strcpy(message.data.message, "Server : None username");
-                    } else {
-                        if (strcmp(userBuf.password, message.data.data) == 0) {
-                            pthread_mutex_lock(&databaseMutex);
-                            if (RemoveUserByPlace(temp) != -1) {
-                                strcpy(message.data.message, "Server : Unregister successfully");
+                    case DISCONNECT: {
+                        TableErase(table, &message.client);
+                        strcpy(message.data.message, "Server : Disconnect successfully");
+                        break;
+                    }
+                    case LOGIN: {
+                        if (GetUserByUserName(&userBuf, message.data.message) != -1) {
+                            if (strcmp(userBuf.password, message.data.data) == 0) {
+                                client->status = LoggedIN;
+                                strcpy(message.data.message, "Server : Login successfully");
                             } else {
-                                strcpy(message.data.message, "Server : Unregister unsuccessfully");
+                                strcpy(message.data.message, "Server : Wrong password");
                             }
-                            pthread_mutex_unlock(&databaseMutex);
                         } else {
-                            strcpy(message.data.message, "Server : Wrong password");
+                            strcpy(message.data.message, "Server : None username");
                         }
+                        break;
                     }
-                } else if (message.data.code == EXIT) {
-                    break;
-                } else {
-                    message.data.code = UNKNOWN;
-                    strcpy(message.data.message, "Unknown");
+                    case LOGOUT: {
+                        client->status = UnLoggedIN;
+                        strcpy(message.data.message, "Server : Logout successfully");
+                        break;
+                    }
+                    case REGISTER: {
+                        strcpy(userBuf.username, message.data.message);
+                        strcpy(userBuf.password, message.data.data);
+                        pthread_mutex_lock(&databaseMutex);
+                        if (GetUserByUserName(&userBuf, message.data.message) == -1) {
+                            if (SetUserByPlace(&userBuf, GetUserCount())) {
+                                strcpy(message.data.message, "Server : Register successfully");
+                            } else {
+                                strcpy(message.data.message, "Server : Register unsuccessfully");
+                            }
+                        } else {
+                            strcpy(message.data.message, "Server : Duplicate username");
+                        }
+                        pthread_mutex_unlock(&databaseMutex);
+                        break;
+                    }
+                    case UNREGISTER: {
+                        long temp = GetUserByUserName(&userBuf, message.data.message);
+                        if (temp == -1) {
+                            strcpy(message.data.message, "Server : None username");
+                        } else {
+                            if (strcmp(userBuf.password, message.data.data) == 0) {
+                                pthread_mutex_lock(&databaseMutex);
+                                if (RemoveUserByPlace(temp) != -1) {
+                                    strcpy(message.data.message, "Server : Unregister successfully");
+                                } else {
+                                    strcpy(message.data.message, "Server : Unregister unsuccessfully");
+                                }
+                                pthread_mutex_unlock(&databaseMutex);
+                            } else {
+                                strcpy(message.data.message, "Server : Wrong password");
+                            }
+                        }
+                        break;
+                    }
+                    default: {
+                        message.data.code = UNKNOWN;
+                        strcpy(message.data.message, "Unknown");
+                        break;
+                    }
                 }
             }
         }
@@ -170,10 +190,9 @@ void *groupSendServer(struct Transmission *pointer) {
     }
     Destroy_Queue(queue);
     TableDestroy(table);
-    return NULL;
 }
 
-void *receiveAll(struct Transmission *transmissions) {
+_Noreturn void *receiveAll(struct Transmission *transmissions) {
     int serverFileDescriptor = G_serverFileDescriptor;
     unsigned int groupNumber = G_groupNumber;
     struct DataBuf {
@@ -184,45 +203,39 @@ void *receiveAll(struct Transmission *transmissions) {
     struct DataBuf dataBuf;
     clientBuf.length = sizeof(clientBuf.address);
     while (true) {
-//        printf("thread: %lu\n", pthread_self());
         long int count = recvfrom(serverFileDescriptor, &dataBuf, sizeof(struct DataBuf), 0,
                                   (struct sockaddr *) &clientBuf.address, &clientBuf.length);
-        if (count == -1) {
-            perror("Receive data fail");
-            break;
-        } else if (count != sizeof(struct CommonData)) {
-            continue;
-        }
-        if (dataBuf.data.group >= groupNumber) {
-            strcpy(dataBuf.data.message, "Server : Wrong group");
-            sendto(serverFileDescriptor, &dataBuf, sizeof(struct CommonData), 0,
-                   (struct sockaddr *) &clientBuf.address, clientBuf.length);
-            continue;
-        }
-        struct Message message;
-        message.client = clientBuf;
-        message.data = dataBuf.data;
-        if (dataBuf.data.code == EXIT) {
-            for (int i = 0; i < groupNumber; i++) {
-                dataBuf.data.code = EXIT;
+        switch (count) {
+            case -1: {
+                perror("Receive data fail");
+                break;
+            }
+            case sizeof(struct CommonData): {
+                if (dataBuf.data.group >= groupNumber) {
+                    strcpy(dataBuf.data.message, "Server : Wrong group");
+                    sendto(serverFileDescriptor, &dataBuf, sizeof(struct CommonData), 0,
+                           (struct sockaddr *) &clientBuf.address, clientBuf.length);
+                    break;
+                }
+                struct Message message;
                 message.client = clientBuf;
                 message.data = dataBuf.data;
-                Push_Queue(transmissions[i].queue, message);
+                pthread_mutex_lock(transmissions[dataBuf.data.group].mutex);
+                Push_Queue(transmissions[dataBuf.data.group].queue, message);
+                pthread_mutex_unlock(transmissions[dataBuf.data.group].mutex);
+                break;
             }
-            break;
+            default:
+                break;
         }
-        pthread_mutex_lock(transmissions[dataBuf.data.group].mutex);
-        Push_Queue(transmissions[dataBuf.data.group].queue, message);
-        pthread_mutex_unlock(transmissions[dataBuf.data.group].mutex);
     }
-    return NULL;
 }
 
 int main(int argc, char *argv[]) {
     unsigned int TIMEOUT = 300;
     unsigned int groupSize = 1024;
     unsigned int groupNumber = 1024;
-    unsigned int listenNumber = 24;
+    unsigned int listenNumber = 1024;
     short SERVER_PORT = 9999;
     for (int i = 0; i < argc; i++) {
         if (argv[i][0] == '-') {
@@ -238,7 +251,7 @@ int main(int argc, char *argv[]) {
             } else if (strncmp(argv[i] + 1, "timeOut", 7) == 0) {
                 char *temp;
                 TIMEOUT = (int) strtol(argv[i] + 8, &temp, 10);
-            }else if (strncmp(argv[i] + 1, "listenThread", 12) == 0) {
+            } else if (strncmp(argv[i] + 1, "listenThread", 12) == 0) {
                 char *temp;
                 listenNumber = (unsigned int) strtol(argv[i] + 13, &temp, 10);
             }
@@ -267,8 +280,7 @@ int main(int argc, char *argv[]) {
     G_TIMEOUT = TIMEOUT;
     G_groupNumber = groupNumber;
     pthread_t groupSendThreads[groupNumber];
-    if(pthread_mutex_init(&databaseMutex,NULL))
-    {
+    if (pthread_mutex_init(&databaseMutex, NULL)) {
         perror("mutex init failed");
         exit(-1);
     }
@@ -279,12 +291,13 @@ int main(int argc, char *argv[]) {
         }
     }
     pthread_t receiveThreads[listenNumber];
-    for(unsigned i=0;i<listenNumber;i++){
+    for (unsigned i = 0; i < listenNumber; i++) {
         if (pthread_create(&receiveThreads[i], NULL, (void *(*)(void *)) receiveAll, transmissions) != 0) {
             perror("create thread failed");
             exit(-1);
         }
-    }  for(unsigned i=0;i<listenNumber;i++){
+    }
+    for (unsigned i = 0; i < listenNumber; i++) {
         if (pthread_join(receiveThreads[i], NULL) != 0) {
             perror("join thread failed");
             exit(-1);
