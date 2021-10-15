@@ -1,1 +1,0 @@
-/usr/bin/cc -g CMakeFiles/iso_cpu.dir/main.c.o -o ../bin/iso_cpu 

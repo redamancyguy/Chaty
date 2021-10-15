@@ -1,3 +1,3 @@
-/home/sunwenli/CLionProjects/core/cmake-build-release/CMakeFiles/rebuild_cache.dir
-/home/sunwenli/CLionProjects/core/cmake-build-release/CMakeFiles/edit_cache.dir
-/home/sunwenli/CLionProjects/core/cmake-build-release/CMakeFiles/core.dir
+/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/core/cmake-build-release/CMakeFiles/rebuild_cache.dir
+/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/core/cmake-build-release/CMakeFiles/edit_cache.dir
+/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/core/cmake-build-release/CMakeFiles/core.dir
