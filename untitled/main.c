@@ -1,42 +1,35 @@
 #include <stdio.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <string.h>
-#include <unistd.h>
-#include <pthread.h>
-#include <stdlib.h>
 
-#include <semaphore.h>
-pthread_mutex_t mutex;
-void receive() {
-    while (1) {
+int narcissistic( int number );
+void PrintN( int m, int n );
 
-        usleep(1000000);
-        pthread_mutex_lock(&mutex);//上锁,
-        puts("son");
-        pthread_mutex_unlock(&mutex);
-    }
+int main()
+{
+    int m, n;
+
+    scanf("%d %d", &m, &n);
+    if ( narcissistic(m) ) printf("%d is a narcissistic number\n", m);
+    PrintN(m, n);
+    if ( narcissistic(n) ) printf("%d is a narcissistic number\n", n);
+
+    return 0;
 }
 
-int main() {
-    if(pthread_mutex_init(&mutex,NULL))
-    {
-        printf("初始化用于线程间同步的信号量失败\n");
+
+
+int narcissistic( int number ){
+    int temp = number;
+    int sum = 0;
+    while(number != 0){
+        sum += (number%10)*(number%10)*(number%10);
+        number/=10;
     }
-    pthread_t pid;
-    pthread_create(&pid, NULL, (void *(*)(void *)) receive, NULL);
-    while (1) {
-        usleep(1000000);
-        pthread_mutex_lock(&mutex);
-        puts("father");
-        usleep(1000000);
-        pthread_mutex_unlock(&mutex);
+    return sum == temp;
+}
+void PrintN( int m, int n ){
+    for(int i=m+1;i<=n;i++){
+        if(narcissistic(i)){
+            printf("%d\n",i);
+        }
     }
-    if(pthread_mutex_destroy(&mutex)) {
-        printf("销毁互斥锁失败\n");
-    }
-        printf("Hello, World!\n");
-    return 0;
 }

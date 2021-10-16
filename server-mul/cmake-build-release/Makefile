@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /mnt/c/Users/sunwenli/Desktop/server-mul
+CMAKE_SOURCE_DIR = /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /mnt/c/Users/sunwenli/Desktop/server-mul/cmake-build-release
+CMAKE_BINARY_DIR = /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/sunwenli/Desktop/server-mul/cmake-build-release/CMakeFiles /mnt/c/Users/sunwenli/Desktop/server-mul/cmake-build-release/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/CMakeFiles /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/sunwenli/Desktop/server-mul/cmake-build-release/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -111,17 +111,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named server
+# Target rules for targets named server_mul
 
 # Build rule for target.
-server: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 server
-.PHONY : server
+server_mul: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 server_mul
+.PHONY : server_mul
 
 # fast build rule for target.
-server/fast:
-	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/build
-.PHONY : server/fast
+server_mul/fast:
+	$(MAKE) -f CMakeFiles/server_mul.dir/build.make CMakeFiles/server_mul.dir/build
+.PHONY : server_mul/fast
 
 client.o: client.c.o
 
@@ -129,7 +129,7 @@ client.o: client.c.o
 
 # target to build an object file
 client.c.o:
-	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/client.c.o
+	$(MAKE) -f CMakeFiles/server_mul.dir/build.make CMakeFiles/server_mul.dir/client.c.o
 .PHONY : client.c.o
 
 client.i: client.c.i
@@ -138,7 +138,7 @@ client.i: client.c.i
 
 # target to preprocess a source file
 client.c.i:
-	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/client.c.i
+	$(MAKE) -f CMakeFiles/server_mul.dir/build.make CMakeFiles/server_mul.dir/client.c.i
 .PHONY : client.c.i
 
 client.s: client.c.s
@@ -147,7 +147,7 @@ client.s: client.c.s
 
 # target to generate assembly for a file
 client.c.s:
-	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/client.c.s
+	$(MAKE) -f CMakeFiles/server_mul.dir/build.make CMakeFiles/server_mul.dir/client.c.s
 .PHONY : client.c.s
 
 main.o: main.c.o
@@ -156,7 +156,7 @@ main.o: main.c.o
 
 # target to build an object file
 main.c.o:
-	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/main.c.o
+	$(MAKE) -f CMakeFiles/server_mul.dir/build.make CMakeFiles/server_mul.dir/main.c.o
 .PHONY : main.c.o
 
 main.i: main.c.i
@@ -165,7 +165,7 @@ main.i: main.c.i
 
 # target to preprocess a source file
 main.c.i:
-	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/main.c.i
+	$(MAKE) -f CMakeFiles/server_mul.dir/build.make CMakeFiles/server_mul.dir/main.c.i
 .PHONY : main.c.i
 
 main.s: main.c.s
@@ -174,7 +174,7 @@ main.s: main.c.s
 
 # target to generate assembly for a file
 main.c.s:
-	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/main.c.s
+	$(MAKE) -f CMakeFiles/server_mul.dir/build.make CMakeFiles/server_mul.dir/main.c.s
 .PHONY : main.c.s
 
 messagequeue.o: messagequeue.c.o
@@ -183,7 +183,7 @@ messagequeue.o: messagequeue.c.o
 
 # target to build an object file
 messagequeue.c.o:
-	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/messagequeue.c.o
+	$(MAKE) -f CMakeFiles/server_mul.dir/build.make CMakeFiles/server_mul.dir/messagequeue.c.o
 .PHONY : messagequeue.c.o
 
 messagequeue.i: messagequeue.c.i
@@ -192,7 +192,7 @@ messagequeue.i: messagequeue.c.i
 
 # target to preprocess a source file
 messagequeue.c.i:
-	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/messagequeue.c.i
+	$(MAKE) -f CMakeFiles/server_mul.dir/build.make CMakeFiles/server_mul.dir/messagequeue.c.i
 .PHONY : messagequeue.c.i
 
 messagequeue.s: messagequeue.c.s
@@ -201,7 +201,7 @@ messagequeue.s: messagequeue.c.s
 
 # target to generate assembly for a file
 messagequeue.c.s:
-	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/messagequeue.c.s
+	$(MAKE) -f CMakeFiles/server_mul.dir/build.make CMakeFiles/server_mul.dir/messagequeue.c.s
 .PHONY : messagequeue.c.s
 
 user.o: user.c.o
@@ -210,7 +210,7 @@ user.o: user.c.o
 
 # target to build an object file
 user.c.o:
-	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/user.c.o
+	$(MAKE) -f CMakeFiles/server_mul.dir/build.make CMakeFiles/server_mul.dir/user.c.o
 .PHONY : user.c.o
 
 user.i: user.c.i
@@ -219,7 +219,7 @@ user.i: user.c.i
 
 # target to preprocess a source file
 user.c.i:
-	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/user.c.i
+	$(MAKE) -f CMakeFiles/server_mul.dir/build.make CMakeFiles/server_mul.dir/user.c.i
 .PHONY : user.c.i
 
 user.s: user.c.s
@@ -228,7 +228,7 @@ user.s: user.c.s
 
 # target to generate assembly for a file
 user.c.s:
-	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/user.c.s
+	$(MAKE) -f CMakeFiles/server_mul.dir/build.make CMakeFiles/server_mul.dir/user.c.s
 .PHONY : user.c.s
 
 # Help Target
@@ -239,7 +239,7 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... server"
+	@echo "... server_mul"
 	@echo "... client.o"
 	@echo "... client.i"
 	@echo "... client.s"

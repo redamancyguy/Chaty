@@ -44,16 +44,16 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /mnt/c/Users/sunwenli/Desktop/server-mul
+CMAKE_SOURCE_DIR = /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /mnt/c/Users/sunwenli/Desktop/server-mul/cmake-build-debug
+CMAKE_BINARY_DIR = /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-debug
 
 #=============================================================================
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/server.dir/all
+all: CMakeFiles/server_mul.dir/all
 
 .PHONY : all
 
@@ -63,36 +63,36 @@ preinstall:
 .PHONY : preinstall
 
 # The main recursive "clean" target.
-clean: CMakeFiles/server.dir/clean
+clean: CMakeFiles/server_mul.dir/clean
 
 .PHONY : clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/server.dir
+# Target rules for target CMakeFiles/server_mul.dir
 
 # All Build rule for target.
-CMakeFiles/server.dir/all:
-	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/depend
-	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/mnt/c/Users/sunwenli/Desktop/server-mul/cmake-build-debug/CMakeFiles --progress-num=1,2,3,4,5 "Built target server"
-.PHONY : CMakeFiles/server.dir/all
+CMakeFiles/server_mul.dir/all:
+	$(MAKE) -f CMakeFiles/server_mul.dir/build.make CMakeFiles/server_mul.dir/depend
+	$(MAKE) -f CMakeFiles/server_mul.dir/build.make CMakeFiles/server_mul.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-debug/CMakeFiles --progress-num=1,2,3,4,5 "Built target server_mul"
+.PHONY : CMakeFiles/server_mul.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/server.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/sunwenli/Desktop/server-mul/cmake-build-debug/CMakeFiles 5
-	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/server.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/sunwenli/Desktop/server-mul/cmake-build-debug/CMakeFiles 0
-.PHONY : CMakeFiles/server.dir/rule
+CMakeFiles/server_mul.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-debug/CMakeFiles 5
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/server_mul.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-debug/CMakeFiles 0
+.PHONY : CMakeFiles/server_mul.dir/rule
 
 # Convenience name for target.
-server: CMakeFiles/server.dir/rule
+server_mul: CMakeFiles/server_mul.dir/rule
 
-.PHONY : server
+.PHONY : server_mul
 
 # clean rule for target.
-CMakeFiles/server.dir/clean:
-	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/clean
-.PHONY : CMakeFiles/server.dir/clean
+CMakeFiles/server_mul.dir/clean:
+	$(MAKE) -f CMakeFiles/server_mul.dir/build.make CMakeFiles/server_mul.dir/clean
+.PHONY : CMakeFiles/server_mul.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.
