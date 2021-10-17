@@ -6,16 +6,6 @@
 
 #IncludeRegexTransform: 
 
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/client.c
-stdbool.h
--
-string.h
--
-malloc.h
--
-client.h
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/client.h
-
 /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/client.h
 sys/socket.h
 -
@@ -30,25 +20,43 @@ user.h
 client.h
 /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/client.h
 
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/messagequeue.c
-messagequeue.h
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/messagequeue.h
+/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/main.c
+stdio.h
+-
+stdlib.h
+-
+sys/socket.h
+-
+netinet/in.h
+-
+string.h
+-
 malloc.h
 -
+unistd.h
+-
+stdbool.h
+-
+time.h
+-
+pthread.h
+-
+user.h
+/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/user.h
+client.h
+/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/client.h
+messagequeue.h
+/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/messagequeue.h
+commondata.h
+/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/commondata.h
+messagequeue.h
+/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/messagequeue.h
 
 /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/messagequeue.h
 commondata.h
 /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/commondata.h
 stdbool.h
 -
-
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/user.c
-stdio.h
--
-string.h
--
-user.h
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/user.h
 
 /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/user.h
 

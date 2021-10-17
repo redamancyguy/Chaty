@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include "commondata.h"
 #include "include/TreeMap.h"
-short SERVER_PORT = 9999;
+short SERVER_PORT = 9999+0;
 
 int client_fd;
 
@@ -33,9 +33,6 @@ void receive() {
         printf("Group : %d  |  ", buff.group);
         puts(buff.message);
         puts(buff.data);
-        if(buff.code == EXIT){
-            break;
-        }
     }
 }
 
@@ -79,6 +76,7 @@ void Connect(struct CommonData buf, struct sockaddr *serverAddress) {
     socklen_t len = sizeof(struct sockaddr_in);
     buf.code = CONNECT;
     strcpy(buf.message, "connect");
+    printf("connect %d\n",buf.code);
     sendto(client_fd, &buf, sizeof(struct CommonData), 0, serverAddress, len);
 }
 

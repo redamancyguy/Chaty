@@ -24,7 +24,7 @@ struct Transmission {
     MessageQueue queue;
 };
 
-_Noreturn void *groupSendServer(struct Transmission *pointer) {
+void *HandleMessage(struct Transmission *pointer) {
     const unsigned int TIMEOUT = G_TIMEOUT;
     int serverFileDescriptor = G_serverFileDescriptor;
     ConnectionTable table = TableNew(G_groupSize);
@@ -57,9 +57,8 @@ _Noreturn void *groupSendServer(struct Transmission *pointer) {
             if (message.data.code == CONNECT) {
                 strcpy(message.client.nickname, "Unnamed");
                 message.client.time = time(NULL);
-                message.client.status = UnLoggedIN;
+                message.client.online = false;
                 if (!TableSet(table, &message.client)) {
-                    message.data.code = ERROR;
                     strcpy(message.data.message, "Server : This group is full");
                 } else {
                     strcpy(message.data.message, "Server : Connect successfully");
@@ -75,7 +74,7 @@ _Noreturn void *groupSendServer(struct Transmission *pointer) {
                 client->time = time(NULL);
                 switch (message.data.code) {
                     case CHAT: {
-                        if (client->status == LoggedIN) {
+                        if (client->online) {
                             sprintf(message.data.message, "Status : %s | NickName:%s", "Logged in", client->nickname);
                         } else {
                             sprintf(message.data.message, "Status : %s | NickName:%s", "Not logged in",
@@ -114,7 +113,7 @@ _Noreturn void *groupSendServer(struct Transmission *pointer) {
                     case LOGIN: {
                         if (GetUserByUserName(&userBuf, message.data.message) != -1) {
                             if (strcmp(userBuf.password, message.data.data) == 0) {
-                                client->status = LoggedIN;
+                                client->online = true;
                                 strcpy(message.data.message, "Server : Login successfully");
                             } else {
                                 strcpy(message.data.message, "Server : Wrong password");
@@ -125,7 +124,7 @@ _Noreturn void *groupSendServer(struct Transmission *pointer) {
                         break;
                     }
                     case LOGOUT: {
-                        client->status = UnLoggedIN;
+                        client->online = false;
                         strcpy(message.data.message, "Server : Logout successfully");
                         break;
                     }
@@ -164,6 +163,14 @@ _Noreturn void *groupSendServer(struct Transmission *pointer) {
                         }
                         break;
                     }
+                    case EXIT: {
+                        Destroy_Queue(queue);
+                        TableDestroy(table);
+                        if (pthread_mutex_destroy(&mutex) != 0) {
+                            perror("Destroy mutex failed");
+                        }
+                        return NULL;
+                    }
                     default: {
                         message.data.code = UNKNOWN;
                         strcpy(message.data.message, "Unknown");
@@ -176,7 +183,7 @@ _Noreturn void *groupSendServer(struct Transmission *pointer) {
         sendto(serverFileDescriptor, &message.data, sizeof(struct CommonData), 0,
                (struct sockaddr *) &message.client.address, message.client.length);
         PRINT:
-        printf("thread: %lu\t", pthread_self());
+        printf("process: %d\tthread: %lu\t",getpid(), pthread_self());
         printf("%hhu.", *(char *) (&message.client.address.sin_addr.s_addr));
         printf("%hhu.", *((char *) (&message.client.address.sin_addr.s_addr) + 1));
         printf("%hhu.", *((char *) (&message.client.address.sin_addr.s_addr) + 2));
@@ -185,14 +192,9 @@ _Noreturn void *groupSendServer(struct Transmission *pointer) {
         printf("\t Code : %d\tGroup : %d\t", message.data.code, message.data.group);
         printf("size: %d\n", table->size);
     }
-    if (pthread_mutex_destroy(&mutex)) {
-        perror("Destroy mutex failed");
-    }
-    Destroy_Queue(queue);
-    TableDestroy(table);
 }
 
-_Noreturn void *receiveAll(struct Transmission *transmissions) {
+_Noreturn void *GetMessage(struct Transmission *transmissions) {
     int serverFileDescriptor = G_serverFileDescriptor;
     unsigned int groupNumber = G_groupNumber;
     struct DataBuf {
@@ -215,7 +217,7 @@ _Noreturn void *receiveAll(struct Transmission *transmissions) {
                     strcpy(dataBuf.data.message, "Server : Wrong group");
                     sendto(serverFileDescriptor, &dataBuf, sizeof(struct CommonData), 0,
                            (struct sockaddr *) &clientBuf.address, clientBuf.length);
-                    break;
+                    continue;
                 }
                 struct Message message;
                 message.client = clientBuf;
@@ -226,6 +228,7 @@ _Noreturn void *receiveAll(struct Transmission *transmissions) {
                 break;
             }
             default:
+                perror("Invalid data package");
                 break;
         }
     }
@@ -237,6 +240,13 @@ int main(int argc, char *argv[]) {
     unsigned int groupNumber = 1024;
     unsigned int listenNumber = 1024;
     short SERVER_PORT = 9999;
+    for (short i = 0; i < 4; i++) {
+        if (fork() == 0) {
+            SERVER_PORT += (i+1);
+            break;
+        }
+    }
+    printf("%d\n",SERVER_PORT);
     for (int i = 0; i < argc; i++) {
         if (argv[i][0] == '-') {
             if (strncmp(argv[i] + 1, "port", 4) == 0) {
@@ -258,7 +268,7 @@ int main(int argc, char *argv[]) {
         }
     }
     struct sockaddr_in serverAddress;
-    int serverFileDescriptor = socket(AF_INET, SOCK_DGRAM, 0); //AF_INET:IPV4;SOCK_DGRAM:UDP
+    int serverFileDescriptor = socket(AF_INET, SOCK_DGRAM, 0);
     if (serverFileDescriptor < 0) {
         perror("Create socket fail!");
         return -1;
@@ -273,34 +283,48 @@ int main(int argc, char *argv[]) {
         return -2;
     }
     puts("Turn on successfully");
-    struct Transmission *transmissions = malloc(sizeof(struct Transmission) * groupNumber);
-
+    struct Transmission *transmissions = (struct Transmission*)malloc(sizeof(struct Transmission) * groupNumber);
     G_serverFileDescriptor = serverFileDescriptor;
     G_groupSize = groupSize;
     G_TIMEOUT = TIMEOUT;
     G_groupNumber = groupNumber;
-    pthread_t groupSendThreads[groupNumber];
     if (pthread_mutex_init(&databaseMutex, NULL)) {
         perror("mutex init failed");
-        exit(-1);
+        return -1;
+    }
+    pthread_t HandleThreads[groupNumber];
+    for (unsigned int i = 0; i < groupNumber; i++) {
+        if (pthread_create(&HandleThreads[i], NULL, (void *(*)(void *)) HandleMessage, &transmissions[i]) != 0) {
+            perror("create thread failed");
+            return -1;
+        }
+    }
+    pthread_t GetThreads[listenNumber];
+    for (unsigned i = 0; i < listenNumber; i++) {
+        if (pthread_create(&GetThreads[i], NULL, (void *(*)(void *)) GetMessage, transmissions) != 0) {
+            perror("create thread failed");
+            return -1;
+        }
+        if (pthread_detach(GetThreads[i]) != 0) {
+            perror("detach thread failed");
+            return -1;
+        }
+    }
+    getchar();
+    for (unsigned int i = 0; i < groupNumber; i++) {
+        struct Message message;
+        memset(&message, 0, sizeof(struct Message));
+        pthread_mutex_lock(transmissions[i].mutex);
+        message.data.code = CONNECT;
+        Push_Queue(transmissions[i].queue, message);
+        message.data.code = EXIT;
+        Push_Queue(transmissions[i].queue, message);
+        pthread_mutex_unlock(transmissions[i].mutex);
     }
     for (unsigned int i = 0; i < groupNumber; i++) {
-        if (pthread_create(&groupSendThreads[i], NULL, (void *(*)(void *)) groupSendServer, &transmissions[i]) != 0) {
-            perror("create thread failed");
-            exit(-1);
-        }
-    }
-    pthread_t receiveThreads[listenNumber];
-    for (unsigned i = 0; i < listenNumber; i++) {
-        if (pthread_create(&receiveThreads[i], NULL, (void *(*)(void *)) receiveAll, transmissions) != 0) {
-            perror("create thread failed");
-            exit(-1);
-        }
-    }
-    for (unsigned i = 0; i < listenNumber; i++) {
-        if (pthread_join(receiveThreads[i], NULL) != 0) {
+        if (pthread_join(HandleThreads[i],NULL) != 0) {
             perror("join thread failed");
-            exit(-1);
+            return -1;
         }
     }
     if (pthread_mutex_destroy(&databaseMutex)) {

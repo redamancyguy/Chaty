@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/untitled1/main.c
+unistd.h
+-
+stdlib.h
+-
+stdio.h
+-
+sys/shm.h
+-
+string.h
+-
+
