@@ -14,13 +14,11 @@ typedef struct{
     struct QueueNode *tail;
 }MessageQueue_,*MessageQueue;
 
-
-
 MessageQueue New_Queue();
 
-bool Push_Queue(MessageQueue queue,struct Message message);
+bool Push_Queue(MessageQueue queue,struct Message *message);
 
-struct Message Front_Queue(MessageQueue queue);
+struct Message *Front_Queue(MessageQueue queue);
 
 bool Empty_Queue(MessageQueue queue);
 void Pop_Queue(MessageQueue queue);

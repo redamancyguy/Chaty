@@ -48,7 +48,7 @@ void *HandleMessage(struct Transmission *pointer) {
             usleep(100000);
             continue;
         }
-        message = Front_Queue(queue);
+        message = *Front_Queue(queue);
         pthread_mutex_lock(&mutex);
         Pop_Queue(queue);
         pthread_mutex_unlock(&mutex);
@@ -223,7 +223,7 @@ _Noreturn void *GetMessage(struct Transmission *transmissions) {
                 message.client = clientBuf;
                 message.data = dataBuf.data;
                 pthread_mutex_lock(transmissions[dataBuf.data.group].mutex);
-                Push_Queue(transmissions[dataBuf.data.group].queue, message);
+                Push_Queue(transmissions[dataBuf.data.group].queue, &message);
                 pthread_mutex_unlock(transmissions[dataBuf.data.group].mutex);
                 break;
             }
@@ -316,9 +316,9 @@ int main(int argc, char *argv[]) {
         memset(&message, 0, sizeof(struct Message));
         pthread_mutex_lock(transmissions[i].mutex);
         message.data.code = CONNECT;
-        Push_Queue(transmissions[i].queue, message);
+        Push_Queue(transmissions[i].queue, &message);
         message.data.code = EXIT;
-        Push_Queue(transmissions[i].queue, message);
+        Push_Queue(transmissions[i].queue, &message);
         pthread_mutex_unlock(transmissions[i].mutex);
     }
     for (unsigned int i = 0; i < groupNumber; i++) {

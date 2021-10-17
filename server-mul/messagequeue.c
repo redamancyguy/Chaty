@@ -28,15 +28,15 @@ MessageQueue New_Queue() {
     return queue;
 }
 
-bool Push_Queue(MessageQueue queue, struct Message message) {
+bool Push_Queue(MessageQueue queue, struct Message *message) {
     queue->tail->next = NewQueueNode();
-    queue->tail->next->message = message;
+    queue->tail->next->message = *message;
     queue->tail = queue->tail->next;
     return true;
 }
 
-struct Message Front_Queue(MessageQueue queue) {
-    return queue->head->next->message;
+struct Message *Front_Queue(MessageQueue queue) {
+    return &queue->head->next->message;
 }
 
 bool Empty_Queue(MessageQueue queue) {
