@@ -51,23 +51,54 @@ long GetUserPlaceByUsername(char *username) {
 }
 
 long GetUserReadyPlaceByUsername(char *username) {
-    FILE *userFile = NULL;
+    FILE *userFile;
     if ((userFile = fopen(fileName, "rb")) == 0) {
         if ((userFile = fopen(fileName, "w")) == 0) {
             return -1;
         }
     }
-    long place = 0;
-    struct User userBuf;
-    while (fread(&userBuf, sizeof(struct User), 1, userFile) > 0) {
-        if (strcmp(username, userBuf.username) < 0) {
+    long count = GetUserCount();
+    long right = count;
+    long left = 0;
+    long temp;
+    while (left <= right) {
+        temp = (left + right) / 2;
+        fseek(userFile, (long) (sizeof(struct User) * temp), SEEK_SET);
+        struct User userBuf;
+        if (fread(&userBuf, sizeof(struct User), 1, userFile) < 0) {
             break;
+        }
+        int result = strcmp(username, userBuf.username);
+        if (result < 0) {
+            right = temp - 1;
+        } else if (result > 0) {
+            left = temp + 1;
         } else {
-            place++;
+            break;
+        }
+    }
+    struct User userBuf;
+    fseek(userFile, (long) (sizeof(struct User) * temp), SEEK_SET);
+    if (fread(&userBuf, sizeof(struct User), 1, userFile) < 0) {
+        return temp;
+    }
+    while(strcmp(username,userBuf.username) < 0 && temp > 0){
+        puts("left");
+        temp--;
+        fseek(userFile, (long) (sizeof(struct User) * temp), SEEK_SET);
+        if (fread(&userBuf, sizeof(struct User), 1, userFile) < 0) {
+            break;
+        }
+    }
+    while(strcmp(username,userBuf.username) > 0 && temp < count){
+        temp++;
+        fseek(userFile, (long) (sizeof(struct User) * temp), SEEK_SET);
+        if (fread(&userBuf, sizeof(struct User), 1, userFile) < 0) {
+            break;
         }
     }
     fclose(userFile);
-    return place;
+    return temp;
 }
 
 long GetUserByPlace(struct User *user, unsigned long place) {

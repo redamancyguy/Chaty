@@ -92,7 +92,7 @@ long long unsigned *randUnsignedLong(long long unsigned int length) { // remembe
 void RegisterTest(struct sockaddr *serverAddress) {
     struct CommonData buf;
     unsigned long *a = randUnsignedLong(1024);
-    for(int i=0;i<1024/2;i++){
+    for(int i=0;i<100/2;i++){
         struct User user;
         memset(&user,0,sizeof(struct User));
         sprintf(user.username,"sunwenli%c%c",'a'+(a[i]%26),'a'+(a[i+1]%26));
