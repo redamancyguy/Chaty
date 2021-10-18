@@ -71,30 +71,41 @@ void Unregister(struct CommonData buf, struct sockaddr *serverAddress) {
     sendto(client_fd, &buf, sizeof(struct CommonData), 0, serverAddress, len);
 }
 
-
-
-void Change(struct CommonData buf, struct sockaddr *serverAddress) {
-    struct User oldUser;
-    struct User user;
-    memset(&user,0,sizeof(struct User));
-    memset(&oldUser,0,sizeof(struct User));
-    puts("input your old username");
-    scanf("%s",oldUser.username);
-    puts("input your old password");
-    scanf("%s", oldUser.password);
-    puts("input your new email");
-    scanf("%s", user.email);
-    puts("input your new username");
-    scanf("%s", user.username);
-    puts("input your new password");
-    scanf("%s", user.password);
-    socklen_t len = sizeof(struct sockaddr_in);
-    buf.code = CHANGE;
-    memcpy(buf.data,&oldUser,sizeof(struct User));
-    memcpy(buf.data+sizeof(struct User),&user,sizeof(struct User));
-    sendto(client_fd, &buf, sizeof(struct CommonData), 0, serverAddress, len);
+long long unsigned *randUnsignedLong(long long unsigned int length) { // remember to free the array
+    long long unsigned *a = (long long unsigned *) malloc(sizeof(long long unsigned) * length);
+    if (a == NULL) {
+        return NULL;
+    }
+    for (long long unsigned i = 0; i < length; i++) {
+        a[i] = i;
+    }
+    srand((unsigned int) time(NULL));
+    long long unsigned temp;
+    while (--length) {
+        temp = rand() % (length + 1);
+        long long unsigned t = a[length];
+        a[length] = a[temp];
+        a[temp] = t;
+    }
+    return a;
 }
-
+void RegisterTest(struct sockaddr *serverAddress) {
+    struct CommonData buf;
+    unsigned long *a = randUnsignedLong(1024);
+    for(int i=0;i<1024/2;i++){
+        struct User user;
+        memset(&user,0,sizeof(struct User));
+        sprintf(user.username,"sunwenli%c%c",'a'+(a[i]%26),'a'+(a[i+1]%26));
+        user.id = i;
+        socklen_t len = sizeof(struct sockaddr_in);
+        buf.code = REGISTER;
+        buf.group = 123;
+        memcpy(buf.data,&user,sizeof(struct User));
+        sendto(client_fd, &buf, sizeof(struct CommonData), 0, serverAddress, len);
+        usleep(100000);
+    }
+    free(a);
+}
 void Register(struct CommonData buf, struct sockaddr *serverAddress) {
     struct User user;
     memset(&user,0,sizeof(struct User));
@@ -109,6 +120,7 @@ void Register(struct CommonData buf, struct sockaddr *serverAddress) {
     memcpy(buf.data,&user,sizeof(struct User));
     sendto(client_fd, &buf, sizeof(struct CommonData), 0, serverAddress, len);
 }
+
 
 void Connect(struct CommonData buf, struct sockaddr *serverAddress) {
     socklen_t len = sizeof(struct sockaddr_in);
@@ -191,6 +203,7 @@ int main(int argc, char *argv[]) {
     Connect(buf, (struct sockaddr *) &serverAddress);
     TreeMap set = Tree_New();
     Tree_Insert(set,(void*)buf.group,(void*)time(NULL));
+    RegisterTest(&serverAddress);
     while (1) {
         strcpy(buf.message, "");
         strcpy(buf.data, "");
@@ -211,8 +224,6 @@ int main(int argc, char *argv[]) {
             Register(buf, (struct sockaddr *) &serverAddress);
         } else if (strcmp(buf.data, "unregister") == 0) {
             Unregister(buf, (struct sockaddr *) &serverAddress);
-        } else if (strcmp(buf.data, "change") == 0) {
-            Change(buf, (struct sockaddr *) &serverAddress);
         } else if (strncmp(buf.data, "set group", 9) == 0) {
             char *temp;
             strcpy(buf.data, buf.data + 9);

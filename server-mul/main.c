@@ -112,17 +112,19 @@ void *HandleMessage(struct Transmission *pointer) {
                     }
                     case LOGIN: {
                         struct User userBuf;
-                        struct User userTemp;
                         memcpy(&userBuf, messageBuf.data.data, sizeof(struct User));
-                        if (GetUserByUserName(&userTemp, userBuf.username) != -1) {
+                        long place = GetUserPlaceByUsername(userBuf.username);
+                        if (place == -1) {
+                            strcpy(messageBuf.data.message, "Server : None username");
+                        } else {
+                            struct User userTemp;
+                            GetUserByPlace(&userTemp, place);
                             if (strcmp(userBuf.password, userTemp.password) == 0) {
                                 client->online = true;
                                 strcpy(messageBuf.data.message, "Server : Login successfully");
                             } else {
                                 strcpy(messageBuf.data.message, "Server : Wrong password");
                             }
-                        } else {
-                            strcpy(messageBuf.data.message, "Server : None username");
                         }
                         break;
                     }
@@ -134,64 +136,42 @@ void *HandleMessage(struct Transmission *pointer) {
                     case REGISTER: {
                         struct User userBuf;
                         memcpy(&userBuf, messageBuf.data.data, sizeof(struct User));
-                        if (GetUserByUserName(&userBuf, userBuf.username) == -1) {
+                        if(GetUserPlaceByUsername(userBuf.username) == -1){
                             pthread_mutex_lock(&databaseMutex);
-                            if (SetUserByPlace(&userBuf, GetUserCount()) != -1) {
+                            long place = GetUserReadyPlaceByUsername(userBuf.username);
+                            if (InsertUserByPlace(&userBuf, place) != -1) {
                                 strcpy(messageBuf.data.message, "Server : Register successfully");
                             } else {
                                 strcpy(messageBuf.data.message, "Server : Register unsuccessfully");
                             }
                             pthread_mutex_unlock(&databaseMutex);
-                        } else {
+                        }else{
                             strcpy(messageBuf.data.message, "Server : Duplicate username");
                         }
                         break;
                     }
                     case UNREGISTER: {
                         struct User userBuf;
-                        struct User userTemp;
                         memcpy(&userBuf, messageBuf.data.data, sizeof(struct User));
-                        long temp = GetUserByUserName(&userTemp, userBuf.username);
-                        if (temp == -1) {
+                        pthread_mutex_lock(&databaseMutex);
+                        long place = GetUserPlaceByUsername(userBuf.username);
+                        if(place == -1){
                             strcpy(messageBuf.data.message, "Server : None username");
-                        } else {
+                        }else{
+                            struct User userTemp;
+                            GetUserByPlace(&userTemp, place);
                             if (strcmp(userBuf.password, userTemp.password) == 0) {
-                                pthread_mutex_lock(&databaseMutex);
-                                if (RemoveUserByPlace(temp) != -1) {
+                                if (RemoveUserByPlace(place) != -1) {
                                     client->online = false;
                                     strcpy(messageBuf.data.message, "Server : Unregister successfully");
                                 } else {
                                     strcpy(messageBuf.data.message, "Server : Unregister unsuccessfully");
                                 }
-                                pthread_mutex_unlock(&databaseMutex);
                             } else {
                                 strcpy(messageBuf.data.message, "Server : Wrong password");
                             }
                         }
-                        break;
-                    }
-                    case CHANGE: {
-                        struct User userBuf;
-                        struct User userBuff;
-                        struct User userTemp;
-                        memcpy(&userBuf, messageBuf.data.data, sizeof(struct User));
-                        memcpy(&userBuff, messageBuf.data.data + sizeof(struct User), sizeof(struct User));
-                        long temp = GetUserByUserName(&userTemp, userBuf.username);
-                        if (temp == -1) {
-                            strcpy(messageBuf.data.message, "Server : None username");
-                        } else {
-                            if (strcmp(userBuf.password,userTemp.password) == 0) {
-                                pthread_mutex_lock(&databaseMutex);
-                                if (SetUserByPlace(&userBuff,temp) != -1) {
-                                    strcpy(messageBuf.data.message, "Server : Change successfully");
-                                } else {
-                                    strcpy(messageBuf.data.message, "Server : Change unsuccessfully");
-                                }
-                                pthread_mutex_unlock(&databaseMutex);
-                            } else {
-                                strcpy(messageBuf.data.message, "Server : Wrong password");
-                            }
-                        }
+                        pthread_mutex_unlock(&databaseMutex);
                         break;
                     }
                     case EXIT: {
@@ -210,6 +190,7 @@ void *HandleMessage(struct Transmission *pointer) {
                 }
             }
         }
+        Show();
         sendto(serverFileDescriptor, &messageBuf.data, sizeof(struct CommonData), 0,
                (struct sockaddr *) &messageBuf.client.address, messageBuf.client.length);
         PRINT:
@@ -263,6 +244,9 @@ _Noreturn void *GetMessage(struct Transmission *transmissions) {
         }
     }
 }
+
+
+
 
 int main(int argc, char *argv[]) {
     unsigned int TIMEOUT = 300;

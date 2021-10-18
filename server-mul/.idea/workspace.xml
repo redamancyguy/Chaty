@@ -18,25 +18,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="21d7c586-2eda-4187-9de7-99681e4a11ff" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../client/user.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../learning/email.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cmake-build-debug/users" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-release/users" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../client/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../client/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../client/cmake-build-debug/client.cbp" beforeDir="false" afterPath="$PROJECT_DIR$/../client/cmake-build-debug/client.cbp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../client/cmake-build-release/CMakeFiles/client.dir/C.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/../client/cmake-build-release/CMakeFiles/client.dir/C.includecache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../client/cmake-build-release/CMakeFiles/client.dir/depend.internal" beforeDir="false" afterPath="$PROJECT_DIR$/../client/cmake-build-release/CMakeFiles/client.dir/depend.internal" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../client/cmake-build-release/CMakeFiles/client.dir/depend.make" beforeDir="false" afterPath="$PROJECT_DIR$/../client/cmake-build-release/CMakeFiles/client.dir/depend.make" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../client/cmake-build-release/CMakeFiles/client.dir/main.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/../client/cmake-build-release/CMakeFiles/client.dir/main.c.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../client/cmake-build-release/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/../client/cmake-build-release/Testing/Temporary/LastTest.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../client/cmake-build-release/client" beforeDir="false" afterPath="$PROJECT_DIR$/../client/cmake-build-release/client" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../client/cmake-build-release/client.cbp" beforeDir="false" afterPath="$PROJECT_DIR$/../client/cmake-build-release/client.cbp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../client/commondata.h" beforeDir="false" afterPath="$PROJECT_DIR$/../client/commondata.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/commondata.h" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../client/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/../client/main.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/user.h" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../learning/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../learning/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../learning/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../learning/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../learning/cmake-build-debug/CMakeFiles/learning.dir/depend.make" beforeDir="false" afterPath="$PROJECT_DIR$/../learning/cmake-build-debug/CMakeFiles/learning.dir/depend.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../learning/cmake-build-debug/CMakeFiles/learning.dir/C.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/../learning/cmake-build-debug/CMakeFiles/learning.dir/C.includecache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../learning/cmake-build-debug/CMakeFiles/learning.dir/main.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/../learning/cmake-build-debug/CMakeFiles/learning.dir/main.c.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../learning/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/../learning/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../learning/cmake-build-debug/learning.cbp" beforeDir="false" afterPath="$PROJECT_DIR$/../learning/cmake-build-debug/learning.cbp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../learning/cmake-build-debug/learning" beforeDir="false" afterPath="$PROJECT_DIR$/../learning/cmake-build-debug/learning" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../learning/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/../learning/main.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/server_mul.dir/C.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/server_mul.dir/C.includecache" afterDir="false" />
@@ -46,6 +42,11 @@
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/server_mul.dir/user.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/server_mul.dir/user.c.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/server_mul" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/server_mul" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/users" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/server_mul.dir/C.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/server_mul.dir/C.includecache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/server_mul.dir/main.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/server_mul.dir/main.c.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/server_mul.dir/user.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/server_mul.dir/user.c.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-release/Testing/Temporary/LastTest.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-release/server_mul" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-release/server_mul" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commondata.h" beforeDir="false" afterPath="$PROJECT_DIR$/commondata.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main.c" afterDir="false" />
@@ -60,7 +61,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Release" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
@@ -81,7 +82,7 @@
     <property name="cf.first.check.clang-format" value="false" />
     <property name="cidr.known.project.marker" value="true" />
     <property name="cmake.loaded.for.project" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../client" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../learning" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
@@ -94,14 +95,14 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration name="server_mul" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="server_mul" TARGET_NAME="server_mul" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="server_mul" RUN_TARGET_NAME="server_mul">
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="GradleAppRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+    <configuration name="server_mul" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="server_mul" TARGET_NAME="server_mul" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="server_mul" RUN_TARGET_NAME="server_mul">
       <method v="2">
-        <option name="com.jetbrains.cidr.cpp.gradle.execution.GradleNativeBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
   </component>
@@ -118,6 +119,7 @@
       <workItem from="1634441842967" duration="2115000" />
       <workItem from="1634476425680" duration="876000" />
       <workItem from="1634484608077" duration="8986000" />
+      <workItem from="1634557583441" duration="13472000" />
     </task>
     <servers />
   </component>
