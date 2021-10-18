@@ -8,7 +8,9 @@ CMakeFiles/client.dir/include/TreeMap.c.o: ../include/Stack.h
 CMakeFiles/client.dir/include/TreeMap.c.o: ../include/TreeMap.c
 CMakeFiles/client.dir/include/TreeMap.c.o: ../include/TreeMap.h
 
-CMakeFiles/client.dir/main.c.o: ../commondata.h
 CMakeFiles/client.dir/main.c.o: ../include/TreeMap.h
 CMakeFiles/client.dir/main.c.o: ../main.c
+CMakeFiles/client.dir/main.c.o: /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/client.h
+CMakeFiles/client.dir/main.c.o: /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/commondata.h
+CMakeFiles/client.dir/main.c.o: /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/user.h
 

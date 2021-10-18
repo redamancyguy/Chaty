@@ -16,6 +16,7 @@ enum StatusCode {
     LOGOUT = 5,
     REGISTER = 6,
     UNREGISTER = 7,
+    CHANGE = 8,
 };
 struct CommonData {
     enum StatusCode code;

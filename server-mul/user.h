@@ -4,11 +4,12 @@
 #ifndef USER_H
 #define USER_H
 
-enum PrivilegesCode {
+enum Privileges {
     SUPERUSER, USER, ANONYMOUS
 };
 struct User {
     unsigned long id;
+    enum Privileges privileges;
     char username[20];
     char password[20];
     char email[20];

@@ -7,7 +7,8 @@
 #include <unistd.h>
 #include <pthread.h>
 #include <stdlib.h>
-#include "commondata.h"
+#include "../server-mul/user.h"
+#include "../server-mul/commondata.h"
 #include "include/TreeMap.h"
 short SERVER_PORT = 9999+0;
 
@@ -43,32 +44,69 @@ void Logout(struct CommonData buf, struct sockaddr *serverAddress) {
 }
 
 void Login(struct CommonData buf, struct sockaddr *serverAddress) {
+    struct User user;
+    memset(&user,0,sizeof(struct User));
     puts("input your username");
-    scanf("%s", buf.message);
+    scanf("%s", user.username);
     puts("input your password");
-    scanf("%s", buf.data);
+    scanf("%s", user.password);
     socklen_t len = sizeof(struct sockaddr_in);
+    puts(user.username);
+    puts(user.password);
     buf.code = LOGIN;
+    memcpy(buf.data,&user,sizeof(struct User));
     sendto(client_fd, &buf, sizeof(struct CommonData), 0, serverAddress, len);
 }
 
 void Unregister(struct CommonData buf, struct sockaddr *serverAddress) {
+    struct User user;
+    memset(&user,0,sizeof(struct User));
     puts("input your username");
-    scanf("%s", buf.message);
+    scanf("%s", user.username);
     puts("input your password");
-    scanf("%s", buf.data);
+    scanf("%s", user.password);
     socklen_t len = sizeof(struct sockaddr_in);
     buf.code = UNREGISTER;
+    memcpy(buf.data,&user,sizeof(struct User));
+    sendto(client_fd, &buf, sizeof(struct CommonData), 0, serverAddress, len);
+}
+
+
+
+void Change(struct CommonData buf, struct sockaddr *serverAddress) {
+    struct User oldUser;
+    struct User user;
+    memset(&user,0,sizeof(struct User));
+    memset(&oldUser,0,sizeof(struct User));
+    puts("input your old username");
+    scanf("%s",oldUser.username);
+    puts("input your old password");
+    scanf("%s", oldUser.password);
+    puts("input your new email");
+    scanf("%s", user.email);
+    puts("input your new username");
+    scanf("%s", user.username);
+    puts("input your new password");
+    scanf("%s", user.password);
+    socklen_t len = sizeof(struct sockaddr_in);
+    buf.code = CHANGE;
+    memcpy(buf.data,&oldUser,sizeof(struct User));
+    memcpy(buf.data+sizeof(struct User),&user,sizeof(struct User));
     sendto(client_fd, &buf, sizeof(struct CommonData), 0, serverAddress, len);
 }
 
 void Register(struct CommonData buf, struct sockaddr *serverAddress) {
+    struct User user;
+    memset(&user,0,sizeof(struct User));
+    puts("input your email");
+    scanf("%s", user.email);
     puts("input your username");
-    scanf("%s", buf.message);
+    scanf("%s", user.username);
     puts("input your password");
-    scanf("%s", buf.data);
+    scanf("%s", user.password);
     socklen_t len = sizeof(struct sockaddr_in);
     buf.code = REGISTER;
+    memcpy(buf.data,&user,sizeof(struct User));
     sendto(client_fd, &buf, sizeof(struct CommonData), 0, serverAddress, len);
 }
 
@@ -173,6 +211,8 @@ int main(int argc, char *argv[]) {
             Register(buf, (struct sockaddr *) &serverAddress);
         } else if (strcmp(buf.data, "unregister") == 0) {
             Unregister(buf, (struct sockaddr *) &serverAddress);
+        } else if (strcmp(buf.data, "change") == 0) {
+            Change(buf, (struct sockaddr *) &serverAddress);
         } else if (strncmp(buf.data, "set group", 9) == 0) {
             char *temp;
             strcpy(buf.data, buf.data + 9);

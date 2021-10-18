@@ -76,6 +76,15 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/context.cpp">
+			<Option target="learning"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/context.h">
+			<Option target="learning"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/email.cpp">
+			<Option target="learning"/>
+		</Unit>
 		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/main.c">
 			<Option target="learning"/>
 		</Unit>

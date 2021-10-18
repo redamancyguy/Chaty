@@ -91,6 +91,9 @@
 		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/main.c">
 			<Option target="client"/>
 		</Unit>
+		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/user.h">
+			<Option target="client"/>
+		</Unit>
 		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>

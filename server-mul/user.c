@@ -54,7 +54,7 @@ long GetUserByUserName(struct User *user, char *username) {
     long i=0;
     while(fread(&temp, sizeof(struct User), 1, userFile) >0) {
         if (strcmp(username, temp.username) == 0) {
-            memcpy(user, &temp, sizeof(struct User));
+            *user = temp;
             fclose(userFile);
             return i;
         }
