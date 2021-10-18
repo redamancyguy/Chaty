@@ -1,3 +1,0 @@
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-minsizerel/CMakeFiles/rebuild_cache.dir
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-minsizerel/CMakeFiles/edit_cache.dir
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-minsizerel/CMakeFiles/server_mul.dir

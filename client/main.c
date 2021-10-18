@@ -109,6 +109,8 @@ void RegisterTest(struct sockaddr *serverAddress) {
 void Register(struct CommonData buf, struct sockaddr *serverAddress) {
     struct User user;
     memset(&user,0,sizeof(struct User));
+    puts("input your ID");
+    scanf("%ld", &user.id);
     puts("input your email");
     scanf("%s", user.email);
     puts("input your username");
@@ -203,7 +205,7 @@ int main(int argc, char *argv[]) {
     Connect(buf, (struct sockaddr *) &serverAddress);
     TreeMap set = Tree_New();
     Tree_Insert(set,(void*)buf.group,(void*)time(NULL));
-    RegisterTest(&serverAddress);
+//    RegisterTest(&serverAddress);
     while (1) {
         strcpy(buf.message, "");
         strcpy(buf.data, "");
