@@ -1,38 +1,32 @@
+#include <unistd.h>
+#include <fcntl.h>
 #include "string.h"
 #include "stdio.h"
-#define L 7
-long GetPlace(const long *array,long length,long target){
-    long left = 0,right = length,temp;
-    while(left<=right){
-        temp = (left+right)/2;
-        if(array[temp] - target < 0){
-            left = temp +1;
-        }else if(array[temp] - target > 0){
-            right = temp-1;
-        }else{
-            return temp;
-        }
-    }
-    while(target < array[temp] && temp > 0){
-        temp--;
-    }
-    while(target > array[temp] && temp < length){
-        temp++;
-    }
-//    if(temp == 0){
-//        if(array[temp] < target){
-//            temp++;
-//        }
-//    }
-    return temp;
-}
+
+
 int main(){
-    long a[L] = {1,5,9,45,99,999,433432};
-    printf("%ld\n", GetPlace(a,L,0));
-    printf("%ld\n", GetPlace(a,L,4));
-    printf("%ld\n", GetPlace(a,L,6));
-    printf("%ld\n", GetPlace(a,L,55));
-    printf("%ld\n", GetPlace(a,L,100));
-    printf("%ld\n", GetPlace(a,L,989));
-    printf("%ld\n", GetPlace(a,L,111119189));
+    FILE *fp = NULL;
+    fp = fopen("test","w");
+
+    fwrite("sunwenli", strlen("sunwenli"),1,fp);
+    fseek(fp,0,SEEK_SET);
+    char a = 0;
+//    fwrite(&a, 1,1,fp);
+//    fputc( EOF , fp );
+//    fwrite(&a, 1,1,fp);
+//    fwrite(&a, 1,1,fp);
+//    fwrite(&a, 1,1,fp);
+//    fwrite(&a, 1,1,fp);
+//    truncate("test",5);
+    fclose(fp);
+//    truncate("test",5);
+    int fd = open("test",O_WRONLY);
+    lseek(fd, 0, SEEK_SET);
+    ftruncate(fd,5);
+    close(fd);
+    char str[100];
+    fp = fopen("test","r");
+    printf("%ld\n",fread(str, 3,1,fp));
+    puts(str);
+    fclose(fp);
 }

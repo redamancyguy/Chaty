@@ -260,7 +260,7 @@ int main(int argc, char *argv[]) {
             break;
         }
     }
-    printf("%d\n", SERVER_PORT);
+    printf("port %d\n", SERVER_PORT);
     for (int i = 0; i < argc; i++) {
         if (argv[i][0] == '-') {
             if (strncmp(argv[i] + 1, "port", 4) == 0) {

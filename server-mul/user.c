@@ -3,6 +3,7 @@
 //
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 #include "user.h"
 
 const char *fileName = "users";
@@ -21,7 +22,7 @@ long GetUserCount() {
 long GetUserPlaceByUsername(char *username) {
     FILE *userFile;
     if ((userFile = fopen(fileName, "rb")) == 0) {
-        if ((userFile = fopen(fileName, "w")) == 0) {
+        if ((userFile = fopen(fileName, "wb")) == 0) {
             return -1;
         }
     }
@@ -53,7 +54,7 @@ long GetUserPlaceByUsername(char *username) {
 long GetUserReadyPlaceByUsername(char *username) {
     FILE *userFile;
     if ((userFile = fopen(fileName, "rb")) == 0) {
-        if ((userFile = fopen(fileName, "w")) == 0) {
+        if ((userFile = fopen(fileName, "wb")) == 0) {
             return -1;
         }
     }
@@ -74,29 +75,20 @@ long GetUserReadyPlaceByUsername(char *username) {
         } else if (result > 0) {
             left = temp + 1;
         } else {
-            break;
+            goto END;
         }
     }
     struct User userBuf;
-    fseek(userFile, (long) (sizeof(struct User) * temp), SEEK_SET);
-    if (fread(&userBuf, sizeof(struct User), 1, userFile) < 0) {
-        return temp;
-    }
-    while(strcmp(username,userBuf.username) < 0 && temp > 0){
-        puts("left");
+    while (strcmp(username, userBuf.username) < 0 && temp > 0 &&
+           fread(&userBuf, sizeof(struct User), 1, userFile) > 0) {
         temp--;
         fseek(userFile, (long) (sizeof(struct User) * temp), SEEK_SET);
-        if (fread(&userBuf, sizeof(struct User), 1, userFile) < 0) {
-            break;
-        }
     }
-    while(strcmp(username,userBuf.username) > 0 && temp < count){
+    while (strcmp(username, userBuf.username) > 0 && temp < count &&
+           fread(&userBuf, sizeof(struct User), 1, userFile) > 0) {
         temp++;
-        fseek(userFile, (long) (sizeof(struct User) * temp), SEEK_SET);
-        if (fread(&userBuf, sizeof(struct User), 1, userFile) < 0) {
-            break;
-        }
     }
+    END:
     fclose(userFile);
     return temp;
 }
@@ -107,7 +99,9 @@ long GetUserByPlace(struct User *user, unsigned long place) {
         return -1;
     }
     fseek(userFile, (long) (sizeof(struct User) * place), SEEK_SET);
-    fread(user, sizeof(struct User), 1, userFile);
+    if (fread(user, sizeof(struct User), 1, userFile) < 0) {
+        return -1;
+    }
     return (long) place;
 }
 
@@ -124,113 +118,74 @@ void Show() {
     fclose(userFile);
 }
 
-long GetUserByUserName(struct User *user, char *username) { //old
-    FILE *userFile;
-    struct User temp;
-    if ((userFile = fopen(fileName, "rb")) == 0) {
-        return -1;
-    }
-    long i = 0;
-    while (fread(&temp, sizeof(struct User), 1, userFile) > 0) {
-        if (strcmp(username, temp.username) == 0) {
-            *user = temp;
-            fclose(userFile);
-            return i;
-        }
-        i++;
-    }
-    fclose(userFile);
-    return -1;
-}
-
-
 long RemoveUserByPlace(unsigned long place) {
-    FILE *userFile;
-    FILE *tempFile;
-    struct User temp;
+    FILE *writeFile;
+    FILE *readFile;
     long count = GetUserCount();
     if (place >= count) {
         return -1;
     }
-    if ((userFile = fopen(fileName, "rb")) == 0) {
+    if ((readFile = fopen(fileName, "rb")) == 0) {
         return -1;
     }
-    if ((tempFile = fopen("temp", "w")) == 0) {
-        fclose(userFile);
+    if ((writeFile = fopen(fileName, "rb+")) == 0) {
         return -1;
     }
-    long i;
-    for (i = 0; i < place; i++) {
-        if (fread(&temp, sizeof(struct User), 1, userFile) < 0) {
-            goto ERROR;
-        }
-        fwrite(&temp, sizeof(struct User), 1, tempFile);
-    }
-    if (fread(&temp, sizeof(struct User), 1, userFile) < 0) {
+    struct User temp;
+    fseek(readFile, (long)(sizeof(struct User) * place), SEEK_SET);
+    fseek(writeFile, (long)(sizeof(struct User) * place), SEEK_SET);
+    if (fread(&temp, sizeof(struct User), 1, readFile) < 0) {
         goto ERROR;
     }
-    for (; i < count - 1; i++) {
-        if (fread(&temp, sizeof(struct User), 1, userFile) < 0) {
-            goto ERROR;
-        }
-        fwrite(&temp, sizeof(struct User), 1, tempFile);
+    while(fread(&temp, sizeof(struct User), 1, readFile) > 0){
+        fwrite(&temp, sizeof(struct User), 1, writeFile);
     }
-    fclose(userFile);
-    fclose(tempFile);
-    remove(fileName);
-    rename("temp", fileName);
+    fclose(readFile);
+    fclose(writeFile);
+    if(truncate(fileName, (long)(sizeof(struct User) * (count - 1))) == -1){
+        return -1;
+    }
     return (long) place;
     ERROR:
-    fclose(tempFile);
-    fclose(userFile);
+    fclose(readFile);
+    fclose(writeFile);
     return -1;
 }
 
 long InsertUserByPlace(struct User *user, unsigned long place) {
-    FILE *userFile;
-    FILE *tempFile;
-    struct User temp;
+    FILE *writeFile;
+    FILE *readFile;
     long count = GetUserCount();
     if (place > count) {
         return -1;
     }
-    if ((userFile = fopen(fileName, "rb")) == 0) {
-        if ((userFile = fopen(fileName, "w")) == 0) {
-            return -1;
-        }
-    }
-    if ((tempFile = fopen("temp", "w")) == 0) {
-        fclose(userFile);
+    if ((readFile = fopen(fileName, "rb")) == 0) {
         return -1;
     }
-    long i;
-    for (i = 0; i < place; i++) {
-        if (fread(&temp, sizeof(struct User), 1, userFile) < 0) {
-            goto ERROR;
-        }
-        fwrite(&temp, sizeof(struct User), 1, tempFile);
+    if ((writeFile = fopen(fileName, "rb+")) == 0) {
+        return -1;
     }
-    fwrite(user, sizeof(struct User), 1, tempFile);
-    for (; i < count; i++) {
-        if (fread(&temp, sizeof(struct User), 1, userFile) < 0) {
-            goto ERROR;
-        }
-        fwrite(&temp, sizeof(struct User), 1, tempFile);
+    struct User temp;
+    fseek(readFile, (long)(sizeof(struct User) * place), SEEK_SET);
+    fseek(writeFile, (long)(sizeof(struct User) * place), SEEK_SET);
+    if (fwrite(user, sizeof(struct User), 1, writeFile) < 0) {
+        goto ERROR;
     }
-    fclose(userFile);
-    fclose(tempFile);
-    remove(fileName);
-    rename("temp", fileName);
+    while(fread(&temp, sizeof(struct User), 1, readFile) > 0){
+        fwrite(&temp, sizeof(struct User), 1, writeFile);
+    }
+    fclose(readFile);
+    fclose(writeFile);
     return (long) place;
     ERROR:
-    fclose(userFile);
-    fclose(tempFile);
+    fclose(readFile);
+    fclose(writeFile);
     return -1;
 }
 
 int CLearUsers() {
     FILE *tempFile;
-    if ((tempFile = fopen(fileName, "w")) == 0) {
+    if ((tempFile = fopen(fileName, "wb")) == 0) {
         return -1;
     }
     fclose(tempFile);
