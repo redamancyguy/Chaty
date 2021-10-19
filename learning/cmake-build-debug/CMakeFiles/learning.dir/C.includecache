@@ -7,10 +7,6 @@
 #IncludeRegexTransform: 
 
 /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/main.c
-unistd.h
--
-fcntl.h
--
 string.h
 /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/string.h
 stdio.h

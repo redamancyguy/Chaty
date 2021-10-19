@@ -15,14 +15,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cc0ec5ba-efb9-43f1-8ad4-f34c82fb7a24" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../server-mul/cmake-build-debug/users" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../client/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/../client/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/C.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/C.includecache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/main.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/main.c.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/learning" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/learning" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/test" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../server-mul/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server-mul/cmake-build-debug/CMakeFiles/server_mul.dir/C.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/cmake-build-debug/CMakeFiles/server_mul.dir/C.includecache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server-mul/cmake-build-debug/CMakeFiles/server_mul.dir/main.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/cmake-build-debug/CMakeFiles/server_mul.dir/main.c.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server-mul/cmake-build-debug/CMakeFiles/server_mul.dir/user.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/cmake-build-debug/CMakeFiles/server_mul.dir/user.c.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server-mul/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server-mul/cmake-build-debug/server_mul" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/cmake-build-debug/server_mul" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../server-mul/cmake-build-release/CMakeFiles/server_mul.dir/C.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/cmake-build-release/CMakeFiles/server_mul.dir/C.includecache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../server-mul/cmake-build-release/CMakeFiles/server_mul.dir/main.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/cmake-build-release/CMakeFiles/server_mul.dir/main.c.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../server-mul/cmake-build-release/CMakeFiles/server_mul.dir/user.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/cmake-build-release/CMakeFiles/server_mul.dir/user.c.o" afterDir="false" />
@@ -60,7 +67,7 @@
     <property name="cf.first.check.clang-format" value="false" />
     <property name="cidr.known.project.marker" value="true" />
     <property name="cmake.loaded.for.project" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../server-mul" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
@@ -90,7 +97,6 @@
       <workItem from="1634482193625" duration="14000" />
       <workItem from="1634484992088" duration="186000" />
       <workItem from="1634560909168" duration="4307000" />
-      <workItem from="1634642427035" duration="3774000" />
     </task>
     <servers />
   </component>

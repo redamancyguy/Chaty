@@ -249,6 +249,33 @@ _Noreturn void *GetMessage(struct Transmission *transmissions) {
 
 
 int main(int argc, char *argv[]) {
+//    struct User user;
+//
+//    user.id = 1;
+//    printf("%ld\n",InsertUserByPlace(&user,0));
+//    Show();
+//
+//    user.id = 2;
+//    printf("%ld\n",InsertUserByPlace(&user,0));
+//    Show();
+//
+//    user.id = 3;
+//    printf("%ld\n",InsertUserByPlace(&user,2));
+//    Show();
+//
+//    user.id = 4;
+//    printf("%ld\n",InsertUserByPlace(&user,2));
+//    Show();
+//
+//    user.id = 5;
+//    printf("%ld\n",InsertUserByPlace(&user,0));
+//    Show();
+//
+//    user.id = 6;
+//    printf("%ld\n",InsertUserByPlace(&user,5));
+//    Show();
+//    CLearUsers();
+//    return 0;
     unsigned int TIMEOUT = 300;
     unsigned int groupSize = 1024;
     unsigned int groupNumber = 1024;
@@ -260,7 +287,7 @@ int main(int argc, char *argv[]) {
             break;
         }
     }
-    printf("port %d\n", SERVER_PORT);
+    printf("%d\n", SERVER_PORT);
     for (int i = 0; i < argc; i++) {
         if (argv[i][0] == '-') {
             if (strncmp(argv[i] + 1, "port", 4) == 0) {

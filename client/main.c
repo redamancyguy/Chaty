@@ -205,7 +205,7 @@ int main(int argc, char *argv[]) {
     Connect(buf, (struct sockaddr *) &serverAddress);
     TreeMap set = Tree_New();
     Tree_Insert(set,(void*)buf.group,(void*)time(NULL));
-//    RegisterTest(&serverAddress);
+    RegisterTest(&serverAddress);
     while (1) {
         strcpy(buf.message, "");
         strcpy(buf.data, "");
