@@ -176,6 +176,7 @@ long InsertUserByPlace(struct User *user, unsigned long place) {
         if ((readFile = fopen(fileName, "w")) == 0) {
             return -1;
         }
+        fclose(readFile);
         readFile = fopen(fileName, "rb+");
     }
     if ((writeFile = fopen(fileName, "rb+")) == 0) {

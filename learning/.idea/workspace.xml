@@ -14,31 +14,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cc0ec5ba-efb9-43f1-8ad4-f34c82fb7a24" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../server-mul/cmake-build-debug/users" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../client/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/../client/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/C.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/C.includecache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/main.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/main.c.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/learning" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/learning" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/test" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server-mul/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server-mul/cmake-build-debug/CMakeFiles/server_mul.dir/C.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/cmake-build-debug/CMakeFiles/server_mul.dir/C.includecache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server-mul/cmake-build-debug/CMakeFiles/server_mul.dir/main.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/cmake-build-debug/CMakeFiles/server_mul.dir/main.c.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server-mul/cmake-build-debug/CMakeFiles/server_mul.dir/user.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/cmake-build-debug/CMakeFiles/server_mul.dir/user.c.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server-mul/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server-mul/cmake-build-debug/server_mul" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/cmake-build-debug/server_mul" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server-mul/cmake-build-release/CMakeFiles/server_mul.dir/C.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/cmake-build-release/CMakeFiles/server_mul.dir/C.includecache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server-mul/cmake-build-release/CMakeFiles/server_mul.dir/main.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/cmake-build-release/CMakeFiles/server_mul.dir/main.c.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server-mul/cmake-build-release/CMakeFiles/server_mul.dir/user.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/cmake-build-release/CMakeFiles/server_mul.dir/user.c.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server-mul/cmake-build-release/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/cmake-build-release/Testing/Temporary/LastTest.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server-mul/cmake-build-release/server_mul" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/cmake-build-release/server_mul" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server-mul/cmake-build-release/users" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/cmake-build-release/users" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server-mul/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/main.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server-mul/user.c" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/user.c" afterDir="false" />
-    </list>
+    <list default="true" id="cc0ec5ba-efb9-43f1-8ad4-f34c82fb7a24" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
