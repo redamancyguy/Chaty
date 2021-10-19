@@ -15,7 +15,34 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="21d7c586-2eda-4187-9de7-99681e4a11ff" name="Changes" comment="" />
+    <list default="true" id="21d7c586-2eda-4187-9de7-99681e4a11ff" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../QTclient/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../QTclient/QTclient.pro" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../QTclient/QTclient_zh_CN.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../QTclient/commondata.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../QTclient/main.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../QTclient/mainwindow.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../QTclient/mainwindow.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../QTclient/mainwindow.ui" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../QTclient/mythread.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../QTclient/mythread.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../build-QTclient-Desktop_Qt_5_14_2_MinGW_32_bit-Debug/.qmake.stash" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../build-QTclient-Desktop_Qt_5_14_2_MinGW_32_bit-Debug/Makefile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../build-QTclient-Desktop_Qt_5_14_2_MinGW_32_bit-Debug/Makefile.Debug" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../build-QTclient-Desktop_Qt_5_14_2_MinGW_32_bit-Debug/Makefile.Release" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../build-QTclient-Desktop_Qt_5_14_2_MinGW_32_bit-Debug/debug/QTclient.exe" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../build-QTclient-Desktop_Qt_5_14_2_MinGW_32_bit-Debug/debug/main.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../build-QTclient-Desktop_Qt_5_14_2_MinGW_32_bit-Debug/debug/mainwindow.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../build-QTclient-Desktop_Qt_5_14_2_MinGW_32_bit-Debug/debug/moc_mainwindow.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../build-QTclient-Desktop_Qt_5_14_2_MinGW_32_bit-Debug/debug/moc_mainwindow.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../build-QTclient-Desktop_Qt_5_14_2_MinGW_32_bit-Debug/debug/moc_predefs.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../build-QTclient-Desktop_Qt_5_14_2_MinGW_32_bit-Debug/ui_mainwindow.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/../client/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../learning/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../learning/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/server_mul.dir/C.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/server_mul.dir/C.includecache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
