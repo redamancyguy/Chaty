@@ -6,8 +6,8 @@
 #include <Qt3DExtras/qt3dwindow.h>
 
 #include "ui_mainwindow.h"
-QUdpSocket socket;
 
+QUdpSocket socket;
 void Receive(QTextBrowser *textBrowser){
 
     while(true){
@@ -37,10 +37,12 @@ void Receive(QTextBrowser *textBrowser){
 }
 
 
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+    ui->setupUi(this);
 
     ui->menubar->addMenu("Login");
 
@@ -67,23 +69,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::keyPressEvent(QKeyEvent *event){
     if(event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return){
-        this->on_pushButton_clicked();
+        CommonData data;
+        data.group = this->group;
+        data.code = CHAT;
+        strcpy(data.data,ui->textEdit->toPlainText().toStdString().c_str());
+        socket.writeDatagram((char*)&data,sizeof (CommonData), serverAddress,serverPort);
+        ui->textEdit->clear();
     }
 }
 
-
-void MainWindow::on_pushButton_clicked()
-{
-    CommonData data;
-    data.group = this->group;
-    data.code = CHAT;
-    strcpy(data.data,ui->textEdit->toPlainText().toStdString().c_str());
-    socket.writeDatagram((char*)&data,sizeof (CommonData), serverAddress,serverPort);
-    ui->textEdit->clear();
-}
-
-
-void MainWindow::on_comboBox_currentIndexChanged(int index)
-{
-    std::cout<<"index : "<<index<<std::endl;
-}
