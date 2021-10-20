@@ -16,27 +16,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="21d7c586-2eda-4187-9de7-99681e4a11ff" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../QTclient/QTclient.pro" beforeDir="false" afterPath="$PROJECT_DIR$/../QTclient/QTclient.pro" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../QTclient/mainwindow.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../QTclient/mainwindow.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../QTclient/mainwindow.h" beforeDir="false" afterPath="$PROJECT_DIR$/../QTclient/mainwindow.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../QTclient/mythread.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../QTclient/mythread.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../build-QTclient-Desktop_Qt_5_14_2_MinGW_32_bit-Debug/Makefile.Debug" beforeDir="false" afterPath="$PROJECT_DIR$/../build-QTclient-Desktop_Qt_5_14_2_MinGW_32_bit-Debug/Makefile.Debug" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../build-QTclient-Desktop_Qt_5_14_2_MinGW_32_bit-Debug/Makefile.Release" beforeDir="false" afterPath="$PROJECT_DIR$/../build-QTclient-Desktop_Qt_5_14_2_MinGW_32_bit-Debug/Makefile.Release" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../build-QTclient-Desktop_Qt_5_14_2_MinGW_32_bit-Debug/debug/QTclient.exe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../build-QTclient-Desktop_Qt_5_14_2_MinGW_32_bit-Debug/debug/main.o" beforeDir="false" afterPath="$PROJECT_DIR$/../build-QTclient-Desktop_Qt_5_14_2_MinGW_32_bit-Debug/debug/main.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../build-QTclient-Desktop_Qt_5_14_2_MinGW_32_bit-Debug/debug/mainwindow.o" beforeDir="false" afterPath="$PROJECT_DIR$/../build-QTclient-Desktop_Qt_5_14_2_MinGW_32_bit-Debug/debug/mainwindow.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../build-QTclient-Desktop_Qt_5_14_2_MinGW_32_bit-Debug/debug/moc_mainwindow.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../build-QTclient-Desktop_Qt_5_14_2_MinGW_32_bit-Debug/debug/moc_mainwindow.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../build-QTclient-Desktop_Qt_5_14_2_MinGW_32_bit-Debug/debug/moc_mainwindow.o" beforeDir="false" afterPath="$PROJECT_DIR$/../build-QTclient-Desktop_Qt_5_14_2_MinGW_32_bit-Debug/debug/moc_mainwindow.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../client/cmake-build-debug/CMakeFiles/client.dir/main.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/../client/cmake-build-debug/CMakeFiles/client.dir/main.c.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../client/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/../client/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../client/cmake-build-debug/client" beforeDir="false" afterPath="$PROJECT_DIR$/../client/cmake-build-debug/client" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../client/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/../client/main.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/server_mul.dir/main.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/server_mul.dir/main.c.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/server_mul" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/server_mul" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/users" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/users" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

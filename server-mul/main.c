@@ -190,18 +190,17 @@ void *HandleMessage(struct Transmission *pointer) {
                 }
             }
         }
-        Show();
         sendto(serverFileDescriptor, &messageBuf.data, sizeof(struct CommonData), 0,
                (struct sockaddr *) &messageBuf.client.address, messageBuf.client.length);
         PRINT:
         printf("process: %d\tthread: %lu\t", getpid(), pthread_self());
-        printf("%hhu.", *(char *) (&messageBuf.client.address.sin_addr.s_addr));
-        printf("%hhu.", *((char *) (&messageBuf.client.address.sin_addr.s_addr) + 1));
-        printf("%hhu.", *((char *) (&messageBuf.client.address.sin_addr.s_addr) + 2));
-        printf("%hhu:", *((char *) (&messageBuf.client.address.sin_addr.s_addr) + 3));
-        printf("%d", messageBuf.client.address.sin_port);
-        printf("\t Code : %d\tGroup : %d\t", messageBuf.data.code, messageBuf.data.group);
-        printf("size: %d\n", table->size);
+        printf("%3hhu.", *(char *) (&messageBuf.client.address.sin_addr.s_addr));
+        printf("%3hhu.", *((char *) (&messageBuf.client.address.sin_addr.s_addr) + 1));
+        printf("%3hhu.", *((char *) (&messageBuf.client.address.sin_addr.s_addr) + 2));
+        printf("%3hhu:", *((char *) (&messageBuf.client.address.sin_addr.s_addr) + 3));
+        printf("%5d", messageBuf.client.address.sin_port);
+        printf("\t Code : %2d\tGroup : %5d\t", messageBuf.data.code, messageBuf.data.group);
+        printf("size: %5d\n", table->size);
     }
 }
 
