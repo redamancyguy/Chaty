@@ -7,8 +7,9 @@
 #include <QCoreApplication>
 #include <QHostAddress>
 #include <QUdpSocket>
-
-#include "mythread.h"
+#include <iostream>
+#include <QThread>
+#include <QObject>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -20,18 +21,22 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    QUdpSocket socket;
+    std::thread receive;
+
     QHostAddress serverAddress;
     quint16 serverPort;
     unsigned int group;
     QSet<unsigned int> groupSet;
     void keyPressEvent(QKeyEvent *event);
-    MyThread receive;
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
 private slots:
     void on_pushButton_clicked();
+
+    void on_comboBox_activated(const QString &arg1);
+
+    void on_comboBox_currentIndexChanged(int index);
 
 private:
     Ui::MainWindow *ui;

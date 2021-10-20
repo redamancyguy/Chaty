@@ -74,7 +74,7 @@ void *HandleMessage(struct Transmission *pointer) {
                 switch (messageBuf.data.code) {
                     case CHAT: {
                         if (client->online == true) {
-                            sprintf(messageBuf.data.message, "Status : %s | NickName:%s", "Logged in",
+                            sprintf(messageBuf.data.message, "Status : %s | NickName:%s", "Logged in    ",
                                     client->nickname);
                         } else {
                             sprintf(messageBuf.data.message, "Status : %s | NickName:%s", "Not logged in",
@@ -249,33 +249,6 @@ _Noreturn void *GetMessage(struct Transmission *transmissions) {
 
 
 int main(int argc, char *argv[]) {
-//    struct User user;
-//
-//    user.id = 1;
-//    printf("%ld\n",InsertUserByPlace(&user,0));
-//    Show();
-//
-//    user.id = 2;
-//    printf("%ld\n",InsertUserByPlace(&user,0));
-//    Show();
-//
-//    user.id = 3;
-//    printf("%ld\n",InsertUserByPlace(&user,2));
-//    Show();
-//
-//    user.id = 4;
-//    printf("%ld\n",InsertUserByPlace(&user,2));
-//    Show();
-//
-//    user.id = 5;
-//    printf("%ld\n",InsertUserByPlace(&user,0));
-//    Show();
-//
-//    user.id = 6;
-//    printf("%ld\n",InsertUserByPlace(&user,5));
-//    Show();
-//    CLearUsers();
-//    return 0;
     unsigned int TIMEOUT = 300;
     unsigned int groupSize = 1024;
     unsigned int groupNumber = 1024;

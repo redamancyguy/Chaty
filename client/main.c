@@ -126,6 +126,7 @@ void Register(struct CommonData buf, struct sockaddr *serverAddress) {
 
 void Connect(struct CommonData buf, struct sockaddr *serverAddress) {
     socklen_t len = sizeof(struct sockaddr_in);
+    memset(&buf,0,sizeof(struct CommonData));
     buf.code = CONNECT;
     strcpy(buf.message, "connect");
     printf("connect %d\n",buf.code);

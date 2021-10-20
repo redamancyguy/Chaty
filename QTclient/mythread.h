@@ -3,8 +3,7 @@
 
 
 
-#include <QThread>
-#include <QObject>
+
 #include "ui_mainwindow.h"
 class MyThread : public QObject
 {
