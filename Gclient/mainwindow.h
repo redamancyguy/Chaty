@@ -11,7 +11,6 @@
 #include <QThread>
 #include <QObject>
 
-
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -24,15 +23,11 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-
-
 private slots:
-
     void on_listWidget_clicked(const QModelIndex &index);
 
-    void on_listWidget_currentRowChanged(int currentRow);
-
 private:
+    Ui::MainWindow *ui;
     std::thread receive;
 
     CommonData data;
@@ -42,6 +37,5 @@ private:
     QSet<unsigned int> groupSet;
 
     void keyPressEvent(QKeyEvent *event);
-    Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H

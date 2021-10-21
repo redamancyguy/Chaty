@@ -1,4 +1,6 @@
 #include "mainwindow.h"
+#include "ui_mainwindow.h"
+#include "mainwindow.h"
 #include <QDateTime>
 #include <QMouseEvent>
 #include <QObject>
@@ -7,7 +9,10 @@
 #include <QTime>
 #include "ui_mainwindow.h"
 
+
 QUdpSocket socket;
+
+
 void Receive(QTextBrowser *textBrowser){
 
     while(true){
@@ -35,54 +40,24 @@ void Receive(QTextBrowser *textBrowser){
 
 
 
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
-
     ui->setupUi(this);
-
-
-    setWindowFlags(windowFlags()& ~Qt::WindowMaximizeButtonHint);
-    setFixedSize(this->width(), this->height());
-
-
-    for(int i=0;i<1024;i++){
-        char temp[20];
-        sprintf(temp,"Group:%5d",i);
-        ui->listWidget->insertItem(i,temp);
-    }
-
-    QTime time;
-    time= QTime::currentTime();
-    qsrand(time.msec()+time.second()*1000);
-    data.id = qrand();
-    receive = std::thread(Receive,ui->textBrowser);
-    receive.detach();
-    serverAddress = QHostAddress("172.22.255.54"); //server address there
-    serverPort = 9999;
-    data.group = 0;
-    this->groupSet.insert(data.group);
-
-
-    memset(&data.message,0,64);
-    memset(&data.data,0,1024);
-    data.code = CONNECT;
-    socket.writeDatagram((char*)&data,sizeof (CommonData), serverAddress,serverPort);
 }
 
 MainWindow::~MainWindow()
 {
-    for(auto i:this->groupSet){
-        memset(&data.message,0,64);
-        memset(&data.data,0,1024);
-        data.group = i;
-        data.code = DISCONNECT;
-        socket.writeDatagram((char*)&data,sizeof (CommonData), serverAddress,serverPort);
-    }
     delete ui;
 }
+
+
+void MainWindow::on_listWidget_clicked(const QModelIndex &index)
+{
+std::cout<<index.row()<<std::endl;
+}
+
 
 void MainWindow::keyPressEvent(QKeyEvent *event){
     if(event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return){
@@ -91,29 +66,4 @@ void MainWindow::keyPressEvent(QKeyEvent *event){
         socket.writeDatagram((char*)&data,sizeof (CommonData), serverAddress,serverPort);
         ui->textEdit->clear();
     }
-}
-
-
-void MainWindow::on_listWidget_clicked(const QModelIndex &index)
-{
-//    std::cout<<index.row()<<std::endl;
-//    data.group = index.row();
-//    memset(&data.message,0,64);
-//    memset(&data.data,0,1024);
-//    data.code = CONNECT;
-//    socket.writeDatagram((char*)&data,sizeof (CommonData), serverAddress,serverPort);
-}
-
-void MainWindow::on_listWidget_currentRowChanged(int currentRow)
-{
-    memset(&data.message,0,64);
-    memset(&data.data,0,1024);
-    data.code = DISCONNECT;
-    socket.writeDatagram((char*)&data,sizeof (CommonData), serverAddress,serverPort);
-    std::cout<<currentRow<<std::endl;
-    data.group = currentRow;
-    memset(&data.message,0,64);
-    memset(&data.data,0,1024);
-    data.code = CONNECT;
-    socket.writeDatagram((char*)&data,sizeof (CommonData), serverAddress,serverPort);
 }

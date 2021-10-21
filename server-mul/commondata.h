@@ -18,6 +18,7 @@ enum StatusCode {
     REGISTER = 5,
 };
 struct CommonData {
+    unsigned int id;
     enum StatusCode code;
     unsigned int group;
     char message[64];
