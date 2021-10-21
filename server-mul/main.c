@@ -322,17 +322,17 @@ int main(int argc, char *argv[]) {
             return -1;
         }
     }
-    getchar();
-    for (unsigned int i = 0; i < groupNumber; i++) {
-        struct Message message;
-        memset(&message, 0, sizeof(struct Message));
-        pthread_mutex_lock(transmissions[i].mutex);
-        message.data.code = CONNECT;
-        Push_Queue(transmissions[i].queue, &message);
-        message.data.code = EXIT;
-        Push_Queue(transmissions[i].queue, &message);
-        pthread_mutex_unlock(transmissions[i].mutex);
-    }
+//    getchar();
+//    for (unsigned int i = 0; i < groupNumber; i++) {
+//        struct Message message;
+//        memset(&message, 0, sizeof(struct Message));
+//        pthread_mutex_lock(transmissions[i].mutex);
+//        message.data.code = CONNECT;
+//        Push_Queue(transmissions[i].queue, &message);
+//        message.data.code = EXIT;
+//        Push_Queue(transmissions[i].queue, &message);
+//        pthread_mutex_unlock(transmissions[i].mutex);
+//    }
     for (unsigned int i = 0; i < groupNumber; i++) {
         if (pthread_join(HandleThreads[i], NULL) != 0) {
             perror("join thread failed");

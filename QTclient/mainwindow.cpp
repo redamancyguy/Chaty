@@ -12,6 +12,10 @@
 #include <vector>
 #include <unordered_map>
 #include <QThread>
+#include <qsystemtrayicon.h>
+#include <QMessageBox>
+#include <QAction>
+#include <qmenu.h>
 
 
 QUdpSocket socket;
@@ -47,7 +51,7 @@ void Receive(QTextBrowser *textBrowser){
             QDateTime curDateTime=QDateTime::currentDateTime();
             textBrowser->append(QString("<font color=\"#AA6600\">") + QString(curDateTime.toString("yyyy-MM-dd hh:mm:ss").toStdString().c_str()) + QString("</font> "));
             char temp[2048];
-            sprintf(temp,"Group : %5d\tId : %20d\tMessage : %s",data.group,data.id,data.message);
+            sprintf(temp,"Id : %20d\tMessage : %s",data.id,data.message);
             textBrowser->append(QString("<font color=\"#0066AA\">") + QString(temp) + QString("</font> "));
             textBrowser->append(QString(data.data));
             textBrowser->insertPlainText("\n");
@@ -57,9 +61,9 @@ void Receive(QTextBrowser *textBrowser){
             textBrowser->setTextCursor(cursor);
         }
         DataTime temp;
-        temp.data = dataBuf;
+        temp.data = data;
         temp.time = QDateTime::currentDateTime();
-        groupMessage[dataBuf.group].push_back(temp);
+        groupMessage[data.group].push_back(temp);
     }
 }
 
@@ -96,6 +100,13 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    SysIcon = new QSystemTrayIcon(this);
+    connect(SysIcon,SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
+            this,SLOT(on_activatedSysTrayIcon(QSystemTrayIcon::ActivationReason)));
+    SysIcon->setToolTip(QObject::trUtf8("ChatTogether"));
+    icon = new  QIcon("C:\\Users\\sunwenli\\Documents\\GitHub\\ChatTogether\\QTclient\\myappico.ico");
+
+
 
     setWindowFlags(windowFlags()& ~Qt::WindowMaximizeButtonHint);
     setFixedSize(this->width(), this->height());
@@ -113,7 +124,7 @@ MainWindow::MainWindow(QWidget *parent)
     dataBuf.group = 0;
 
     socket.open(QIODevice::ReadWrite);
-    serverAddress = QHostAddress("172.22.252.56"); //server address there
+    serverAddress = QHostAddress("39.104.209.232"); //server address there
     serverPort = 9999;
 
     Connect(dataBuf.group);
@@ -134,6 +145,8 @@ MainWindow::~MainWindow()
     }
     socket.close();
     mutex.unlock();
+    delete SysIcon;
+    delete icon;
     delete ui;
 }
 
@@ -147,29 +160,19 @@ void MainWindow::keyPressEvent(QKeyEvent *event){
 
 void MainWindow::on_listWidget_clicked(const QModelIndex &index)
 {
-//    std::cout<<index.row()<<std::endl;
-//    data.group = index.row();
-//    memset(&data.message,0,64);
-//    memset(&data.data,0,1024);
-//    data.code = CONNECT;
-//    socket.writeDatagram((char*)&data,sizeof (CommonData), serverAddress,serverPort);
-}
-
-void MainWindow::on_listWidget_currentRowChanged(int currentRow)
-{
     ui->textBrowser->clear();
-    if(groupMessage.find(currentRow) == groupMessage.end()){
+    if(groupMessage.find(index.row()) == groupMessage.end()){
         mutex.lock();
-        groupMessage[currentRow] = std::vector<DataTime>();
-        Connect(currentRow);
+        groupMessage[index.row()] = std::vector<DataTime>();
+        Connect(index.row());
         mutex.unlock();
         return;
     }
-    for(auto i:groupMessage[currentRow]){
+    for(auto i:groupMessage[index.row()]){
         QDateTime curDateTime = i.time;
         ui->textBrowser->append(QString("<font color=\"#AA6600\">") + QString(curDateTime.toString("yyyy-MM-dd hh:mm:ss").toStdString().c_str()) + QString("</font> "));
         char temp[2048];
-        sprintf(temp,"Group : %5d\tId : %20d\tMessage : %s",i.data.group,i.data.id,i.data.message);
+        sprintf(temp,"Id : %20d\tMessage : %s",i.data.group,i.data.id,i.data.message);
         ui->textBrowser->append(QString("<font color=\"#0066AA\">") + QString(temp) + QString("</font> "));
         ui->textBrowser->append(QString(i.data.data));
         ui->textBrowser->insertPlainText("\n");
@@ -178,3 +181,34 @@ void MainWindow::on_listWidget_currentRowChanged(int currentRow)
     cursor.movePosition(QTextCursor::End);
     ui->textBrowser->setTextCursor(cursor);
 }
+
+void MainWindow::on_activatedSysTrayIcon(QSystemTrayIcon::ActivationReason reason){
+    if (reason == QSystemTrayIcon::Trigger){
+        this->show();
+        SysIcon->hide();
+    }else if(reason == QSystemTrayIcon::Context){
+        m_menu = new QMenu(this);
+        m_action1 = new QAction(m_menu);
+        m_action2 = new QAction(m_menu);
+
+        m_action1->setText("Show Window");
+        m_action2->setText("Exit");
+
+        m_menu->addAction(m_action1);
+        m_menu->addAction(m_action2);
+        QApplication* app;
+
+        connect(m_action1, &QAction::triggered, this, &MainWindow::show);
+        connect(m_action2, &QAction::triggered, this, &app->exit);
+
+        SysIcon->setContextMenu(m_menu);
+    }
+}
+
+void MainWindow::closeEvent(QCloseEvent *event){
+    event->ignore();
+    SysIcon->setIcon(*icon);
+    SysIcon->show();
+    this->hide();
+}
+

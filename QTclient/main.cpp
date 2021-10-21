@@ -8,5 +8,6 @@ int main(int argc, char *argv[])
     MainWindow w;
     w.setWindowTitle("Chat Together");
     w.show();
+    w.setWindowIcon(*w.icon);
     return a.exec();
 }
