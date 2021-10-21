@@ -170,7 +170,6 @@ int main(int argc, char *argv[]) {
         puts(argv[i]);
     }
     puts("====================================");
-    struct CommonData buf;
     const char *p = "Connect again       :reconnect\n"
                     "Disconnect to server:disconnect\n"
                     "Change nickname     :set username yourNickname\n"
@@ -193,6 +192,7 @@ int main(int argc, char *argv[]) {
 //    serverAddress.sin_addr.s_addr = inet_addr("39.104.209.232");
     serverAddress.sin_port = htons(SERVER_PORT);
     puts("input your group number (0 ~ 1023)");
+    struct CommonData buf;
     while (1) {
         if (scanf("%u", &buf.group) > 0) {
             break;

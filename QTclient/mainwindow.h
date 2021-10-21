@@ -7,8 +7,7 @@
 #include <QCoreApplication>
 #include <QHostAddress>
 #include <QUdpSocket>
-#include <iostream>
-#include <QThread>
+
 #include <QObject>
 
 
@@ -33,14 +32,6 @@ private slots:
     void on_listWidget_currentRowChanged(int currentRow);
 
 private:
-    std::thread receive;
-
-    CommonData data;
-
-    QHostAddress serverAddress;
-    quint16 serverPort;
-    QSet<unsigned int> groupSet;
-
     void keyPressEvent(QKeyEvent *event);
     Ui::MainWindow *ui;
 };

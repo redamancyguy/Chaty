@@ -52,27 +52,11 @@ commondata.h
 messagequeue.h
 /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/messagequeue.h
 
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/messagequeue.c
-messagequeue.h
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/messagequeue.h
-malloc.h
--
-
 /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/messagequeue.h
 commondata.h
 /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/commondata.h
 stdbool.h
 -
-
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/user.c
-stdio.h
--
-string.h
--
-unistd.h
--
-user.h
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/user.h
 
 /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/user.h
 stdbool.h

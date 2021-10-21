@@ -101,7 +101,6 @@ void *HandleMessage(struct Transmission *pointer) {
                         break;
                     }
                     case CONNECT: {
-                        TableErase(table, &messageBuf.client);
                         strcpy(messageBuf.data.message, "Server : You have connected");
                         break;
                     }

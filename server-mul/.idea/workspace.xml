@@ -16,31 +16,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="21d7c586-2eda-4187-9de7-99681e4a11ff" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../Gclient/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Gclient/Gclient.pro" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Gclient/commondata.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Gclient/main.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Gclient/mainwindow.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Gclient/mainwindow.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Gclient/mainwindow.ui" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../QTclient/commondata.h" beforeDir="false" afterPath="$PROJECT_DIR$/../QTclient/commondata.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Gclient/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Gclient/Gclient.pro" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Gclient/commondata.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Gclient/main.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Gclient/mainwindow.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Gclient/mainwindow.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Gclient/mainwindow.ui" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../QTclient/mainwindow.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../QTclient/mainwindow.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../QTclient/mainwindow.h" beforeDir="false" afterPath="$PROJECT_DIR$/../QTclient/mainwindow.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../QTclient/mainwindow.ui" beforeDir="false" afterPath="$PROJECT_DIR$/../QTclient/mainwindow.ui" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/cmake-build-debug/CMakeFiles/client.dir/main.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/../client/cmake-build-debug/CMakeFiles/client.dir/main.c.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../client/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/../client/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/cmake-build-debug/client" beforeDir="false" afterPath="$PROJECT_DIR$/../client/cmake-build-debug/client" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/../client/main.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/server_mul.dir/C.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/server_mul.dir/C.includecache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/server_mul.dir/main.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/server_mul.dir/main.c.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/server_mul.dir/messagequeue.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/server_mul.dir/messagequeue.c.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/server_mul" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/server_mul" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/server_mul.dir/C.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/server_mul.dir/C.includecache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/server_mul.dir/main.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/server_mul.dir/main.c.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/server_mul.dir/messagequeue.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/server_mul.dir/messagequeue.c.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/server_mul.dir/user.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/server_mul.dir/user.c.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-release/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-release/Testing/Temporary/LastTest.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-release/server_mul" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-release/server_mul" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commondata.h" beforeDir="false" afterPath="$PROJECT_DIR$/commondata.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,7 +65,7 @@
     <property name="cf.first.check.clang-format" value="false" />
     <property name="cidr.known.project.marker" value="true" />
     <property name="cmake.loaded.for.project" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../client" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
@@ -111,6 +105,8 @@
       <workItem from="1634557583441" duration="13472000" />
       <workItem from="1634573422277" duration="3950000" />
       <workItem from="1634740446459" duration="3887000" />
+      <workItem from="1634814073252" duration="93000" />
+      <workItem from="1634814175501" duration="3925000" />
     </task>
     <servers />
   </component>
