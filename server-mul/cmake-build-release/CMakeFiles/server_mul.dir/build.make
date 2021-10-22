@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul
+CMAKE_SOURCE_DIR = /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release
+CMAKE_BINARY_DIR = /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release
 
 # Include any dependencies generated for this target.
 include CMakeFiles/server_mul.dir/depend.make
@@ -59,55 +59,55 @@ include CMakeFiles/server_mul.dir/flags.make
 
 CMakeFiles/server_mul.dir/main.c.o: CMakeFiles/server_mul.dir/flags.make
 CMakeFiles/server_mul.dir/main.c.o: ../main.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/server_mul.dir/main.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/server_mul.dir/main.c.o   -c /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/main.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/server_mul.dir/main.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/server_mul.dir/main.c.o   -c /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/main.c
 
 CMakeFiles/server_mul.dir/main.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/server_mul.dir/main.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/main.c > CMakeFiles/server_mul.dir/main.c.i
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/main.c > CMakeFiles/server_mul.dir/main.c.i
 
 CMakeFiles/server_mul.dir/main.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/server_mul.dir/main.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/main.c -o CMakeFiles/server_mul.dir/main.c.s
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/main.c -o CMakeFiles/server_mul.dir/main.c.s
 
 CMakeFiles/server_mul.dir/user.c.o: CMakeFiles/server_mul.dir/flags.make
 CMakeFiles/server_mul.dir/user.c.o: ../user.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/server_mul.dir/user.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/server_mul.dir/user.c.o   -c /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/user.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/server_mul.dir/user.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/server_mul.dir/user.c.o   -c /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/user.c
 
 CMakeFiles/server_mul.dir/user.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/server_mul.dir/user.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/user.c > CMakeFiles/server_mul.dir/user.c.i
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/user.c > CMakeFiles/server_mul.dir/user.c.i
 
 CMakeFiles/server_mul.dir/user.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/server_mul.dir/user.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/user.c -o CMakeFiles/server_mul.dir/user.c.s
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/user.c -o CMakeFiles/server_mul.dir/user.c.s
 
 CMakeFiles/server_mul.dir/client.c.o: CMakeFiles/server_mul.dir/flags.make
 CMakeFiles/server_mul.dir/client.c.o: ../client.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/server_mul.dir/client.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/server_mul.dir/client.c.o   -c /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/client.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/server_mul.dir/client.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/server_mul.dir/client.c.o   -c /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/client.c
 
 CMakeFiles/server_mul.dir/client.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/server_mul.dir/client.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/client.c > CMakeFiles/server_mul.dir/client.c.i
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/client.c > CMakeFiles/server_mul.dir/client.c.i
 
 CMakeFiles/server_mul.dir/client.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/server_mul.dir/client.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/client.c -o CMakeFiles/server_mul.dir/client.c.s
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/client.c -o CMakeFiles/server_mul.dir/client.c.s
 
 CMakeFiles/server_mul.dir/messagequeue.c.o: CMakeFiles/server_mul.dir/flags.make
 CMakeFiles/server_mul.dir/messagequeue.c.o: ../messagequeue.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/server_mul.dir/messagequeue.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/server_mul.dir/messagequeue.c.o   -c /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/messagequeue.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/server_mul.dir/messagequeue.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/server_mul.dir/messagequeue.c.o   -c /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/messagequeue.c
 
 CMakeFiles/server_mul.dir/messagequeue.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/server_mul.dir/messagequeue.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/messagequeue.c > CMakeFiles/server_mul.dir/messagequeue.c.i
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/messagequeue.c > CMakeFiles/server_mul.dir/messagequeue.c.i
 
 CMakeFiles/server_mul.dir/messagequeue.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/server_mul.dir/messagequeue.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/messagequeue.c -o CMakeFiles/server_mul.dir/messagequeue.c.s
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/messagequeue.c -o CMakeFiles/server_mul.dir/messagequeue.c.s
 
 # Object files for target server_mul
 server_mul_OBJECTS = \
@@ -125,7 +125,7 @@ server_mul: CMakeFiles/server_mul.dir/client.c.o
 server_mul: CMakeFiles/server_mul.dir/messagequeue.c.o
 server_mul: CMakeFiles/server_mul.dir/build.make
 server_mul: CMakeFiles/server_mul.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking C executable server_mul"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking C executable server_mul"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/server_mul.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -138,6 +138,6 @@ CMakeFiles/server_mul.dir/clean:
 .PHONY : CMakeFiles/server_mul.dir/clean
 
 CMakeFiles/server_mul.dir/depend:
-	cd /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/CMakeFiles/server_mul.dir/DependInfo.cmake --color=$(COLOR)
+	cd /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release/CMakeFiles/server_mul.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/server_mul.dir/depend
 

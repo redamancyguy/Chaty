@@ -8,38 +8,38 @@
 		<Option virtualFolders="CMake Files\;"/>
 		<Build>
 			<Target title="all">
-				<Option working_dir="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release"/>
+				<Option working_dir="/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 all"/>
-					<CompileFile command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="rebuild_cache">
-				<Option working_dir="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release"/>
+				<Option working_dir="/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
-					<CompileFile command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="edit_cache">
-				<Option working_dir="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release"/>
+				<Option working_dir="/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 edit_cache"/>
-					<CompileFile command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="server_mul">
-				<Option output="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/server_mul" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release"/>
+				<Option output="/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release/server_mul" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -50,15 +50,15 @@
 					<Add directory="/usr/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 server_mul"/>
-					<CompileFile command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 server_mul"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="server_mul/fast">
-				<Option output="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/server_mul" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release"/>
+				<Option output="/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release/server_mul" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -69,38 +69,38 @@
 					<Add directory="/usr/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 server_mul/fast"/>
-					<CompileFile command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 server_mul/fast"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/client.c">
+		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/client.c">
 			<Option target="server_mul"/>
 		</Unit>
-		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/client.h">
+		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/client.h">
 			<Option target="server_mul"/>
 		</Unit>
-		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/commondata.h">
+		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/commondata.h">
 			<Option target="server_mul"/>
 		</Unit>
-		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/main.c">
+		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/main.c">
 			<Option target="server_mul"/>
 		</Unit>
-		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/messagequeue.c">
+		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/messagequeue.c">
 			<Option target="server_mul"/>
 		</Unit>
-		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/messagequeue.h">
+		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/messagequeue.h">
 			<Option target="server_mul"/>
 		</Unit>
-		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/user.c">
+		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/user.c">
 			<Option target="server_mul"/>
 		</Unit>
-		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/user.h">
+		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/user.h">
 			<Option target="server_mul"/>
 		</Unit>
-		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/CMakeLists.txt">
+		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
 	</Project>

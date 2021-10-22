@@ -1,3 +1,3 @@
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/CMakeFiles/rebuild_cache.dir
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/CMakeFiles/edit_cache.dir
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/cmake-build-release/CMakeFiles/server_mul.dir
+/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release/CMakeFiles/rebuild_cache.dir
+/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release/CMakeFiles/edit_cache.dir
+/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/cmake-build-release/CMakeFiles/server_mul.dir

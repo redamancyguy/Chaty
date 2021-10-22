@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client
+CMAKE_SOURCE_DIR = /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/cmake-build-debug
+CMAKE_BINARY_DIR = /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client/cmake-build-debug
 
 # Include any dependencies generated for this target.
 include CMakeFiles/client.dir/depend.make
@@ -59,42 +59,42 @@ include CMakeFiles/client.dir/flags.make
 
 CMakeFiles/client.dir/main.c.o: CMakeFiles/client.dir/flags.make
 CMakeFiles/client.dir/main.c.o: ../main.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/client.dir/main.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/client.dir/main.c.o   -c /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/main.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/client.dir/main.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/client.dir/main.c.o   -c /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client/main.c
 
 CMakeFiles/client.dir/main.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/client.dir/main.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/main.c > CMakeFiles/client.dir/main.c.i
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client/main.c > CMakeFiles/client.dir/main.c.i
 
 CMakeFiles/client.dir/main.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/client.dir/main.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/main.c -o CMakeFiles/client.dir/main.c.s
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client/main.c -o CMakeFiles/client.dir/main.c.s
 
 CMakeFiles/client.dir/include/Stack.c.o: CMakeFiles/client.dir/flags.make
 CMakeFiles/client.dir/include/Stack.c.o: ../include/Stack.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/client.dir/include/Stack.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/client.dir/include/Stack.c.o   -c /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/include/Stack.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/client.dir/include/Stack.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/client.dir/include/Stack.c.o   -c /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client/include/Stack.c
 
 CMakeFiles/client.dir/include/Stack.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/client.dir/include/Stack.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/include/Stack.c > CMakeFiles/client.dir/include/Stack.c.i
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client/include/Stack.c > CMakeFiles/client.dir/include/Stack.c.i
 
 CMakeFiles/client.dir/include/Stack.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/client.dir/include/Stack.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/include/Stack.c -o CMakeFiles/client.dir/include/Stack.c.s
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client/include/Stack.c -o CMakeFiles/client.dir/include/Stack.c.s
 
 CMakeFiles/client.dir/include/TreeMap.c.o: CMakeFiles/client.dir/flags.make
 CMakeFiles/client.dir/include/TreeMap.c.o: ../include/TreeMap.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/client.dir/include/TreeMap.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/client.dir/include/TreeMap.c.o   -c /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/include/TreeMap.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/client.dir/include/TreeMap.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/client.dir/include/TreeMap.c.o   -c /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client/include/TreeMap.c
 
 CMakeFiles/client.dir/include/TreeMap.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/client.dir/include/TreeMap.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/include/TreeMap.c > CMakeFiles/client.dir/include/TreeMap.c.i
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client/include/TreeMap.c > CMakeFiles/client.dir/include/TreeMap.c.i
 
 CMakeFiles/client.dir/include/TreeMap.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/client.dir/include/TreeMap.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/include/TreeMap.c -o CMakeFiles/client.dir/include/TreeMap.c.s
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client/include/TreeMap.c -o CMakeFiles/client.dir/include/TreeMap.c.s
 
 # Object files for target client
 client_OBJECTS = \
@@ -110,7 +110,7 @@ client: CMakeFiles/client.dir/include/Stack.c.o
 client: CMakeFiles/client.dir/include/TreeMap.c.o
 client: CMakeFiles/client.dir/build.make
 client: CMakeFiles/client.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking C executable client"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking C executable client"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/client.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -123,6 +123,6 @@ CMakeFiles/client.dir/clean:
 .PHONY : CMakeFiles/client.dir/clean
 
 CMakeFiles/client.dir/depend:
-	cd /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/cmake-build-debug /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/cmake-build-debug /mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/cmake-build-debug/CMakeFiles/client.dir/DependInfo.cmake --color=$(COLOR)
+	cd /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client/cmake-build-debug /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client/cmake-build-debug /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client/cmake-build-debug/CMakeFiles/client.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/client.dir/depend
 

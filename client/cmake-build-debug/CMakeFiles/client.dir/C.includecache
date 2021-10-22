@@ -6,11 +6,29 @@
 
 #IncludeRegexTransform: 
 
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/include/TreeMap.h
+/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client/include/Stack.c
+Stack.h
+/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client/include/Stack.h
+malloc.h
+-
+
+/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client/include/Stack.h
 stdbool.h
 -
 
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/main.c
+/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client/include/TreeMap.c
+malloc.h
+-
+Stack.h
+/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client/include/Stack.h
+TreeMap.h
+/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client/include/TreeMap.h
+
+/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client/include/TreeMap.h
+stdbool.h
+-
+
+/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client/main.c
 stdio.h
 -
 sys/types.h
@@ -30,13 +48,13 @@ pthread.h
 stdlib.h
 -
 ../server-mul/user.h
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/user.h
+/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/user.h
 ../server-mul/commondata.h
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/commondata.h
+/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/commondata.h
 include/TreeMap.h
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/client/include/TreeMap.h
+/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client/include/TreeMap.h
 
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/client.h
+/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/client.h
 sys/socket.h
 -
 netinet/in.h
@@ -44,13 +62,13 @@ netinet/in.h
 stdbool.h
 -
 user.h
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/user.h
+/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/user.h
 
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/commondata.h
+/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/commondata.h
 client.h
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/client.h
+/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/client.h
 
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/server-mul/user.h
+/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/user.h
 stdbool.h
 -
 
