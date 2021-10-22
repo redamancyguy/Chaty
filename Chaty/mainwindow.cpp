@@ -184,7 +184,7 @@ void MainWindow::on_activatedSysTrayIcon(QSystemTrayIcon::ActivationReason reaso
     if (reason == QSystemTrayIcon::Trigger){
         this->show();
         SysIcon->hide();
-    }else{
+    }else if(reason == QSystemTrayIcon::Context){
         m_menu = new QMenu(this);
         m_action1 = new QAction(m_menu);
         m_action2 = new QAction(m_menu);
