@@ -1,8 +1,0 @@
-﻿  chatTogetherForWindows.cpp
-C:\Users\sunwenli\Documents\GitHub\ChatTogether\chatTogetherForWindows\chatTogetherForWindows.cpp(50,23): warning C4101: “buff”: 未引用的局部变量
-  正在生成代码
-  0 of 8 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
-  已完成代码的生成
-  chatTogetherForWindows.vcxproj -> C:\Users\sunwenli\Documents\GitHub\ChatTogether\chatTogetherForWindows\Release\chatTogetherForWindows.exe
