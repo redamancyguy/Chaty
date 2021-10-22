@@ -16,14 +16,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    groupitem.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     commondata.h \
+    groupitem.h \
     mainwindow.h
 
 FORMS += \
+    groupitem.ui \
     mainwindow.ui
 
 TRANSLATIONS += \
@@ -34,6 +37,9 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-OTHER_FILES += ico.rc
+#OTHER_FILES += ico.rc
 
-RC_FILE += ico.rc
+#RC_FILE += ico.rc
+
+RESOURCES += \
+    src.qrc
