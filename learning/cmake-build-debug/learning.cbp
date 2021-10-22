@@ -8,38 +8,38 @@
 		<Option virtualFolders="CMake Files\;"/>
 		<Build>
 			<Target title="all">
-				<Option working_dir="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/cmake-build-debug"/>
+				<Option working_dir="/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
-					<CompileFile command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="rebuild_cache">
-				<Option working_dir="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/cmake-build-debug"/>
+				<Option working_dir="/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
-					<CompileFile command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="edit_cache">
-				<Option working_dir="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/cmake-build-debug"/>
+				<Option working_dir="/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
-					<CompileFile command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="learning">
-				<Option output="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/cmake-build-debug/learning" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/cmake-build-debug"/>
+				<Option output="/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/cmake-build-debug/learning" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -50,15 +50,15 @@
 					<Add directory="/usr/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 learning"/>
-					<CompileFile command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 learning"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="learning/fast">
-				<Option output="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/cmake-build-debug/learning" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/cmake-build-debug"/>
+				<Option output="/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/cmake-build-debug/learning" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -69,32 +69,32 @@
 					<Add directory="/usr/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 learning/fast"/>
-					<CompileFile command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 learning/fast"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/context.cpp">
+		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/context.cpp">
 			<Option target="learning"/>
 		</Unit>
-		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/context.h">
+		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/context.h">
 			<Option target="learning"/>
 		</Unit>
-		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/email.cpp">
+		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/email.cpp">
 			<Option target="learning"/>
 		</Unit>
-		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/main.c">
+		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/main.c">
 			<Option target="learning"/>
 		</Unit>
-		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/memory.cpp">
+		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/memory.cpp">
 			<Option target="learning"/>
 		</Unit>
-		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/processPrivileges.cpp">
+		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/processPrivileges.cpp">
 			<Option target="learning"/>
 		</Unit>
-		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/CMakeLists.txt">
+		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
 	</Project>

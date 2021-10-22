@@ -6,9 +6,19 @@
 
 #IncludeRegexTransform: 
 
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/main.c
-string.h
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/string.h
+/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/main.c
 stdio.h
-/mnt/c/Users/sunwenli/Documents/GitHub/ChatTogether/learning/stdio.h
+-
+stdlib.h
+-
+sys/types.h
+-
+sys/timeb.h
+-
+lua.h
+-
+lualib.h
+-
+lauxlib.h
+-
 

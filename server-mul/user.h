@@ -13,6 +13,7 @@ struct User {
     enum Privileges privileges;
     char username[20];
     char password[20];
+    char telephone[20];
     char email[20];
 };
 long GetUserCount();

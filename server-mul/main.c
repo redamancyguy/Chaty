@@ -304,44 +304,48 @@ int main(int argc, char *argv[]) {
         perror("mutex init failed");
         return -1;
     }
-    pthread_t HandleThreads[groupNumber];
+    pthread_t *HandleThreads = (pthread_t *)malloc(sizeof(pthread_t)*groupNumber);
     for (unsigned int i = 0; i < groupNumber; i++) {
         if (pthread_create(&HandleThreads[i], NULL, (void *(*)(void *)) HandleMessage, &transmissions[i]) != 0) {
             perror("create thread failed");
             return -1;
         }
     }
-    pthread_t GetThreads[listenNumber];
+    pthread_t *GetThreads = (pthread_t *)malloc(sizeof(pthread_t)*listenNumber);
     for (unsigned i = 0; i < listenNumber; i++) {
         if (pthread_create(&GetThreads[i], NULL, (void *(*)(void *)) GetMessage, transmissions) != 0) {
             perror("create thread failed");
             return -1;
         }
-        if (pthread_detach(GetThreads[i]) != 0) {
-            perror("detach thread failed");
-            return -1;
-        }
     }
-//    getchar();
-//    for (unsigned int i = 0; i < groupNumber; i++) {
-//        struct Message message;
-//        memset(&message, 0, sizeof(struct Message));
-//        pthread_mutex_lock(transmissions[i].mutex);
-//        message.data.code = CONNECT;
-//        Push_Queue(transmissions[i].queue, &message);
-//        message.data.code = EXIT;
-//        Push_Queue(transmissions[i].queue, &message);
-//        pthread_mutex_unlock(transmissions[i].mutex);
-//    }
+    getchar();
+    getchar();
+    for (unsigned int i = 0; i < groupNumber; i++) {
+        struct Message message;
+        pthread_mutex_lock(transmissions[i].mutex);
+        message.data.code = CONNECT;
+        Push_Queue(transmissions[i].queue, &message);
+        message.data.code = EXIT;
+        Push_Queue(transmissions[i].queue, &message);
+        pthread_mutex_unlock(transmissions[i].mutex);
+    }
     for (unsigned int i = 0; i < groupNumber; i++) {
         if (pthread_join(HandleThreads[i], NULL) != 0) {
             perror("join thread failed");
             return -1;
         }
     }
+    for (unsigned i = 0; i < listenNumber; i++) {
+        if (pthread_detach(GetThreads[i]) != 0) {
+            perror("detach thread failed");
+            return -1;
+        }
+    }
     if (pthread_mutex_destroy(&databaseMutex)) {
         perror("Destroy mutex failed");
     }
+    free(HandleThreads);
+    free(GetThreads);
     free(transmissions);
     close(serverFileDescriptor);
     puts("Shutdown server successfully");
