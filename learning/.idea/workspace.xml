@@ -15,44 +15,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cc0ec5ba-efb9-43f1-8ad4-f34c82fb7a24" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../client/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/../client/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Debug/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Debug/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Debug/Makefile.Debug" beforeDir="false" afterPath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Debug/Makefile.Debug" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Debug/Makefile.Release" beforeDir="false" afterPath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Debug/Makefile.Release" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Release/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Release/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Release/Makefile.Debug" beforeDir="false" afterPath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Release/Makefile.Debug" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Release/Makefile.Release" beforeDir="false" afterPath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Release/Makefile.Release" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Release/release/Chaty.exe" beforeDir="false" afterPath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Release/release/Chaty.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeCache.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeCache.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.16.3/CMakeCCompiler.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.16.3/CMakeCCompiler.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.16.3/CMakeSystem.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.16.3/CMakeSystem.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.16.3/CompilerIdC/CMakeCCompilerId.c" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.16.3/CompilerIdC/CMakeCCompilerId.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeOutput.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeOutput.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile2" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile2" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TargetDirectories.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TargetDirectories.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-environment.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-environment.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/cmake.check_cache" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/cmake.check_cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/C.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/C.includecache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Progress/count.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Progress/count.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/DependInfo.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/DependInfo.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/build.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/build.make" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/cmake_clean.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/cmake_clean.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/depend.internal" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/depend.internal" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/depend.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/depend.make" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/flags.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/flags.make" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/link.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/link.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/main.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/main.c.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/progress.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/progress.make" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/progress.marks" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/progress.marks" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Makefile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/cmake_install.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/cmake_install.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/learning" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/learning.cbp" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/learning.cbp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server-mul/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server-mul/cmake-build-debug/CMakeFiles/server_mul.dir/C.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/cmake-build-debug/CMakeFiles/server_mul.dir/C.includecache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server-mul/cmake-build-debug/CMakeFiles/server_mul.dir/main.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/cmake-build-debug/CMakeFiles/server_mul.dir/main.c.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server-mul/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server-mul/cmake-build-debug/server_mul" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/cmake-build-debug/server_mul" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server-mul/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/main.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server-mul/user.h" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/user.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
