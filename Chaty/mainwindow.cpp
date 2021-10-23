@@ -133,11 +133,11 @@ void MainWindow::keyPressEvent(QKeyEvent* event) {
 
 void MainWindow::on_listWidget_clicked(const QModelIndex& index) {
   ui->textBrowser->clear();
+  data.Connect(index.row());
   if(this->groups.find(index.row()) == this->groups.end()){
       this->groups.insert(index.row());
       return;
   }
-  data.Connect(index.row());
   this->textMutex.lock();
   for (auto i : data.GroupMessage(index.row())) {
     ui->textBrowser->append(QString("<font color=\"#AA6600\">") + i.time.toString("yyyy-MM-dd hh:mm:ss").toStdString().c_str() + "</font> ");

@@ -248,7 +248,6 @@ Makefile: ../Chaty/Chaty.pro C:/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/win32-g++/
 		C:/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/qt_config.prf \
 		C:/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/win32-g++/qmake.conf \
 		C:/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/spec_post.prf \
-		.qmake.stash \
 		C:/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/exclusive_builds.prf \
 		C:/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/toolchain.prf \
 		C:/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/default_pre.prf \
@@ -278,6 +277,7 @@ Makefile: ../Chaty/Chaty.pro C:/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/win32-g++/
 		C:/Qt/Qt5.14.2/5.14.2/mingw73_64/lib/Qt5Network.prl \
 		C:/Qt/Qt5.14.2/5.14.2/mingw73_64/lib/Qt5Core.prl \
 		C:/Qt/Qt5.14.2/5.14.2/mingw73_64/lib/qtmain.prl \
+		.qmake.stash \
 		C:/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/build_pass.prf \
 		../Chaty/src.qrc
 	$(QMAKE) -o Makefile ..\Chaty\Chaty.pro -spec win32-g++ "CONFIG+=qtquickcompiler"
@@ -459,7 +459,6 @@ C:/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/qt_functions.prf:
 C:/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/qt_config.prf:
 C:/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/win32-g++/qmake.conf:
 C:/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/spec_post.prf:
-.qmake.stash:
 C:/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/exclusive_builds.prf:
 C:/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/toolchain.prf:
 C:/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/default_pre.prf:
@@ -489,6 +488,7 @@ C:/Qt/Qt5.14.2/5.14.2/mingw73_64/lib/Qt5Gui.prl:
 C:/Qt/Qt5.14.2/5.14.2/mingw73_64/lib/Qt5Network.prl:
 C:/Qt/Qt5.14.2/5.14.2/mingw73_64/lib/Qt5Core.prl:
 C:/Qt/Qt5.14.2/5.14.2/mingw73_64/lib/qtmain.prl:
+.qmake.stash:
 C:/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/build_pass.prf:
 ../Chaty/src.qrc:
 qmake: FORCE
