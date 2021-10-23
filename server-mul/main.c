@@ -207,28 +207,33 @@ _Noreturn void *GetMessage(struct Transmission *transmissions) {
     int serverFileDescriptor = G_serverFileDescriptor;
     unsigned int groupNumber = G_groupNumber;
     struct DataBuf {
-        struct Message message;
+        struct CommonData data;
         char others[1024];
     };
     while (true) {
+        struct Client clientBuf;
         struct DataBuf dataBuf;
+        clientBuf.length = sizeof(clientBuf.address);
         long int count = recvfrom(serverFileDescriptor, &dataBuf, sizeof(struct DataBuf), 0,
-                                  (struct sockaddr *) &dataBuf.message.client.address, &dataBuf.message.client.length);
+                                  (struct sockaddr *) &clientBuf.address, &clientBuf.length);
         switch (count) {
             case -1: {
                 perror("Receive data fail");
                 break;
             }
             case sizeof(struct CommonData): {
-                if (dataBuf.message.data.group >= groupNumber) {
-                    strcpy(dataBuf.message.data.message, "Server : Wrong group");
+                if (dataBuf.data.group >= groupNumber) {
+                    strcpy(dataBuf.data.message, "Server : Wrong group");
                     sendto(serverFileDescriptor, &dataBuf, sizeof(struct CommonData), 0,
-                           (struct sockaddr *) &dataBuf.message.client.address, dataBuf.message.client.length);
+                           (struct sockaddr *) &clientBuf.address, clientBuf.length);
                     continue;
                 }
-                pthread_mutex_lock(transmissions[dataBuf.message.data.group].mutex);
-                Push_Queue(transmissions[dataBuf.message.data.group].queue, &dataBuf.message);
-                pthread_mutex_unlock(transmissions[dataBuf.message.data.group].mutex);
+                struct Message message;
+                message.client = clientBuf;
+                message.data = dataBuf.data;
+                pthread_mutex_lock(transmissions[dataBuf.data.group].mutex);
+                Push_Queue(transmissions[dataBuf.data.group].queue, &message);
+                pthread_mutex_unlock(transmissions[dataBuf.data.group].mutex);
                 break;
             }
             default:

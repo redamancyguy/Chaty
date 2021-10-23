@@ -6,24 +6,6 @@
 
 #IncludeRegexTransform: 
 
-/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client/include/Stack.c
-Stack.h
-/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client/include/Stack.h
-malloc.h
--
-
-/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client/include/Stack.h
-stdbool.h
--
-
-/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client/include/TreeMap.c
-malloc.h
--
-Stack.h
-/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client/include/Stack.h
-TreeMap.h
-/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client/include/TreeMap.h
-
 /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client/include/TreeMap.h
 stdbool.h
 -

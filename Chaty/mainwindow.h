@@ -19,7 +19,7 @@
 #include <QUdpSocket>
 #include <unordered_map>
 #include "commondata.h"
-
+#include "data.h"
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -34,9 +34,6 @@ class MainWindow : public QMainWindow {
   MainWindow(QWidget* parent = nullptr);
   ~MainWindow();
   void Receive(QTextBrowser* textBrowser);
-  void Connect(unsigned int group);
-  void Disconnect(unsigned int group);
-  void Chat(const char* data);
 
  protected slots:
   void closeEvent(QCloseEvent* event);
@@ -51,19 +48,11 @@ class MainWindow : public QMainWindow {
   QMenu* m_menu;
   QAction* m_action1;
   QAction* m_action2;
-  QUdpSocket socket;
-  QHostAddress serverAddress;
-  quint16 serverPort;
 
+  Data data;
   std::thread receive;
-  QMutex mutex;
 
-  int groupNum = 1024;
-  CommonData dataBuf;
-  struct DataTime {
-    QDateTime time;
-    CommonData data;
-  };
-  std::unordered_map<unsigned int, std::vector<DataTime>> groupMessage;
+  QSet<unsigned> groups;
+
 };
 #endif  // MAINWINDOW_H

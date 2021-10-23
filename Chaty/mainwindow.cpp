@@ -19,72 +19,45 @@
 #include "groupitem.h"
 #include "ui_mainwindow.h"
 
+
+int groupNum = 1024;
 void MainWindow::Receive(QTextBrowser* textBrowser) {
   while (true) {
-    QHostAddress serverAddr;
-    quint16 port;
-    CommonData data;
-    mutex.lock();
-    qint64 len = socket.readDatagram((char*)&data, sizeof(CommonData),
-                                     &serverAddr, &port);
-    mutex.unlock();
-    if (len == -1) {
-      int ms = 300;
-      struct timespec ts = {ms / 1000, (ms % 1000) * 1000 * 1000};
-      nanosleep(&ts, NULL);
-      continue;
-    }
-    if (data.group == dataBuf.group) {
-      QDateTime curDateTime = QDateTime::currentDateTime();
-      textBrowser->append(QString("<font color=\"#AA6600\">") +
-                          QString(curDateTime.toString("yyyy-MM-dd hh:mm:ss")
-                                      .toStdString()
-                                      .c_str()) +
-                          QString("</font> "));
-      char temp[2048];
-      sprintf(temp, "Id : %20d\tMessage : %s", data.id, data.message);
-      textBrowser->append(QString("<font color=\"#0066AA\">") + QString(temp) +
-                          QString("</font> "));
-      textBrowser->append(QString(data.data));
-      textBrowser->insertPlainText("\n");
+      data.queueMutex.lock();
+      puts("1");
+      if(data.messages.empty()){
+          QThread::msleep(300);
+          puts("4");
+      }
+      else{
+          puts("2");
+          while(!data.messages.empty()){
+              puts("3");
+              Data::Datas buf = data.messages.front();
+              QDateTime curDateTime = buf.time;
+              textBrowser->append(QString("<font color=\"#AA6600\">") +
+                                  QString(curDateTime.toString("yyyy-MM-dd hh:mm:ss")
+                                              .toStdString()
+                                              .c_str()) +
+                                  QString("</font> "));
+              char temp[2048];
+              sprintf(temp, "Id : %20d\tMessage : %s", buf.data.id,buf.data.message);
+              textBrowser->append(QString("<font color=\"#0066AA\">") + QString(temp) +
+                                  QString("</font> "));
+              textBrowser->append(QString(buf.data.data));
+              textBrowser->insertPlainText("\n");
+              data.messages.pop();
+          }
 
-      QTextCursor cursor = textBrowser->textCursor();
-      cursor.movePosition(QTextCursor::End);
-      textBrowser->setTextCursor(cursor);
-    }
-    DataTime temp;
-    temp.data = data;
-    temp.time = QDateTime::currentDateTime();
-    groupMessage[data.group].push_back(temp);
+          QTextCursor cursor = textBrowser->textCursor();
+          cursor.movePosition(QTextCursor::End);
+          textBrowser->setTextCursor(cursor);
+      }
+      data.queueMutex.unlock();
   }
 }
 
-void MainWindow::Connect(unsigned int group) {
-  dataBuf.group = group;
-  memset(&dataBuf.message, 0, 64);
-  memset(&dataBuf.data, 0, 1024);
-  dataBuf.code = CONNECT;
-  groupMessage[dataBuf.group] = std::vector<DataTime>();
-  socket.writeDatagram((char*)&dataBuf, sizeof(CommonData), serverAddress,
-                       serverPort);
-}
 
-void MainWindow::Disconnect(unsigned int group) {
-  dataBuf.group = group;
-  memset(&dataBuf.message, 0, 64);
-  memset(&dataBuf.data, 0, 1024);
-  dataBuf.code = DISCONNECT;
-  groupMessage.erase(dataBuf.group);
-  socket.writeDatagram((char*)&dataBuf, sizeof(CommonData), serverAddress,
-                       serverPort);
-}
-
-void MainWindow::Chat(const char* data) {
-  dataBuf.code = CHAT;
-  strcpy(dataBuf.data, data);
-  socket.writeDatagram((char*)&dataBuf, sizeof(CommonData), serverAddress,
-                       serverPort);
-}
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
@@ -133,38 +106,16 @@ MainWindow::MainWindow(QWidget* parent)
   /// fin ui setting
 
   connect(ui->send, &QPushButton::clicked, [&]() {
-    Chat(ui->textEdit->toPlainText().toStdString().c_str());
+    data.Chat(ui->textEdit->toPlainText().toStdString().c_str());
     ui->textEdit->clear();
   });
 
-  QTime time;
-  time = QTime::currentTime();
-  qsrand(time.msec() + time.second() * 1000);
-  dataBuf.id = qrand();
-  dataBuf.group = 0;
 
-  socket.open(QIODevice::ReadWrite);
-  serverAddress = QHostAddress("39.104.209.232");  // server address there
-  serverPort = 9999;
-
-  Connect(dataBuf.group);
-
-  receive = std::thread(&MainWindow::Receive, this, ui->textBrowser);
-  receive.detach();
+  receive = std::thread(&MainWindow::Receive,this,ui->textBrowser);
+//  receive.detach();
 }
 
 MainWindow::~MainWindow() {
-  mutex.lock();
-  for (auto i : groupMessage) {
-    memset(&dataBuf.message, 0, 64);
-    memset(&dataBuf.data, 0, 1024);
-    dataBuf.group = i.first;
-    dataBuf.code = DISCONNECT;
-    socket.writeDatagram((char*)&dataBuf, sizeof(CommonData), serverAddress,
-                         serverPort);
-  }
-  socket.close();
-  mutex.unlock();
   delete SysIcon;
   delete icon;
   delete ui;
@@ -173,21 +124,19 @@ MainWindow::~MainWindow() {
 
 void MainWindow::keyPressEvent(QKeyEvent* event) {
   if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) {
-    Chat(ui->textEdit->toPlainText().toStdString().c_str());
+      puts("SENDING");
+    data.Chat(ui->textEdit->toPlainText().toStdString().c_str());
     ui->textEdit->clear();
   }
 }
 
 void MainWindow::on_listWidget_clicked(const QModelIndex& index) {
   ui->textBrowser->clear();
-  if (groupMessage.find(index.row()) == groupMessage.end()) {
-    mutex.lock();
-    groupMessage[index.row()] = std::vector<DataTime>();
-    Connect(index.row());
-    mutex.unlock();
-    return;
+  if(this->groups.find(index.row()) == this->groups.end()){
+      data.Connect(index.row());
+      return;
   }
-  for (auto i : groupMessage[index.row()]) {
+  for (auto i : data.GroupMessage(index.row())) {
     QDateTime curDateTime = i.time;
     ui->textBrowser->append(
         QString("<font color=\"#AA6600\">") +
