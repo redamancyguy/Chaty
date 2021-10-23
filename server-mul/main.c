@@ -14,7 +14,7 @@
 #include "commondata.h"
 #include "messagequeue.h"
 
-unsigned int G_TIMEOUT = 300;
+unsigned int G_TIMEOUT = 3000;
 unsigned int G_groupSize = 1024;
 unsigned int G_groupNumber = 1024;
 int G_serverFileDescriptor = -1;

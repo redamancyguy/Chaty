@@ -52,6 +52,8 @@ class MainWindow : public QMainWindow {
   Data data;
   std::thread receive;
 
+  std::mutex textMutex;
+
   QSet<unsigned> groups;
 
 };
