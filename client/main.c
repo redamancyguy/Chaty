@@ -151,6 +151,26 @@ void Chat(struct CommonData buf, struct sockaddr *serverAddress) {
     sendto(client_fd, &buf, sizeof(struct CommonData), 0, serverAddress, len);
 }
 
+void Email(struct CommonData buf, struct sockaddr *serverAddress) {
+    socklen_t len = sizeof(struct sockaddr_in);
+    puts("Input your email");
+    scanf("%s",buf.data);
+    buf.code = EMAIL;
+    sendto(client_fd, &buf, sizeof(struct CommonData), 0, serverAddress, len);
+}
+void Change(struct CommonData buf, struct sockaddr *serverAddress) {
+    socklen_t len = sizeof(struct sockaddr_in);
+    puts("Input your username");
+    scanf("%s",buf.data);
+    puts("Input your code");
+    scanf("%s",buf.data+20);
+    puts("Input your new password");
+    scanf("%s",buf.data+40);
+    buf.code = CHANGE;
+    sendto(client_fd, &buf, sizeof(struct CommonData), 0, serverAddress, len);
+}
+
+
 void SetNickName(struct CommonData buf, struct sockaddr *serverAddress) {
     socklen_t len = sizeof(struct sockaddr_in);
     buf.code = RENAME;
@@ -207,6 +227,8 @@ int main(int argc, char *argv[]) {
     TreeMap set = Tree_New();
     Tree_Insert(set,(void*)buf.group,(void*)time(NULL));
 //    RegisterTest(&serverAddress);
+//    Email(buf,&serverAddress);
+    Change(buf,&serverAddress);
     while (1) {
         strcpy(buf.message, "");
         strcpy(buf.data, "");

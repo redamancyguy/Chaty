@@ -13,7 +13,7 @@
 #include "messagequeue.h"
 #include "commondata.h"
 #include "messagequeue.h"
-
+#include "utils.h"
 unsigned int G_TIMEOUT = 3000;
 unsigned int G_groupSize = 1024;
 unsigned int G_groupNumber = 1024;
@@ -53,17 +53,22 @@ void *HandleMessage(struct Transmission *pointer) {
         pthread_mutex_unlock(&mutex);
         struct Client *client = TableGet(table, &messageBuf.client);
         if (client == NULL) {
-            if (messageBuf.data.code == CONNECT) {
-                strcpy(messageBuf.client.nickname, "Unnamed");
-                messageBuf.client.time = time(NULL);
-                messageBuf.client.online = false;
-                if (!TableSet(table, &messageBuf.client)) {
-                    strcpy(messageBuf.data.message, "Server : This group is full");
-                } else {
-                    strcpy(messageBuf.data.message, "Server : Connect successfully");
+            switch (messageBuf.data.code) {
+                case CONNECT:{
+                    strcpy(messageBuf.client.nickname, "Unnamed");
+                    messageBuf.client.time = time(NULL);
+                    messageBuf.client.online = false;
+                    if (!TableSet(table, &messageBuf.client)) {
+                        strcpy(messageBuf.data.message, "Server : This group is full");
+                    } else {
+                        strcpy(messageBuf.data.message, "Server : Connect successfully");
+                    }
+                    break;
                 }
-            } else {
-                strcpy(messageBuf.data.message, "Server : You haven't connected yet");
+                default:{
+                    strcpy(messageBuf.data.message, "Server : You haven't connected yet");
+                    break;
+                }
             }
         } else {
             if (time(NULL) - client->time > TIMEOUT) {
@@ -160,7 +165,7 @@ void *HandleMessage(struct Transmission *pointer) {
                             struct User userTemp;
                             GetUserByPlace(&userTemp, place);
                             if (strcmp(userBuf.password, userTemp.password) == 0) {
-                                if (RemoveUserByPlace(place) != -1) {
+                                if (RemoveUserByPlace(place) == place) {
                                     client->online = false;
                                     strcpy(messageBuf.data.message, "Server : Unregister successfully");
                                 } else {
@@ -171,6 +176,43 @@ void *HandleMessage(struct Transmission *pointer) {
                             }
                         }
                         pthread_mutex_unlock(&databaseMutex);
+                        break;
+                    }
+                    case EMAIL:{
+                        long place = GetUserPlaceByUsername(messageBuf.data.data);
+                        if(place == -1){
+                            strcpy(messageBuf.data.message, "Server : None username");
+                        }else{
+                            struct User user;
+                            GetUserByPlace(&user,place);
+                            char temp[20];
+                            srand(time(NULL));
+                            sprintf(temp,"%d",rand()%1000000);
+                            strcpy(user.password,temp);
+                            pthread_mutex_lock(&databaseMutex);
+                            SetUserByPlace(&user,place);
+                            pthread_mutex_unlock(&databaseMutex);
+                            sendEmail(user.email,temp);
+                        }
+                        break;
+                    }
+                    case CHANGE:{
+                        long place = GetUserPlaceByUsername(messageBuf.data.data);
+                        if(place == -1){
+                            strcpy(messageBuf.data.message, "Server : None username");
+                        }else{
+                            struct User user;
+                            GetUserByPlace(&user,place);
+                            if(strcmp(user.password,messageBuf.data.data+20) == 0){
+                                strcpy(user.password,messageBuf.data.data+40);
+                                pthread_mutex_lock(&databaseMutex);
+                                SetUserByPlace(&user,place);
+                                pthread_mutex_unlock(&databaseMutex);
+                                strcpy(messageBuf.data.message, "Server : Change password successfully");
+                            }else{
+                                strcpy(messageBuf.data.message, "Server : Wrong code");
+                            }
+                        }
                         break;
                     }
                     case EXIT: {
@@ -189,6 +231,7 @@ void *HandleMessage(struct Transmission *pointer) {
                 }
             }
         }
+        Show();
         sendto(serverFileDescriptor, &messageBuf.data, sizeof(struct CommonData), 0,
                (struct sockaddr *) &messageBuf.client.address, messageBuf.client.length);
         PRINT:

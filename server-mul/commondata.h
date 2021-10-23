@@ -16,6 +16,8 @@ enum StatusCode {
     RENAME = 3,
     LOGIN = 4,
     REGISTER = 5,
+    EMAIL = 6,
+    CHANGE = 7
 };
 struct CommonData {
     unsigned int id;
