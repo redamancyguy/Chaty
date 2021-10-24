@@ -14,6 +14,7 @@
 #include "commondata.h"
 #include "messagequeue.h"
 #include "utils.h"
+#define MAX_PACKAGE_SIZE 1024*64
 unsigned int G_TIMEOUT = 3000;
 unsigned int G_groupSize = 1024;
 unsigned int G_groupNumber = 1024;
@@ -322,12 +323,12 @@ int main(int argc, char *argv[]) {
             }
         }
     }
-    struct sockaddr_in serverAddress;
     int serverFileDescriptor = socket(AF_INET, SOCK_DGRAM, 0);
     if (serverFileDescriptor < 0) {
         perror("Create socket fail!");
         return -1;
     }
+    struct sockaddr_in serverAddress;
     memset(&serverAddress, 0, sizeof(struct sockaddr_in));
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_addr.s_addr = htonl(INADDR_ANY);
