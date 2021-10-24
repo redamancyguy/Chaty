@@ -1,5 +1,5 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/learning.dir/main.c.o"
+  "CMakeFiles/learning.dir/amil2.c.o"
   "learning"
   "learning.pdb"
 )

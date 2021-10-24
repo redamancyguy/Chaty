@@ -1,5 +1,5 @@
 QT       += core gui network
-
+RC_ICONS = chaty.ico
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
@@ -19,17 +19,21 @@ SOURCES += \
     data.cpp \
     groupitem.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    profile.cpp
 
 HEADERS += \
     commondata.h \
     data.h \
+    data.h \
     groupitem.h \
-    mainwindow.h
+    mainwindow.h \
+    profile.h
 
 FORMS += \
     groupitem.ui \
-    mainwindow.ui
+    mainwindow.ui \
+    profile.ui
 
 TRANSLATIONS += \
     QTclient_zh_CN.ts

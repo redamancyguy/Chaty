@@ -107,10 +107,6 @@ MainWindow::MainWindow(QWidget* parent)
   SysIcon->setIcon(*icon);
   SysIcon->show();
 
-  connect(ui->send, &QPushButton::clicked, [&]() {
-    data.Chat(ui->textEdit->toPlainText().toStdString().c_str());
-    ui->textEdit->clear();
-  });
   this->groups.insert(0);
   receive = std::thread(&MainWindow::Receive,this,ui->textBrowser);
 

@@ -159,38 +159,6 @@ p, li { white-space: pre-wrap; }
              </property>
             </spacer>
            </item>
-           <item>
-            <widget class="QPushButton" name="send">
-             <property name="font">
-              <font>
-               <pointsize>10</pointsize>
-              </font>
-             </property>
-             <property name="autoFillBackground">
-              <bool>false</bool>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">QPushButton{
-	margin:5px;
-	height:30px;
-	color: rgb(30, 111, 255);
-	width:80px;
-}</string>
-             </property>
-             <property name="text">
-              <string>Send</string>
-             </property>
-             <property name="autoDefault">
-              <bool>false</bool>
-             </property>
-             <property name="default">
-              <bool>false</bool>
-             </property>
-             <property name="flat">
-              <bool>false</bool>
-             </property>
-            </widget>
-           </item>
           </layout>
          </item>
         </layout>

@@ -10,6 +10,7 @@ CMakeFiles/server_mul.dir/main.c.o: ../commondata.h
 CMakeFiles/server_mul.dir/main.c.o: ../main.c
 CMakeFiles/server_mul.dir/main.c.o: ../messagequeue.h
 CMakeFiles/server_mul.dir/main.c.o: ../user.h
+CMakeFiles/server_mul.dir/main.c.o: ../utils.h
 
 CMakeFiles/server_mul.dir/messagequeue.c.o: ../client.h
 CMakeFiles/server_mul.dir/messagequeue.c.o: ../commondata.h

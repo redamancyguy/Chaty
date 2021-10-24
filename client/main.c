@@ -228,7 +228,7 @@ int main(int argc, char *argv[]) {
     Tree_Insert(set,(void*)buf.group,(void*)time(NULL));
 //    RegisterTest(&serverAddress);
 //    Email(buf,&serverAddress);
-    Change(buf,&serverAddress);
+//    Change(buf,&serverAddress);
     while (1) {
         strcpy(buf.message, "");
         strcpy(buf.data, "");

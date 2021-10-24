@@ -76,6 +76,9 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/amil2.c">
+			<Option target="learning"/>
+		</Unit>
 		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/context.cpp">
 			<Option target="learning"/>
 		</Unit>
@@ -85,7 +88,7 @@
 		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/email.cpp">
 			<Option target="learning"/>
 		</Unit>
-		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/main.c">
+		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/main.cpp">
 			<Option target="learning"/>
 		</Unit>
 		<Unit filename="/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/memory.cpp">

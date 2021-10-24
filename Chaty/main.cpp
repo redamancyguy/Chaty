@@ -1,5 +1,5 @@
 #include "mainwindow.h"
-
+#include "profile.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])
@@ -9,5 +9,7 @@ int main(int argc, char *argv[])
     w.setWindowTitle("Chaty");
     w.show();
     w.setWindowIcon(*w.icon);
+    profile p;
+    p.show();
     return a.exec();
 }

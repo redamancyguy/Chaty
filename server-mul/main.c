@@ -355,9 +355,14 @@ int main(int argc, char *argv[]) {
             return -1;
         }
     }
+    pthread_attr_t attr={0};
+    pthread_attr_init(&attr);
+    struct sched_param sched={99};
+    pthread_attr_setschedpolicy(&attr,SCHED_RR);
+    pthread_attr_setschedparam(&attr,&sched);
     pthread_t *GetThreads = (pthread_t *)malloc(sizeof(pthread_t)*listenNumber);
     for (unsigned i = 0; i < listenNumber; i++) {
-        if (pthread_create(&GetThreads[i], NULL, (void *(*)(void *)) GetMessage, transmissions) != 0) {
+        if (pthread_create(&GetThreads[i], &attr, (void *(*)(void *)) GetMessage, transmissions) != 0) {
             perror("create thread failed");
             return -1;
         }

@@ -123,32 +123,32 @@ learning/fast:
 	$(MAKE) -f CMakeFiles/learning.dir/build.make CMakeFiles/learning.dir/build
 .PHONY : learning/fast
 
-main.o: main.c.o
+amil2.o: amil2.c.o
 
-.PHONY : main.o
+.PHONY : amil2.o
 
 # target to build an object file
-main.c.o:
-	$(MAKE) -f CMakeFiles/learning.dir/build.make CMakeFiles/learning.dir/main.c.o
-.PHONY : main.c.o
+amil2.c.o:
+	$(MAKE) -f CMakeFiles/learning.dir/build.make CMakeFiles/learning.dir/amil2.c.o
+.PHONY : amil2.c.o
 
-main.i: main.c.i
+amil2.i: amil2.c.i
 
-.PHONY : main.i
+.PHONY : amil2.i
 
 # target to preprocess a source file
-main.c.i:
-	$(MAKE) -f CMakeFiles/learning.dir/build.make CMakeFiles/learning.dir/main.c.i
-.PHONY : main.c.i
+amil2.c.i:
+	$(MAKE) -f CMakeFiles/learning.dir/build.make CMakeFiles/learning.dir/amil2.c.i
+.PHONY : amil2.c.i
 
-main.s: main.c.s
+amil2.s: amil2.c.s
 
-.PHONY : main.s
+.PHONY : amil2.s
 
 # target to generate assembly for a file
-main.c.s:
-	$(MAKE) -f CMakeFiles/learning.dir/build.make CMakeFiles/learning.dir/main.c.s
-.PHONY : main.c.s
+amil2.c.s:
+	$(MAKE) -f CMakeFiles/learning.dir/build.make CMakeFiles/learning.dir/amil2.c.s
+.PHONY : amil2.c.s
 
 # Help Target
 help:
@@ -159,9 +159,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... learning"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
+	@echo "... amil2.o"
+	@echo "... amil2.i"
+	@echo "... amil2.s"
 .PHONY : help
 
 

@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/main.c" "/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/cmake-build-debug/CMakeFiles/learning.dir/main.c.o"
+  "/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/amil2.c" "/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/cmake-build-debug/CMakeFiles/learning.dir/amil2.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 

@@ -57,27 +57,27 @@ include CMakeFiles/learning.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/learning.dir/flags.make
 
-CMakeFiles/learning.dir/main.c.o: CMakeFiles/learning.dir/flags.make
-CMakeFiles/learning.dir/main.c.o: ../main.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/learning.dir/main.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/learning.dir/main.c.o   -c /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/main.c
+CMakeFiles/learning.dir/amil2.c.o: CMakeFiles/learning.dir/flags.make
+CMakeFiles/learning.dir/amil2.c.o: ../amil2.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/learning.dir/amil2.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/learning.dir/amil2.c.o   -c /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/amil2.c
 
-CMakeFiles/learning.dir/main.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/learning.dir/main.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/main.c > CMakeFiles/learning.dir/main.c.i
+CMakeFiles/learning.dir/amil2.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/learning.dir/amil2.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/amil2.c > CMakeFiles/learning.dir/amil2.c.i
 
-CMakeFiles/learning.dir/main.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/learning.dir/main.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/main.c -o CMakeFiles/learning.dir/main.c.s
+CMakeFiles/learning.dir/amil2.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/learning.dir/amil2.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/amil2.c -o CMakeFiles/learning.dir/amil2.c.s
 
 # Object files for target learning
 learning_OBJECTS = \
-"CMakeFiles/learning.dir/main.c.o"
+"CMakeFiles/learning.dir/amil2.c.o"
 
 # External object files for target learning
 learning_EXTERNAL_OBJECTS =
 
-learning: CMakeFiles/learning.dir/main.c.o
+learning: CMakeFiles/learning.dir/amil2.c.o
 learning: CMakeFiles/learning.dir/build.make
 learning: CMakeFiles/learning.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C executable learning"

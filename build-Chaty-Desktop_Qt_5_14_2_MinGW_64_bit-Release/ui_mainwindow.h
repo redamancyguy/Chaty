@@ -15,7 +15,6 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QListWidget>
 #include <QtWidgets/QMainWindow>
-#include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QSplitter>
 #include <QtWidgets/QTextBrowser>
@@ -39,7 +38,6 @@ public:
     QTextEdit *textEdit;
     QHBoxLayout *horizontalLayout_3;
     QSpacerItem *horizontalSpacer;
-    QPushButton *send;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -135,23 +133,6 @@ public:
 
         horizontalLayout_3->addItem(horizontalSpacer);
 
-        send = new QPushButton(layoutWidget);
-        send->setObjectName(QString::fromUtf8("send"));
-        QFont font1;
-        font1.setPointSize(10);
-        send->setFont(font1);
-        send->setAutoFillBackground(false);
-        send->setStyleSheet(QString::fromUtf8("QPushButton{\n"
-"	margin:5px;\n"
-"	height:30px;\n"
-"	color: rgb(30, 111, 255);\n"
-"	width:80px;\n"
-"}"));
-        send->setAutoDefault(false);
-        send->setFlat(false);
-
-        horizontalLayout_3->addWidget(send);
-
 
         verticalLayout->addLayout(horizontalLayout_3);
 
@@ -164,9 +145,6 @@ public:
 
         retranslateUi(MainWindow);
 
-        send->setDefault(false);
-
-
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
 
@@ -178,7 +156,6 @@ public:
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:'Source Sans Pro'; font-size:12pt; font-weight:600; font-style:normal;\">\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'SimSun'; font-size:15pt; font-weight:400;\"><br /></p></body></html>", nullptr));
-        send->setText(QCoreApplication::translate("MainWindow", "Send", nullptr));
     } // retranslateUi
 
 };
