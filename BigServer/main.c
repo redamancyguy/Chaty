@@ -35,55 +35,52 @@ int serverFileDescriptor;
 
 pthread_mutex_t databaseMutex;
 
-int iii = 0;
-int iiii = 0;
-int iiiii = 0;
 struct Clients *AllClients;
 
 _Noreturn void *Handle(struct BackboneTran *tran) {
-//    pthread_mutex_t *Mutex = tran->Mutex;
-//    Queue Queue = tran->Queue;
-//    while (true) {
-//        if (pthread_mutex_trylock(Mutex) == 0) {
-//            struct Message messages[10];
-//            int length = 0;
-//            for (int i = 0; i < 10 && !IsEmptyQueue(Queue); i++) {
-//                messages[length++] = *(struct Message *) FrontQueue(Queue);
-//                PopQueue(Queue);
-//            }
-//            pthread_mutex_unlock(Mutex);
-//            for (int i = 0; i < length; i++) {
-////                printf("iii : %d\n", iii++);
-//                switch (messages[i].data.code) {
-////                    case LOGIN:
-////                    case REGISTER:{  //before login
-////                        struct User user;
-////                        memcpy(&user,message.data.data,sizeof(struct User));
-////                        if(GetUserPlaceByUsername(user.username) == -1){
-////
-////                        }else{
-////
-////                        }
-////                        break;
-////                    }
-////                    case CHANGE:
-////                    case LOGOUT:
-////                    case UNREGISTER:{ //after login
-////                        break;
-////                    }
-////                    case CHAT: {
-////                        break;
-////                    }
-//                    default: {
-////                        puts("unknown message");
-//                        break;
-//                    }
-//                }
-//            }
-//        } else {
-//            usleep(1000);
-//        }
-//    }
+    pthread_mutex_t *Mutex = &tran->Mutex;
+    Queue Queue = tran->Queue;
+    while (true) {
+        if (pthread_mutex_trylock(Mutex) == 0) {
+            struct Message messages[10];
+            int length = 0;
+            for (int i = 0; i < 10 && !IsEmptyQueue(Queue); i++) {
+                messages[length++] = *(struct Message *) FrontQueue(Queue);
+                PopQueue(Queue);
+            }
+            pthread_mutex_unlock(Mutex);
+            for (int i = 0; i < length; i++) {
+                printf("::::%d : %s\n",messages[i].data.code,messages[i].data.data);
+                switch (messages[i].data.code) {
+                    case LOGIN:
+                    case REGISTER:{  //before login
+                        struct User user;
+                        memcpy(&user,messages[i].data.data,sizeof(struct User));
+                        if(GetUserPlaceByUsername(user.username) == -1){
+
+                        }else{
+
+                        }
+                        break;
+                    }
+                    case CHANGE:
+                    case LOGOUT:
+                    case UNREGISTER:{ //after login
+                        break;
+                    }
+                    case CHAT: {
+                        break;
+                    }
+                    default: {
+//                        puts("unknown message");
+                        break;
+                    }
+                }
+            }
+        } else {
+            usleep(1000);
+        }
+    }
 }
 
 _Noreturn void *Convert(struct BackboneTran *tran) {
@@ -92,45 +89,26 @@ _Noreturn void *Convert(struct BackboneTran *tran) {
     pthread_mutex_t *Mutex = &tran->Mutex;
     Queue Queue = tran->Queue;
     while (true) {
-        pthread_mutex_lock(mutex);
+        pthread_mutex_lock(Mutex);
         if (!BufQueueIsEmpty(queue)) {
-            printf("%ld iiii : %d\n", pthread_self(), iiii++);
-            BufQueuePop(queue);
-//            if (pthread_mutex_trylock(mutex) == 0) {
-//                do {
-//                    printf("%ld iiii : %d\n",pthread_self(), iiii++);
-//                    BufQueuePop(queue);
-//                } while (!BufQueueIsEmpty(queue));
-//                pthread_mutex_unlock(mutex);
-//            }else{
-//                usleep(1000);
-//            }
-            pthread_mutex_unlock(mutex);
+            if (pthread_mutex_trylock(mutex) == 0) {
+                do {
+                    struct Message *temp = (struct Message *) malloc(sizeof(struct Message));
+                    *temp = BufQueueFront(queue)->message;
+                    if (!PushQueue(Queue, (void *) temp)) {
+                        free(temp);
+                        break;
+                    }
+                    BufQueuePop(queue);
+                } while (!BufQueueIsEmpty(queue));
+                pthread_mutex_unlock(mutex);
+            }else{
+                usleep(1000);
+            }
         } else {
-            pthread_mutex_unlock(mutex);
             usleep(1000);
         }
-//        pthread_mutex_lock(Mutex);
-//        if (!BufQueueIsEmpty(queue)) {
-//            if (pthread_mutex_trylock(mutex) == 0) {
-//                do {
-//                    struct Message *temp = (struct Message *) malloc(sizeof(struct Message));
-//                    *temp = BufQueueFront(queue)->message;
-//                    if (!PushQueue(Queue, (void *) temp)) {
-//                        free(temp);
-//                        break;
-//                    }
-//                    printf("%ld iiii : %d\n",pthread_self(), iiii++);
-//                    BufQueuePop(queue);
-//                } while (!BufQueueIsEmpty(queue));
-//                pthread_mutex_unlock(mutex);
-//            }else{
-//                usleep(1000);
-//            }
-//        } else {
-//            usleep(1000);
-//        }
-//        pthread_mutex_unlock(Mutex);
+        pthread_mutex_unlock(Mutex);
     }
 }
 
@@ -139,7 +117,7 @@ _Noreturn void *GetMessage(struct BackboneTran *tran) {
     struct BufQueue *queue = tran->queue;
     while (true) {
         struct DataBuf *temp = BufQueueBack(queue);
-        long long count = recvfrom(serverFileDescriptor, &temp->message.data, sizeof(struct DataBuf),
+        long long count = recvfrom(serverFileDescriptor, &temp->message.data, sizeof(struct CommunicationData)+1024,
                                    0, (struct sockaddr *) &temp->message.address, &temp->message.len);
         switch (count) {
             case -1: {
@@ -154,7 +132,6 @@ _Noreturn void *GetMessage(struct BackboneTran *tran) {
                     pthread_mutex_lock(mutex);
                 }
                 BufQueuePush(queue);
-                printf("%ld iiiii : %d\n", pthread_self(), iiiii++);
                 pthread_mutex_unlock(mutex);
                 break;
             }

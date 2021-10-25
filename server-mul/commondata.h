@@ -21,8 +21,6 @@ enum StatusCode {
 };
 struct CommonData {
     enum StatusCode code;
-    unsigned int group;
-    char message[64];
     char data[1024];
 };
 struct Message{

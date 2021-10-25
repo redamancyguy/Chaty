@@ -31,8 +31,8 @@ void receive() {
         strcpy(time, asctime(nowTime));
         time[strlen(time) - 1] = '\0';
         printf("time : %s | ", time);
-        printf("Group : %d  |  ", buff.group);
-        puts(buff.message);
+//        puts(buff.message);  printf("Group : %d  |  ", buff.group);
+
         puts(buff.data);
     }
 }
@@ -99,7 +99,7 @@ void RegisterTest(struct sockaddr *serverAddress) {
         user.id = i;
         socklen_t len = sizeof(struct sockaddr_in);
         buf.code = REGISTER;
-        buf.group = 123;
+//        buf.group = 123;
         memcpy(buf.data,&user,sizeof(struct User));
         sendto(client_fd, &buf, sizeof(struct CommonData), 0, serverAddress, len);
         usleep(100000);
@@ -128,7 +128,7 @@ void Connect(struct CommonData buf, struct sockaddr *serverAddress) {
     socklen_t len = sizeof(struct sockaddr_in);
     memset(&buf,0,sizeof(struct CommonData));
     buf.code = CONNECT;
-    strcpy(buf.message, "connect");
+//    strcpy(buf.message, "connect");
     printf("connect %d\n",buf.code);
     sendto(client_fd, &buf, sizeof(struct CommonData), 0, serverAddress, len);
 }
@@ -136,23 +136,20 @@ void Connect(struct CommonData buf, struct sockaddr *serverAddress) {
 void Disconnect(struct CommonData buf, struct sockaddr *serverAddress) {
     socklen_t len = sizeof(struct sockaddr_in);
     buf.code = DISCONNECT;
-    strcpy(buf.message, "disconnect");
+//    strcpy(buf.message, "disconnect");
     sendto(client_fd, &buf, sizeof(struct CommonData), 0, serverAddress, len);
 }
 
 void SetGroup(struct CommonData buf, struct sockaddr *serverAddress, unsigned group) {
-    buf.group = group;
+//    buf.group = group;
     Connect(buf, serverAddress);
 }
 
 void Chat(struct CommonData buf, struct sockaddr *serverAddress) {
-    struct CommunicationData {
-        enum StatusCode code;
-        char data[1024];
-    };
     socklen_t len = sizeof(struct sockaddr_in);
-    buf.code = CHAT;
-    sendto(client_fd, &buf, sizeof(struct CommunicationData), 0, serverAddress, len);
+    puts("INPUT");
+    puts(buf.data);
+    sendto(client_fd, &buf, sizeof(struct CommonData), 0, serverAddress, len);
 }
 
 void Email(struct CommonData buf, struct sockaddr *serverAddress) {
@@ -217,34 +214,24 @@ int main(int argc, char *argv[]) {
     serverAddress.sin_port = htons(SERVER_PORT);
     puts("input your group number (0 ~ 1023)");
     struct CommonData buf;
-    while (1) {
-        if (scanf("%u", &buf.group) > 0) {
-            break;
-        }
-        FlushStdin();
-        puts("Please input a num !");
-    }
     FlushStdin();
     pthread_t pid;
     pthread_create(&pid, NULL, (void *(*)(void *)) receive, NULL);
     Connect(buf, (struct sockaddr *) &serverAddress);
     TreeMap set = Tree_New();
-    Tree_Insert(set,(void*)buf.group,(void*)time(NULL));
 //    RegisterTest(&serverAddress);
 //    Email(buf,&serverAddress);
 //    Change(buf,&serverAddress);
 int i=0;
     while (1) {
-        if(i > 10000){
-            puts("???????????");
-            break;
+        if(i > 1){
+            scanf("%s",buf.data);
         }
         printf("iii ; %d\n",i++);
+        buf.code = i;
         Chat(buf, (struct sockaddr *) &serverAddress);
-        usleep(10);
-//        getchar();
+        usleep(1000);
         continue;
-        strcpy(buf.message, "");
         strcpy(buf.data, "");
         if (scanf("%[^\n]*?", buf.data) < 0) { break; }
         if (strcmp(buf.data, "exit") == 0) {
@@ -266,10 +253,10 @@ int i=0;
         } else if (strncmp(buf.data, "set group", 9) == 0) {
             char *temp;
             strcpy(buf.data, buf.data + 9);
-            unsigned int tempGroup = buf.group = (unsigned int) strtol(buf.data, &temp, 10);
-            SetGroup(buf, (struct sockaddr *) &serverAddress, tempGroup);
-            buf.group = tempGroup;
-            Tree_SetOrInsert(set,(void*)buf.group,(void*)time(NULL));
+//            unsigned int tempGroup = buf.group = (unsigned int) strtol(buf.data, &temp, 10);
+//            SetGroup(buf, (struct sockaddr *) &serverAddress, tempGroup);
+//            buf.group = tempGroup;
+//            Tree_SetOrInsert(set,(void*)buf.group,(void*)time(NULL));
         } else if (strcmp(buf.data, "disconnect") == 0) {
             Disconnect(buf, (struct sockaddr *) &serverAddress);
         } else if (strcmp(buf.data, "connect") == 0) {
@@ -282,7 +269,7 @@ int i=0;
     for(int i=0;i<groupNumber;i++){
         if(Tree_ContainKey(set,(void*)i)){
             if(time(NULL) - (long)Tree_Get(set,(void*)i) < 300){
-                buf.group = i;
+//                buf.group = i;
                 Disconnect(buf, (struct sockaddr *) &serverAddress);
                 printf("Disconnect group : %d\n",i);
             }
