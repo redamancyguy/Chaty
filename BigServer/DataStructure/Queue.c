@@ -57,14 +57,12 @@ bool PushQueue(Queue queue, void *data) {
     }
     queue->tail->next = (struct Node_ *) temp;
     ((struct Node_ *) temp)->data = data;
-    queue->tail = queue->tail->next;
+    queue->tail = (struct Node_ *) temp;
     return true;
 }
 
-void *PopQueue(Queue queue) {
+void PopQueue(Queue queue) {
     void *temp = queue->head;
-    void *data = queue->head->next->data;
     queue->head = queue->head->next;
     free(temp);
-    return data;
 }

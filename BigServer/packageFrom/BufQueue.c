@@ -39,6 +39,9 @@ struct DataBuf *BufQueueFront(struct BufQueue *queue) {
     return &queue->dataBuff[queue->head];
 }
 
+struct DataBuf *BufQueueBack(struct BufQueue *queue) {
+    return &queue->dataBuff[queue->tail];
+}
 bool BufQueueIsEmpty(struct BufQueue *queue) {
     return queue->head == queue->tail && !queue->status;
 }

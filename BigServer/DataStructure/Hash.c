@@ -215,11 +215,13 @@ bool HashErase(Hash hash,void *const key) {
         long long temp = flag + i;
         if (hash->table[temp].status && hash->table[temp].key == key ){
             hash->table[temp].status = false;
+            hash->size--;
             return true;
         }
         temp = flag - i;
         if (hash->table[temp].status && hash->table[temp].key == key ){
             hash->table[temp].status = false;
+            hash->size--;
             return true;
         }
         i++;
@@ -229,6 +231,7 @@ bool HashErase(Hash hash,void *const key) {
         while (i < hash->capacity) {
             if (hash->table[i].status && hash->table[i].key == key ){
                 hash->table[i].status = false;
+                hash->size--;
                 return true;
             }
             i++;
@@ -238,6 +241,7 @@ bool HashErase(Hash hash,void *const key) {
         while (i >= 0) {
             if (hash->table[i].status && hash->table[i].key == key ){
                 hash->table[i].status = false;
+                hash->size--;
                 return true;
             }
             i--;

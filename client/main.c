@@ -235,12 +235,14 @@ int main(int argc, char *argv[]) {
 //    Change(buf,&serverAddress);
 int i=0;
     while (1) {
-        if(i++ > 100000){
+        if(i > 10000){
             puts("???????????");
             break;
         }
+        printf("iii ; %d\n",i++);
         Chat(buf, (struct sockaddr *) &serverAddress);
-        usleep(100);
+        usleep(10);
+//        getchar();
         continue;
         strcpy(buf.message, "");
         strcpy(buf.data, "");
