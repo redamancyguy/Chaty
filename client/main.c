@@ -146,9 +146,13 @@ void SetGroup(struct CommonData buf, struct sockaddr *serverAddress, unsigned gr
 }
 
 void Chat(struct CommonData buf, struct sockaddr *serverAddress) {
+    struct CommunicationData {
+        enum StatusCode code;
+        char data[1024];
+    };
     socklen_t len = sizeof(struct sockaddr_in);
     buf.code = CHAT;
-    sendto(client_fd, &buf, sizeof(struct CommonData), 0, serverAddress, len);
+    sendto(client_fd, &buf, sizeof(struct CommunicationData), 0, serverAddress, len);
 }
 
 void Email(struct CommonData buf, struct sockaddr *serverAddress) {
@@ -229,7 +233,15 @@ int main(int argc, char *argv[]) {
 //    RegisterTest(&serverAddress);
 //    Email(buf,&serverAddress);
 //    Change(buf,&serverAddress);
+int i=0;
     while (1) {
+        if(i++ > 100000){
+            puts("???????????");
+            break;
+        }
+        Chat(buf, (struct sockaddr *) &serverAddress);
+        usleep(100);
+        continue;
         strcpy(buf.message, "");
         strcpy(buf.data, "");
         if (scanf("%[^\n]*?", buf.data) < 0) { break; }

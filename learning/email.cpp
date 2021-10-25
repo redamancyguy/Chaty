@@ -248,7 +248,7 @@ int SendEmail(
     return 0;
 };
 
-int main(int argc, char* argv[])
+int maina(int argc, char* argv[])
 {
     int ret = SendEmail("smtp.exmail.qq.com", 25, "2742331300","zxc.cf.1213",
                         "1506607292@qq.com", "This is the body", "from name",

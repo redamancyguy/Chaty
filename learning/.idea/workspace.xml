@@ -15,54 +15,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cc0ec5ba-efb9-43f1-8ad4-f34c82fb7a24" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../Chaty/profile.ui" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Chaty/Chaty.pro" beforeDir="false" afterPath="$PROJECT_DIR$/../Chaty/Chaty.pro" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Chaty/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Chaty/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Chaty/mainwindow.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Chaty/mainwindow.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Chaty/mainwindow.ui" beforeDir="false" afterPath="$PROJECT_DIR$/../Chaty/mainwindow.ui" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Debug/Makefile.Debug" beforeDir="false" afterPath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Debug/Makefile.Debug" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Debug/Makefile.Release" beforeDir="false" afterPath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Debug/Makefile.Release" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Debug/debug/Chaty.exe" beforeDir="false" afterPath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Debug/debug/Chaty.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Debug/debug/main.o" beforeDir="false" afterPath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Debug/debug/main.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Debug/debug/mainwindow.o" beforeDir="false" afterPath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Debug/debug/mainwindow.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Debug/debug/moc_mainwindow.o" beforeDir="false" afterPath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Debug/debug/moc_mainwindow.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Release/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Release/Makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Release/Makefile.Debug" beforeDir="false" afterPath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Release/Makefile.Debug" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Release/Makefile.Release" beforeDir="false" afterPath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Release/Makefile.Release" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Release/release/Chaty.exe" beforeDir="false" afterPath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Release/release/Chaty.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Release/release/main.o" beforeDir="false" afterPath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Release/release/main.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Release/release/mainwindow.o" beforeDir="false" afterPath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Release/release/mainwindow.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Release/release/moc_mainwindow.o" beforeDir="false" afterPath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Release/release/moc_mainwindow.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Release/ui_mainwindow.h" beforeDir="false" afterPath="$PROJECT_DIR$/../build-Chaty-Desktop_Qt_5_14_2_MinGW_64_bit-Release/ui_mainwindow.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../client/cmake-build-debug/CMakeFiles/client.dir/C.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/../client/cmake-build-debug/CMakeFiles/client.dir/C.includecache" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../BigServer/packageFrom/BufQueue.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BigServer/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../BigServer/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BigServer/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/../BigServer/main.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BigServer/packageFrom/messageQueue.c" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../client/cmake-build-debug/CMakeFiles/client.dir/main.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/../client/cmake-build-debug/CMakeFiles/client.dir/main.c.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../client/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/../client/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../client/cmake-build-debug/client" beforeDir="false" afterPath="$PROJECT_DIR$/../client/cmake-build-debug/client" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/../client/main.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/DependInfo.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/DependInfo.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/build.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/build.make" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/cmake_clean.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/cmake_clean.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/link.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/link.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Progress/count.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Progress/count.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/C.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/C.includecache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/depend.internal" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/depend.internal" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/depend.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/depend.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/learning.dir/main.c.o" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/learning.cbp" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/learning.cbp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/amil2.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/email.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/email.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../server-mul/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server-mul/cmake-build-debug/CMakeFiles/Makefile.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/cmake-build-debug/CMakeFiles/Makefile.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server-mul/cmake-build-debug/CMakeFiles/clion-log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/cmake-build-debug/CMakeFiles/clion-log.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server-mul/cmake-build-debug/CMakeFiles/server_mul.dir/C.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/cmake-build-debug/CMakeFiles/server_mul.dir/C.includecache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server-mul/cmake-build-debug/CMakeFiles/server_mul.dir/depend.internal" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/cmake-build-debug/CMakeFiles/server_mul.dir/depend.internal" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server-mul/cmake-build-debug/CMakeFiles/server_mul.dir/depend.make" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/cmake-build-debug/CMakeFiles/server_mul.dir/depend.make" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server-mul/cmake-build-debug/CMakeFiles/server_mul.dir/main.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/cmake-build-debug/CMakeFiles/server_mul.dir/main.c.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server-mul/cmake-build-debug/CMakeFiles/server_mul.dir/messagequeue.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/cmake-build-debug/CMakeFiles/server_mul.dir/messagequeue.c.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../server-mul/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server-mul/cmake-build-debug/server_mul" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/cmake-build-debug/server_mul" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server-mul/cmake-build-debug/server_mul.cbp" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/cmake-build-debug/server_mul.cbp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server-mul/cmake-build-debug/users" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/cmake-build-debug/users" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server-mul/cmake-build-release/CMakeFiles/Makefile.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/cmake-build-release/CMakeFiles/Makefile.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server-mul/cmake-build-release/CMakeFiles/clion-log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/cmake-build-release/CMakeFiles/clion-log.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server-mul/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/../server-mul/main.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,16 +62,16 @@
     <property name="cf.first.check.clang-format" value="false" />
     <property name="cidr.known.project.marker" value="true" />
     <property name="cmake.loaded.for.project" value="true" />
-    <property name="last_opened_file_path" value="$USER_HOME$/CLionProjects/untitled1" />
+    <property name="last_opened_file_path" value="$USER_HOME$/CLionProjects/untitled3" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
   </component>
   <component name="RunManager">
-    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
-        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
     <configuration name="learning" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="learning" TARGET_NAME="learning" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="learning" RUN_TARGET_NAME="learning">
@@ -130,6 +100,7 @@
       <workItem from="1634914345421" duration="1824000" />
       <workItem from="1634998651394" duration="244000" />
       <workItem from="1635043181927" duration="100000" />
+      <workItem from="1635145808423" duration="128000" />
     </task>
     <servers />
   </component>

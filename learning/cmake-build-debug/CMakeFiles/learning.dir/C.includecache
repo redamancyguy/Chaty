@@ -6,19 +6,27 @@
 
 #IncludeRegexTransform: 
 
-/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/main.c
+/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/learning/amil2.c
 stdio.h
--
-stdlib.h
 -
 sys/types.h
 -
-sys/timeb.h
+sys/socket.h
 -
-lua.h
+netinet/in.h
 -
-lualib.h
+errno.h
 -
-lauxlib.h
+unistd.h
+-
+sys/time.h
+-
+assert.h
+-
+netdb.h
+-
+stdlib.h
+-
+string.h
 -
 
