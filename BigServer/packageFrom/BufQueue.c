@@ -21,9 +21,18 @@ struct BufQueue *BufQueueNew(unsigned long long capacity) {
     queue->capacity = capacity;
     queue->head = queue->tail = 0;
     queue->status = false;
+    pthread_mutex_init(&queue->mutex,NULL);
     return queue;
 }
-
+int BufQueueLock(struct BufQueue *queue) {
+    return pthread_mutex_lock(&queue->mutex);
+}
+int BufQueueTryLock(struct BufQueue *queue) {
+    return pthread_mutex_trylock(&queue->mutex);
+}
+int BufQueueUnlock(struct BufQueue *queue) {
+    return pthread_mutex_unlock(&queue->mutex);
+}
 void BufQueuePush(struct BufQueue *queue) {
     if (++queue->tail == queue->capacity) {
         queue->tail = 0;
@@ -54,6 +63,7 @@ bool BufQueueIsFull(struct BufQueue *queue) {
 }
 
 void BufQueueDestroy(struct BufQueue *queue) {
+    pthread_mutex_destroy(&queue->mutex);
     free(queue->dataBuff);
     free(queue);
 }

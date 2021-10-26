@@ -15,27 +15,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="21d7c586-2eda-4187-9de7-99681e4a11ff" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../BigClient/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../BigClient/BigClient.pro" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../BigClient/BigClient_zh_CN.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../BigClient/mainwindow.ui" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BigServer/DataStructure/Hash.c" beforeDir="false" afterPath="$PROJECT_DIR$/../BigServer/DataStructure/Hash.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BigServer/Database/User.c" beforeDir="false" afterPath="$PROJECT_DIR$/../BigServer/Database/User.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BigServer/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/../BigServer/main.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BigServer/packageFrom/BufQueue.c" beforeDir="false" afterPath="$PROJECT_DIR$/../BigServer/packageFrom/BufQueue.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../client/cmake-build-debug/CMakeFiles/client.dir/main.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/../client/cmake-build-debug/CMakeFiles/client.dir/main.c.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../client/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/../client/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../client/cmake-build-debug/client" beforeDir="false" afterPath="$PROJECT_DIR$/../client/cmake-build-debug/client" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../client/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/../client/main.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../learning/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../learning/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../learning/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/../learning/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/server_mul" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/server_mul" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commondata.h" beforeDir="false" afterPath="$PROJECT_DIR$/commondata.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main.c" afterDir="false" />
-    </list>
+    <list default="true" id="21d7c586-2eda-4187-9de7-99681e4a11ff" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -133,7 +113,7 @@
       <workItem from="1635213005776" duration="21000" />
       <workItem from="1635213038470" duration="604000" />
       <workItem from="1635217177795" duration="721000" />
-      <workItem from="1635241211785" duration="4198000" />
+      <workItem from="1635241211785" duration="4210000" />
     </task>
     <servers />
   </component>

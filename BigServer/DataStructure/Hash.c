@@ -3,6 +3,7 @@
 //
 #include <string.h>
 #include <malloc.h>
+#include <pthread.h>
 #include "Hash.h"
 
 struct Node_ {
@@ -11,12 +12,46 @@ struct Node_ {
     void *value;
 };
 struct Hash_ {
+    pthread_mutex_t mutex;
     struct Node_ *table;
     long long capacity;
     long long size;
 };
+
+struct Hash_Iterator NewHash_Iterator(Hash hash){
+    struct Hash_Iterator it;
+    it.hash = hash;
+    it.place = 0;
+    return it;
+}
+
+void *NextHash_Iterator(struct Hash_Iterator *it){
+    while(it->place < it->hash->capacity){
+        if(it->hash->table[it->place].status){
+            return it->hash->table[it->place++].value;
+        }
+        it->place++;
+    }
+    return NULL;
+}
+
+
+int HashLock(Hash hash){
+    return pthread_mutex_lock(&hash->mutex);
+}
+int HashUnlock(Hash hash){
+    return pthread_mutex_unlock(&hash->mutex);
+}
+int HashTryLock(Hash hash){
+    return pthread_mutex_trylock(&hash->mutex);
+}
+
+
 long long HashSize(Hash hash){
     return hash->size;
+}
+long long HashCapacity(Hash hash){
+    return hash->capacity;
 }
 Hash HashNew(const long long capacity) {
     Hash hash = (Hash) malloc(sizeof(struct Hash_));
@@ -31,10 +66,16 @@ Hash HashNew(const long long capacity) {
     hash->size = 0;
     hash->capacity = capacity;
     memset(hash->table, 0, sizeof(struct Node_) * capacity);
+    if(pthread_mutex_init(&hash->mutex,NULL) != 0){
+        free(hash->table);
+        free(hash);
+        return NULL;
+    }
     return hash;
 }
 
 void HashDestroy(Hash hash) {
+    pthread_mutex_destroy(&hash->mutex);
     free(hash->table);
     free(hash);
 }

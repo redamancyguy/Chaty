@@ -22,9 +22,7 @@ int k = 10;
 short serverPORT = 9999;
 
 struct BackboneTran {
-    pthread_mutex_t mutex;
     struct BufQueue *queue;
-    pthread_mutex_t Mutex;
     Queue Queue;
 };
 
@@ -34,11 +32,33 @@ pthread_mutex_t databaseMutex;
 
 struct Clients *AllClients;
 
+_Noreturn void *Clear(void *pointer) {
+    const int TimOut = 5;
+    const int Pace = 5;
+    while (true) {
+        sleep(Pace);
+        for (int i = 0; i < 65536; i++) {
+            struct Hash_Iterator it = NewHash_Iterator(AllClients->clients[i]);
+            HashLock(AllClients->clients[i]);
+            while (true) {
+                struct Client *p = NextHash_Iterator(&it);
+                if(p==NULL){
+                    break;
+                }
+                if (time(NULL) - p->time > TimOut) {
+                    HashErase(AllClients->clients[i], (void*)(unsigned long long)p->address.sin_addr.s_addr);
+                    free(p);
+                }
+            }
+            HashUnlock(AllClients->clients[i]);
+        }
+    }
+}
+
 _Noreturn void *Handle(struct BackboneTran *tran) {
-    pthread_mutex_t *Mutex = &tran->Mutex;
     Queue Queue = tran->Queue;
     while (true) {
-        if (pthread_mutex_trylock(Mutex) == 0) {
+        if (TryLockQueue(Queue) == 0) {
             struct Message messages[1000];
             int length = 0;
             for (int i = 0; i < 1000 && !IsEmptyQueue(Queue); i++) {
@@ -47,16 +67,19 @@ _Noreturn void *Handle(struct BackboneTran *tran) {
                 free(temp);
                 PopQueue(Queue);
             }
-            pthread_mutex_unlock(Mutex);
+            UnlockQueue(Queue);
             for (int i = 0; i < length; i++) {
                 struct Message message = messages[i];
                 switch (message.data.code) {
-                    case TOUCH:{
-                        if (ClientGet(AllClients, message.address) != NULL) {
+                    case TOUCH: {
+                        struct Client *client = ClientGet(AllClients, message.address);
+                        if (client != NULL) {
+                            client->time = time(NULL);
                             strcpy(message.data.data, "Server : YES");
                         } else {
                             strcpy(message.data.data, "Server : NO");
                         }
+                        break;
                     }
                     case LOGIN: {
                         struct User userBuf;
@@ -73,12 +96,14 @@ _Noreturn void *Handle(struct BackboneTran *tran) {
                                 client->address = message.address;
                                 client->length = message.length;
                                 client->time = time(NULL);
+                                HashLock(AllClients->clients[i]);
                                 if (ClientsInsert(AllClients, message.address, client)) {
                                     strcpy(message.data.data, "Server : Login successfully");
                                 } else {
                                     free(client);
                                     strcpy(message.data.data, "Server : You're already logged in");
                                 }
+                                HashUnlock(AllClients->clients[i]);
                             } else {
                                 strcpy(message.data.data, "Server : Wrong password");
                             }
@@ -88,8 +113,10 @@ _Noreturn void *Handle(struct BackboneTran *tran) {
                     case LOGOUT: {
                         struct Client *client = ClientGet(AllClients, message.address);
                         if (client != NULL) {
-                            ClientErase(AllClients,message.address);
+                            HashLock(AllClients->clients[i]);
+                            ClientErase(AllClients, message.address);
                             free(client);
+                            HashUnlock(AllClients->clients[i]);
                             strcpy(message.data.data, "Server : Logout successfully");
                         } else {
                             strcpy(message.data.data, "Server : You haven't logged in yet");
@@ -150,7 +177,6 @@ _Noreturn void *Handle(struct BackboneTran *tran) {
                 }
                 sendto(serverFileDescriptor, &message.data, sizeof(struct CommunicationData), 0,
                        (struct sockaddr *) &message.address, message.length);
-                printf("%d\t%lld\n",message.address.sin_port, HashSize(AllClients->clients[message.address.sin_port]));
             }
         } else {
             usleep(1000);
@@ -159,14 +185,12 @@ _Noreturn void *Handle(struct BackboneTran *tran) {
 }
 
 _Noreturn void *Convert(struct BackboneTran *tran) {
-    pthread_mutex_t *mutex = &tran->mutex;
     struct BufQueue *queue = tran->queue;
-    pthread_mutex_t *Mutex = &tran->Mutex;
     Queue Queue = tran->Queue;
     while (true) {
-        pthread_mutex_lock(Mutex);
+        LockQueue(Queue);
         if (!BufQueueIsEmpty(queue)) {
-            if (pthread_mutex_trylock(mutex) == 0) {
+            if (BufQueueTryLock(queue) == 0) {
                 for (int i = 0; i < 1000 && !BufQueueIsEmpty(queue); i++) {
                     struct Message *temp = (struct Message *) malloc(sizeof(struct Message));
                     *temp = BufQueueFront(queue)->message;
@@ -176,19 +200,18 @@ _Noreturn void *Convert(struct BackboneTran *tran) {
                     }
                     BufQueuePop(queue);
                 }
-                pthread_mutex_unlock(mutex);
+                BufQueueUnlock(queue);
             } else {
                 usleep(1000);
             }
         } else {
             usleep(1000);
         }
-        pthread_mutex_unlock(Mutex);
+        UnlockQueue(Queue);
     }
 }
 
 _Noreturn void *GetMessage(struct BackboneTran *tran) {
-    pthread_mutex_t *mutex = &tran->mutex;
     struct BufQueue *queue = tran->queue;
     while (true) {
         struct DataBuf *temp = BufQueueBack(queue);
@@ -200,14 +223,14 @@ _Noreturn void *GetMessage(struct BackboneTran *tran) {
                 break;
             }
             case sizeof(struct CommunicationData): {
-                pthread_mutex_lock(mutex);
+                BufQueueLock(queue);
                 while (BufQueueIsFull(queue)) {
-                    pthread_mutex_unlock(mutex);
+                    BufQueueUnlock(queue);
                     usleep(1000);
-                    pthread_mutex_lock(mutex);
+                    BufQueueLock(queue);
                 }
                 BufQueuePush(queue);
-                pthread_mutex_unlock(mutex);
+                BufQueueUnlock(queue);
                 break;
             }
             default: {
@@ -255,14 +278,6 @@ int main() {
                 perror("create linkQueue failed");
                 exit(-1);
             }
-            if (pthread_mutex_init(&backboneTrans[i].mutex, NULL) != 0) {
-                perror("Init mutex failed");
-                exit(-1);
-            }
-            if (pthread_mutex_init(&backboneTrans[i].Mutex, NULL) != 0) {
-                perror("Init linkQueueMutex failed");
-                exit(-1);
-            }
             pthread_attr_t attr;
             pthread_attr_init(&attr);
             struct sched_param sched = {99};
@@ -287,12 +302,21 @@ int main() {
                 }
             }
         }
-
+        pthread_t clearThread;
+        if (pthread_create(&clearThread, NULL, (void *(*)(void *)) Clear, NULL) != 0) {
+            perror("create ClearThread failed");
+            exit(-1);
+        }
 
         getchar();
         getchar();
         getchar();
 
+        pthread_cancel(clearThread);
+        if (pthread_join(clearThread, NULL) != 0) {
+            perror("join ClearThread failed");
+            exit(-1);
+        }
 
         for (int i = 0; i < backboneThreadNumber; i++) {
             pthread_cancel(ConcertThreads[i]);
@@ -312,8 +336,6 @@ int main() {
                     exit(-1);
                 }
             }
-            pthread_mutex_destroy(&backboneTrans[i].mutex);
-            pthread_mutex_destroy(&backboneTrans[i].Mutex);
             BufQueueDestroy(backboneTrans[i].queue);
             DestroyQueue(backboneTrans[i].Queue);
         }
