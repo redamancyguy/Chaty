@@ -224,13 +224,17 @@ int main(int argc, char *argv[]) {
 //    Change(buf,&serverAddress);
 int i=0;
     while (1) {
-        if(i > 1){
+        if(i > 100000){
             scanf("%s",buf.data);
         }
         printf("iii ; %d\n",i++);
         buf.code = i;
         Chat(buf, (struct sockaddr *) &serverAddress);
-        usleep(1000);
+//        usleep(1);
+        struct timespec pp;
+        pp.tv_nsec = 100;
+        pp.tv_sec = 0;
+        nanosleep(&pp,&pp);
         continue;
         strcpy(buf.data, "");
         if (scanf("%[^\n]*?", buf.data) < 0) { break; }

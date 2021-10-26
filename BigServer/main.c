@@ -17,11 +17,9 @@
 #include "DataStructure/Queue.h"
 #include "Clients.h"
 
-unsigned int TIMEOUT = 3000;
-unsigned int groupSize = 1024;
 
 unsigned int backboneThreadNumber = 4;
-int k = 20;
+int k = 10;
 short serverPORT = 9999;
 
 struct BackboneTran {
@@ -37,20 +35,21 @@ pthread_mutex_t databaseMutex;
 
 struct Clients *AllClients;
 
+int iii=0;
 _Noreturn void *Handle(struct BackboneTran *tran) {
     pthread_mutex_t *Mutex = &tran->Mutex;
     Queue Queue = tran->Queue;
     while (true) {
         if (pthread_mutex_trylock(Mutex) == 0) {
-            struct Message messages[10];
+            struct Message messages[1000];
             int length = 0;
-            for (int i = 0; i < 10 && !IsEmptyQueue(Queue); i++) {
+            for (int i = 0; i < 1000 && !IsEmptyQueue(Queue); i++) {
                 messages[length++] = *(struct Message *) FrontQueue(Queue);
                 PopQueue(Queue);
             }
             pthread_mutex_unlock(Mutex);
             for (int i = 0; i < length; i++) {
-                printf("::::%d : %s\n",messages[i].data.code,messages[i].data.data);
+                printf("::::%d  %d : %s\n",iii++,messages[i].data.code,messages[i].data.data);
                 switch (messages[i].data.code) {
                     case LOGIN:
                     case REGISTER:{  //before login
