@@ -15,6 +15,9 @@ struct BufQueue *BufQueueNew(unsigned long long capacity) {
         free(queue);
         return NULL;
     }
+    for(long long i=0;i<capacity;i++){
+        queue->dataBuff[i].message.length = sizeof(struct sockaddr_in);
+    }
     queue->capacity = capacity;
     queue->head = queue->tail = 0;
     queue->status = false;

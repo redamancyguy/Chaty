@@ -54,12 +54,6 @@ messagequeue.h
 utils.h
 /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/utils.h
 
-/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/messagequeue.c
-messagequeue.h
-/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/messagequeue.h
-malloc.h
--
-
 /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/messagequeue.h
 commondata.h
 /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/commondata.h

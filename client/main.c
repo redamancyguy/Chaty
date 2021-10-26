@@ -224,7 +224,7 @@ int main(int argc, char *argv[]) {
 //    Change(buf,&serverAddress);
 int i=0;
     while (1) {
-        if(i > 100000){
+        if(i > 1000){
             scanf("%s",buf.data);
         }
         printf("iii ; %d\n",i++);

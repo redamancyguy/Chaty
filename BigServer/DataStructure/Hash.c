@@ -15,7 +15,9 @@ struct Hash_ {
     long long capacity;
     long long size;
 };
-
+long long HashSize(Hash hash){
+    return hash->size;
+}
 Hash HashNew(const long long capacity) {
     Hash hash = (Hash) malloc(sizeof(struct Hash_));
     if (hash == NULL) {

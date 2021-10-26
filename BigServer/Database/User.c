@@ -6,7 +6,7 @@
 #include <unistd.h>
 #include "User.h"
 
-const char *fileName = "users";
+static const char *fileName = "users";
 
 long GetUserCount() {
     FILE *userFile;
@@ -80,7 +80,6 @@ long GetUserReadyPlaceByUsername(char *username) {
     }
     fseek(userFile, (long) (sizeof(struct User) * temp), SEEK_SET);
     struct User userBuf;
-    printf("%ld\n", temp);
     while (temp > 0) {
         fseek(userFile, (long) (sizeof(struct User) * temp), SEEK_SET);
         if (fread(&userBuf, sizeof(struct User), 1, userFile) < 0) {

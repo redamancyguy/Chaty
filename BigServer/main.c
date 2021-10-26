@@ -17,7 +17,6 @@
 #include "DataStructure/Queue.h"
 #include "Clients.h"
 
-
 unsigned int backboneThreadNumber = 4;
 int k = 10;
 short serverPORT = 9999;
@@ -35,7 +34,6 @@ pthread_mutex_t databaseMutex;
 
 struct Clients *AllClients;
 
-int iii=0;
 _Noreturn void *Handle(struct BackboneTran *tran) {
     pthread_mutex_t *Mutex = &tran->Mutex;
     Queue Queue = tran->Queue;
@@ -44,37 +42,115 @@ _Noreturn void *Handle(struct BackboneTran *tran) {
             struct Message messages[1000];
             int length = 0;
             for (int i = 0; i < 1000 && !IsEmptyQueue(Queue); i++) {
-                messages[length++] = *(struct Message *) FrontQueue(Queue);
+                struct Message *temp = (struct Message *) FrontQueue(Queue);
+                messages[length++] = *temp;
+                free(temp);
                 PopQueue(Queue);
             }
             pthread_mutex_unlock(Mutex);
             for (int i = 0; i < length; i++) {
-                printf("::::%d  %d : %s\n",iii++,messages[i].data.code,messages[i].data.data);
-                switch (messages[i].data.code) {
-                    case LOGIN:
-                    case REGISTER:{  //before login
-                        struct User user;
-                        memcpy(&user,messages[i].data.data,sizeof(struct User));
-                        if(GetUserPlaceByUsername(user.username) == -1){
-
-                        }else{
-
+                struct Message message = messages[i];
+                switch (message.data.code) {
+                    case TOUCH:{
+                        if (ClientGet(AllClients, message.address) != NULL) {
+                            strcpy(message.data.data, "Server : YES");
+                        } else {
+                            strcpy(message.data.data, "Server : NO");
+                        }
+                    }
+                    case LOGIN: {
+                        struct User userBuf;
+                        memcpy(&userBuf, &message.data.data, sizeof(struct User));
+                        long place = GetUserPlaceByUsername(userBuf.username);
+                        if (place == -1) {
+                            strcpy(message.data.data, "Server : None username");
+                        } else {
+                            struct User temp;
+                            GetUserByPlace(&temp, place);
+                            if (strcmp(temp.password, userBuf.password) == 0) {
+                                struct Client *client = (struct Client *) malloc(sizeof(struct Client));
+                                client->user = userBuf;
+                                client->address = message.address;
+                                client->length = message.length;
+                                client->time = time(NULL);
+                                if (ClientsInsert(AllClients, message.address, client)) {
+                                    strcpy(message.data.data, "Server : Login successfully");
+                                } else {
+                                    free(client);
+                                    strcpy(message.data.data, "Server : You're already logged in");
+                                }
+                            } else {
+                                strcpy(message.data.data, "Server : Wrong password");
+                            }
                         }
                         break;
                     }
-                    case CHANGE:
-                    case LOGOUT:
-                    case UNREGISTER:{ //after login
+                    case LOGOUT: {
+                        struct Client *client = ClientGet(AllClients, message.address);
+                        if (client != NULL) {
+                            ClientErase(AllClients,message.address);
+                            free(client);
+                            strcpy(message.data.data, "Server : Logout successfully");
+                        } else {
+                            strcpy(message.data.data, "Server : You haven't logged in yet");
+                        }
+                        break;
+                    }
+                    case REGISTER: {
+                        struct User userBuf;
+                        memcpy(&userBuf, message.data.data, sizeof(struct User));
+                        if (GetUserPlaceByUsername(userBuf.username) == -1) {
+                            pthread_mutex_lock(&databaseMutex);
+                            long place = GetUserReadyPlaceByUsername(userBuf.username);
+                            userBuf.id = place;
+                            if (InsertUserByPlace(&userBuf, place) != -1) {
+                                strcpy(message.data.data, "Server : Register successfully");
+                            } else {
+                                strcpy(message.data.data, "Server : Register by error");
+                            }
+                            pthread_mutex_unlock(&databaseMutex);
+                        } else {
+                            strcpy(message.data.data, "Server : Duplicate username");
+                        }
+                        break;
+                    }
+                    case UNREGISTER: {
+                        struct User userBuf;
+                        memcpy(&userBuf, message.data.data, sizeof(struct User));
+                        pthread_mutex_lock(&databaseMutex);
+                        long place = GetUserPlaceByUsername(userBuf.username);
+                        if (place == -1) {
+                            strcpy(message.data.data, "Server : None username");
+                        } else {
+                            struct User userTemp;
+                            GetUserByPlace(&userTemp, place);
+                            if (strcmp(userBuf.password, userTemp.password) == 0) {
+                                if (RemoveUserByPlace(place) == place) {
+                                    strcpy(message.data.data, "Server : Unregister successfully");
+                                } else {
+                                    strcpy(message.data.data, "Server : Unregister by error");
+                                }
+                            } else {
+                                strcpy(message.data.data, "Server : Wrong password");
+                            }
+                        }
+                        pthread_mutex_unlock(&databaseMutex);
+                        break;
+                    }
+                    case CHANGE: {
                         break;
                     }
                     case CHAT: {
                         break;
                     }
                     default: {
-//                        puts("unknown message");
+                        strcpy(message.data.data, "Server : unknown");
                         break;
                     }
                 }
+                sendto(serverFileDescriptor, &message.data, sizeof(struct CommunicationData), 0,
+                       (struct sockaddr *) &message.address, message.length);
+                printf("%d\t%lld\n",message.address.sin_port, HashSize(AllClients->clients[message.address.sin_port]));
             }
         } else {
             usleep(1000);
@@ -91,7 +167,7 @@ _Noreturn void *Convert(struct BackboneTran *tran) {
         pthread_mutex_lock(Mutex);
         if (!BufQueueIsEmpty(queue)) {
             if (pthread_mutex_trylock(mutex) == 0) {
-                do {
+                for (int i = 0; i < 1000 && !BufQueueIsEmpty(queue); i++) {
                     struct Message *temp = (struct Message *) malloc(sizeof(struct Message));
                     *temp = BufQueueFront(queue)->message;
                     if (!PushQueue(Queue, (void *) temp)) {
@@ -99,9 +175,9 @@ _Noreturn void *Convert(struct BackboneTran *tran) {
                         break;
                     }
                     BufQueuePop(queue);
-                } while (!BufQueueIsEmpty(queue));
+                }
                 pthread_mutex_unlock(mutex);
-            }else{
+            } else {
                 usleep(1000);
             }
         } else {
@@ -116,8 +192,8 @@ _Noreturn void *GetMessage(struct BackboneTran *tran) {
     struct BufQueue *queue = tran->queue;
     while (true) {
         struct DataBuf *temp = BufQueueBack(queue);
-        long long count = recvfrom(serverFileDescriptor, &temp->message.data, sizeof(struct CommunicationData)+1024,
-                                   0, (struct sockaddr *) &temp->message.address, &temp->message.len);
+        long long count = recvfrom(serverFileDescriptor, &temp->message.data, sizeof(struct DataBuf),
+                                   0, (struct sockaddr *) &temp->message.address, &temp->message.length);
         switch (count) {
             case -1: {
                 perror("Receive data fail");
