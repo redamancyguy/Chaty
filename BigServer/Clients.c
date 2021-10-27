@@ -32,7 +32,10 @@ void ClientsDestroy(struct Clients *clients){
 
 bool ClientsInsert(struct Clients *clients,struct sockaddr_in address,struct Client *client){
     Hash hash = clients->clients[address.sin_port];
-    return HashInsert(hash,(void*)(unsigned long long)address.sin_addr.s_addr,(void*)client);
+    HashLock(hash);
+    bool result = HashInsert(hash,(void*)(unsigned long long)address.sin_addr.s_addr,(void*)client);
+    HashUnlock(hash);
+    return result;
 }
 
 struct Client *ClientGet(struct Clients *clients,struct sockaddr_in address){
@@ -42,10 +45,16 @@ struct Client *ClientGet(struct Clients *clients,struct sockaddr_in address){
 
 bool ClientSet(struct Clients *clients,struct sockaddr_in address,struct Client *client){
     Hash hash = clients->clients[address.sin_port];
-    return HashSet(hash,(void*)(unsigned long long)address.sin_addr.s_addr,(void*)client);
+    HashLock(hash);
+    bool result = HashSet(hash,(void*)(unsigned long long)address.sin_addr.s_addr,(void*)client);
+    HashUnlock(hash);
+    return result;
 }
 bool ClientErase(struct Clients *clients,struct sockaddr_in address){
     Hash hash = clients->clients[address.sin_port];
-    return HashErase(hash,(void*)(unsigned long long)address.sin_addr.s_addr);
+    HashLock(hash);
+    bool result = HashErase(hash,(void*)(unsigned long long)address.sin_addr.s_addr);
+    HashUnlock(hash);
+    return result;
 }
 

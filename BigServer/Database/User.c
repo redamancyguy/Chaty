@@ -75,6 +75,7 @@ long GetUserReadyPlaceByUsername(char *username) {
         } else if (result > 0) {
             left = temp + 1;
         } else {
+            temp == -1;
             goto END;
         }
     }

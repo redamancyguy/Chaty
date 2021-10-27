@@ -147,8 +147,6 @@ void SetGroup(struct CommonData buf, struct sockaddr *serverAddress, unsigned gr
 
 void Chat(struct CommonData buf, struct sockaddr *serverAddress) {
     socklen_t len = sizeof(struct sockaddr_in);
-    puts("INPUT");
-    puts(buf.data);
     sendto(client_fd, &buf, sizeof(struct CommonData), 0, serverAddress, len);
 }
 
@@ -216,25 +214,26 @@ int main(int argc, char *argv[]) {
     struct CommonData buf;
     FlushStdin();
     pthread_t pid;
-    pthread_create(&pid, NULL, (void *(*)(void *)) receive, NULL);
+//    pthread_create(&pid, NULL, (void *(*)(void *)) receive, NULL);
     Connect(buf, (struct sockaddr *) &serverAddress);
     TreeMap set = Tree_New();
 //    RegisterTest(&serverAddress);
 //    Email(buf,&serverAddress);
 //    Change(buf,&serverAddress);
 int i=0;
+    printf("%ld\n", time(NULL));
     while (1) {
-        if(i > 1000){
+        if(i > 1000000){
+            printf("%ld\n", time(NULL));
             scanf("%s",buf.data);
         }
-        printf("iii ; %d\n",i++);
         buf.code = i;
         Chat(buf, (struct sockaddr *) &serverAddress);
 //        usleep(1);
-        struct timespec pp;
-        pp.tv_nsec = 100;
-        pp.tv_sec = 0;
-        nanosleep(&pp,&pp);
+//        struct timespec pp;
+//        pp.tv_nsec = 10;
+//        pp.tv_sec = 0;
+//        nanosleep(&pp,&pp);
         continue;
         strcpy(buf.data, "");
         if (scanf("%[^\n]*?", buf.data) < 0) { break; }

@@ -4,6 +4,7 @@
 #include <string.h>
 #include <malloc.h>
 #include <pthread.h>
+
 #include "Hash.h"
 
 struct Node_ {
@@ -35,6 +36,16 @@ void *NextHash_Iterator(struct Hash_Iterator *it){
     return NULL;
 }
 
+
+ArrayList HashToArrayList(Hash hash){
+    ArrayList array = ArrayListNew();
+    for(unsigned long long i=0;i<hash->capacity;i++){
+        if(hash->table[i].status){
+            ArrayListPushBack(array,hash->table[i].value);
+        }
+    }
+    return array;
+}
 
 int HashLock(Hash hash){
     return pthread_mutex_lock(&hash->mutex);
