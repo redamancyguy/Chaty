@@ -24,7 +24,7 @@ struct Transmission {
     pthread_mutex_t *mutex;
     MessageQueue queue;
 };
-
+int iii=0;
 void *HandleMessage(struct Transmission *pointer) {
     const unsigned int TIMEOUT = G_TIMEOUT;
     int serverFileDescriptor = G_serverFileDescriptor;
@@ -232,7 +232,8 @@ void *HandleMessage(struct Transmission *pointer) {
                 }
             }
         }
-        Show();
+//        Show();
+        printf("%d\n",iii++);
         sendto(serverFileDescriptor, &messageBuf.data, sizeof(struct CommonData), 0,
                (struct sockaddr *) &messageBuf.client.address, messageBuf.client.length);
         PRINT:
@@ -266,15 +267,16 @@ _Noreturn void *GetMessage(struct Transmission *transmissions) {
                 break;
             }
             case sizeof(struct CommonData): {
-                if (dataBuf.data.group >= groupNumber) {
-                    strcpy(dataBuf.data.message, "Server : Wrong group");
-                    sendto(serverFileDescriptor, &dataBuf, sizeof(struct CommonData), 0,
-                           (struct sockaddr *) &clientBuf.address, clientBuf.length);
-                    continue;
-                }
+//                if (dataBuf.data.group >= groupNumber) {
+//                    strcpy(dataBuf.data.message, "Server : Wrong group");
+//                    sendto(serverFileDescriptor, &dataBuf, sizeof(struct CommonData), 0,
+//                           (struct sockaddr *) &clientBuf.address, clientBuf.length);
+//                    continue;
+//                }
                 struct Message message;
                 message.client = clientBuf;
                 message.data = dataBuf.data;
+                dataBuf.data.group = 0;
                 pthread_mutex_lock(transmissions[dataBuf.data.group].mutex);
                 Push_Queue(transmissions[dataBuf.data.group].queue, &message);
                 pthread_mutex_unlock(transmissions[dataBuf.data.group].mutex);

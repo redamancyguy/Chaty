@@ -223,7 +223,7 @@ int main(int argc, char *argv[]) {
 int i=0;
     printf("%ld\n", time(NULL));
     while (1) {
-        if(i > 1000000){
+        if(i++ > 100000){
             printf("%ld\n", time(NULL));
             scanf("%s",buf.data);
         }

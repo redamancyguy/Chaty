@@ -18,16 +18,16 @@ struct Node_ {
 
 //struct Node_ *node = (struct Node_ *)malloc(sizeof(struct Node_));
 
-int LockQueue(Queue queue){
+int QueueLock(Queue queue){
    return pthread_mutex_lock(&queue->mutex);
 }
-int TryLockQueue(Queue queue){
+int QueueTryLock(Queue queue){
    return pthread_mutex_trylock(&queue->mutex);
 }
-int UnlockQueue(Queue queue){
+int QueueUnlock(Queue queue){
    return pthread_mutex_unlock(&queue->mutex);
 }
-Queue NewQueue() {
+Queue QueueNew() {
     Queue queue = (Queue) malloc(sizeof(struct Queue_));
     if (queue == NULL) {
         return NULL;
@@ -47,7 +47,7 @@ Queue NewQueue() {
     return queue;
 }
 
-void DestroyQueue(Queue queue) {
+void QueueDestroy(Queue queue) {
     pthread_mutex_destroy(&queue->mutex);
     while (queue->head != queue->tail) {
         void *temp = queue->head;
@@ -58,15 +58,15 @@ void DestroyQueue(Queue queue) {
     free(queue);
 }
 
-bool IsEmptyQueue(Queue queue) {
+bool QueueIsEmpty(Queue queue) {
     return queue->head == queue->tail;
 }
 
-void *FrontQueue(Queue queue) {
+void *QueueFront(Queue queue) {
     return queue->head->next->data;
 }
 
-bool PushQueue(Queue queue, void *data) {
+bool QueuePush(Queue queue, void *data) {
     void *temp = malloc(sizeof(struct Node_));
     if (temp == NULL) {
         return false;
@@ -77,7 +77,7 @@ bool PushQueue(Queue queue, void *data) {
     return true;
 }
 
-void PopQueue(Queue queue) {
+void QueuePop(Queue queue) {
     void *temp = queue->head;
     queue->head = queue->head->next;
     free(temp);

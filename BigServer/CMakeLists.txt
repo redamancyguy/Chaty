@@ -7,4 +7,4 @@ add_executable(BigServer main.c DataStructure/Queue.h DataStructure/Queue.c
         DataStructure/Hash.c DataStructure/Hash.h Database/User.h
         Database/User.c Client/Client.c Client/Client.h packageFrom/communication.h
         packageFrom/message.h packageFrom/BufQueue.c packageFrom/BufQueue.h Clients.c Clients.h
-        DataStructure/ArrayList.c DataStructure/ArrayList.h)
+        DataStructure/ArrayList.c DataStructure/ArrayList.h DataStructure/Stack.c DataStructure/Stack.h DataStructure/Tree.c DataStructure/Tree.h DataStructure/CQueue.c DataStructure/CQueue.h)

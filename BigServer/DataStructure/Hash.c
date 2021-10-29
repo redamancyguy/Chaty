@@ -4,7 +4,6 @@
 #include <string.h>
 #include <malloc.h>
 #include <pthread.h>
-
 #include "Hash.h"
 
 struct Node_ {
@@ -16,7 +15,6 @@ struct Hash_ {
     pthread_mutex_t mutex;
     struct Node_ *table;
     long long capacity;
-    long long size;
 };
 
 struct Hash_Iterator NewHash_Iterator(Hash hash){
@@ -57,10 +55,6 @@ int HashTryLock(Hash hash){
     return pthread_mutex_trylock(&hash->mutex);
 }
 
-
-long long HashSize(Hash hash){
-    return hash->size;
-}
 long long HashCapacity(Hash hash){
     return hash->capacity;
 }
@@ -74,7 +68,6 @@ Hash HashNew(const long long capacity) {
         free(hash);
         return NULL;
     }
-    hash->size = 0;
     hash->capacity = capacity;
     memset(hash->table, 0, sizeof(struct Node_) * capacity);
     if(pthread_mutex_init(&hash->mutex,NULL) != 0){
@@ -100,7 +93,6 @@ void HashClear(Hash hash) {
             hash->table[i].value = NULL;
         }
     }
-    hash->size = 0;
 }
 
 bool HashInsert(Hash hash,void *const key,void *const value) {
@@ -113,7 +105,6 @@ bool HashInsert(Hash hash,void *const key,void *const value) {
             hash->table[temp].key = key;
             hash->table[temp].value = value;
             hash->table[temp].status = true;
-            ++hash->size;
             return true;
         } else if (hash->table[temp].key == key) {
             return false;
@@ -123,7 +114,6 @@ bool HashInsert(Hash hash,void *const key,void *const value) {
             hash->table[temp].key = key;
             hash->table[temp].value = value;
             hash->table[temp].status = true;
-            ++hash->size;
             return true;
         } else if (hash->table[temp].key == key) {
             return false;
@@ -137,7 +127,6 @@ bool HashInsert(Hash hash,void *const key,void *const value) {
                 hash->table[i].key = key;
                 hash->table[i].value = value;
                 hash->table[i].status = true;
-                ++hash->size;
                 return true;
             } else if (hash->table[i].key == key) {
                 return false;
@@ -151,7 +140,6 @@ bool HashInsert(Hash hash,void *const key,void *const value) {
                 hash->table[i].key = key;
                 hash->table[i].value = value;
                 hash->table[i].status = true;
-                ++hash->size;
                 return true;
             } else if (hash->table[i].key == key) {
                 return false;
@@ -208,7 +196,6 @@ bool HashSet(Hash hash,void *const key,void *const value) {
             hash->table[temp].key = key;
             hash->table[temp].value = value;
             hash->table[temp].status = true;
-            ++hash->size;
             return true;
         } else if (hash->table[temp].key == key) {
             hash->table[temp].value = value;
@@ -219,7 +206,6 @@ bool HashSet(Hash hash,void *const key,void *const value) {
             hash->table[temp].key = key;
             hash->table[temp].value = value;
             hash->table[temp].status = true;
-            ++hash->size;
             return true;
         } else if (hash->table[temp].key == key) {
             hash->table[temp].value = value;
@@ -234,7 +220,6 @@ bool HashSet(Hash hash,void *const key,void *const value) {
                 hash->table[i].key = key;
                 hash->table[i].value = value;
                 hash->table[i].status = true;
-                ++hash->size;
                 return true;
             } else if (hash->table[i].key == key) {
                 hash->table[i].value = value;
@@ -249,7 +234,6 @@ bool HashSet(Hash hash,void *const key,void *const value) {
                 hash->table[i].key = key;
                 hash->table[i].value = value;
                 hash->table[i].status = true;
-                ++hash->size;
                 return true;
             } else if (hash->table[i].key == key) {
                 hash->table[i].value = value;
@@ -269,13 +253,11 @@ bool HashErase(Hash hash,void *const key) {
         long long temp = flag + i;
         if (hash->table[temp].status && hash->table[temp].key == key ){
             hash->table[temp].status = false;
-            hash->size--;
             return true;
         }
         temp = flag - i;
         if (hash->table[temp].status && hash->table[temp].key == key ){
             hash->table[temp].status = false;
-            hash->size--;
             return true;
         }
         i++;
@@ -285,7 +267,6 @@ bool HashErase(Hash hash,void *const key) {
         while (i < hash->capacity) {
             if (hash->table[i].status && hash->table[i].key == key ){
                 hash->table[i].status = false;
-                hash->size--;
                 return true;
             }
             i++;
@@ -295,7 +276,6 @@ bool HashErase(Hash hash,void *const key) {
         while (i >= 0) {
             if (hash->table[i].status && hash->table[i].key == key ){
                 hash->table[i].status = false;
-                hash->size--;
                 return true;
             }
             i--;

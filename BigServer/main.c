@@ -17,7 +17,8 @@
 #include "packageFrom/BufQueue.h"
 #include "DataStructure/Queue.h"
 #include "Clients.h"
-
+#include "DataStructure/Stack.h"
+#include "DataStructure/Tree.h"
 unsigned int MaxGroupNumber = 1024;
 unsigned int BufQueueSize = 1024 * 32;
 unsigned int backboneThreadNumber = 4;
@@ -74,22 +75,24 @@ _Noreturn void *Clear(void *pointer) {
         }
     }
 }
-int iii=0;
+
+int iii = 0;
+
 _Noreturn void *Handle(struct BackboneTran *tran) {
     Queue Queue = tran->Queue;
     unsigned int HandleBufSize = 1024;
     unsigned sleepPace = 1024;
     while (true) {
-        if (TryLockQueue(Queue) == 0) {
+        if (QueueTryLock(Queue) == 0) {
             struct Message *messages[HandleBufSize];
             int length = 0;
-            for (int i = 0; i < HandleBufSize && !IsEmptyQueue(Queue); i++) {
-                messages[length++] = (struct Message *) FrontQueue(Queue);
-                PopQueue(Queue);
+            for (int i = 0; i < HandleBufSize && !QueueIsEmpty(Queue); i++) {
+                messages[length++] = (struct Message *) QueueFront(Queue);
+                QueuePop(Queue);
             }
-            UnlockQueue(Queue);
+            QueueUnlock(Queue);
             for (int i = 0; i < length; i++) {
-                printf("%d\n",iii++);
+                printf("%d\n", iii++);
                 printf("%ld\n", time(NULL));
                 struct Message message = *messages[i];
                 free(messages[i]);
@@ -143,7 +146,7 @@ _Noreturn void *Handle(struct BackboneTran *tran) {
                         break;
                     }
                     case JOIN: {
-                        ArrayList array = HashGet(AllGroup, (*(void**)(message.data.data+64)));
+                        ArrayList array = HashGet(AllGroup, (*(void **) (message.data.data + 64)));
                         struct Client *client = ClientGet(AllClients, message.address);
                         if (array != NULL) {
                             if (client != NULL) {
@@ -164,7 +167,7 @@ _Noreturn void *Handle(struct BackboneTran *tran) {
                         break;
                     }
                     case DETACH: {
-                        ArrayList array = HashGet(AllGroup, (*(void**)(message.data.data+64)));
+                        ArrayList array = HashGet(AllGroup, (*(void **) (message.data.data + 64)));
                         if (array != NULL) {
                             struct Client *client = ClientGet(AllClients, message.address);
                             if (client != NULL) {
@@ -253,9 +256,9 @@ _Noreturn void *Handle(struct BackboneTran *tran) {
                     }
                     case CHAT: { // 注意这里的群组 要求用户主动在客户端退出,然后就无法再向这个群组发送信息了,如果主动检测,性能损耗过高
                         puts(message.data.data + 128);
-                        ArrayList array = (ArrayList) HashGet(AllGroup, (*(void**)(message.data.data+64)));
+                        ArrayList array = (ArrayList) HashGet(AllGroup, (*(void **) (message.data.data + 64)));
                         if (array != NULL) {
-                            if(ArrayListContain(array, ClientGet(AllClients,message.address))){
+                            if (ArrayListContain(array, ClientGet(AllClients, message.address))) {
                                 strcpy(message.data.data, "Server : Chatting");
                                 for (unsigned long ii = 0, size = ArrayListSize(array); ii < size; ii++) {
                                     struct Client *client = ArrayListGet(array, ii);
@@ -263,7 +266,7 @@ _Noreturn void *Handle(struct BackboneTran *tran) {
                                            (struct sockaddr *) &client->address, client->length);
                                 }
                                 continue;
-                            }else{
+                            } else {
                                 strcpy(message.data.data, "Server : You are not in this group");
                             }
                         } else {
@@ -292,13 +295,13 @@ _Noreturn void *Convert(struct BackboneTran *tran) {
     struct BufQueue *queue = tran->queue;
     Queue Queue = tran->Queue;
     while (true) {
-        LockQueue(Queue);
+        QueueLock(Queue);
         if (!BufQueueIsEmpty(queue)) {
             if (BufQueueTryLock(queue) == 0) {
                 for (unsigned int i = 0; i < ConvertMaximum && !BufQueueIsEmpty(queue); i++) {
                     struct Message *temp = (struct Message *) malloc(sizeof(struct Message));
                     *temp = BufQueueFront(queue)->message;
-                    if (!PushQueue(Queue, (void *) temp)) {
+                    if (!QueuePush(Queue, (void *) temp)) {
                         free(temp);
                         break;
                     }
@@ -311,7 +314,7 @@ _Noreturn void *Convert(struct BackboneTran *tran) {
         } else {
             usleep(sleepPace);
         }
-        UnlockQueue(Queue);
+        QueueUnlock(Queue);
     }
 }
 
@@ -347,6 +350,55 @@ _Noreturn void *GetMessage(struct BackboneTran *tran) {
 }
 
 int main() {
+//    void *a[100000];
+//    int length = 1000;
+//    Tree tree = TreeNew();
+//    Hash hash = HashNew(length);
+//    for (int i = 0; i < length; i++) {
+//        a[i] = malloc(0);
+//    }
+//    time_t last = clock();
+//    for (int i = 0; i < length; i++) {
+//        TreeInsert(tree, a[i], i);
+//    }
+//    printf("tree insert time %lld\n", clock() - last);
+//    last = clock();
+//    for (int i = 0; i < length; i++) {
+//        HashInsert(hash, a[i], i);
+//    }
+//    printf("hash insert time %lld\n", clock() - last);
+//    last = clock();
+//    for (int ii = 0; ii < 100; ii++) {
+//        for (int i = 0; i < length; i++) {
+//            TreeGet(tree, i);
+//        }
+//    }
+//    printf("tree get time %lld\n", clock() - last);
+//    last = clock();
+//    for (int ii = 0; ii < 100; ii++) {
+//        for (int i = 0; i < length; i++) {
+//            HashGet(hash, i);
+//        }
+//    }
+//    printf("hash get time %lld\n", clock() - last);
+//    last = clock();
+//    for (int i = 0; i < length; i++) {
+//        if (!TreeDelete(tree, a[i])) {
+//            printf("????????%d\n", a[i]);
+//        }
+//    }
+//    printf("tree delete time %lld\n", clock() - last);
+//    last = clock();
+//    for (int i = 0; i < length; i++) {
+//        if (!HashErase(hash, a[i])) {
+//            printf("????????%d\n", a[i]);
+//        }
+//    }
+//    printf("hash erase time %lld\n", clock() - last);
+////    ShowTree(tree);
+//    last = clock();
+//    TreeDestroy(tree);
+//    return 0;
     for (int ii = 0; ii < 1000; ii++, usleep(100)) {
         printf("%d\n", ii);
         serverFileDescriptor = socket(AF_INET, SOCK_DGRAM, 0);
@@ -380,7 +432,7 @@ int main() {
                 perror("create queue failed");
                 exit(-1);
             }
-            if ((backboneTrans[i].Queue = NewQueue()) == NULL) {
+            if ((backboneTrans[i].Queue = QueueNew()) == NULL) {
                 perror("create linkQueue failed");
                 exit(-1);
             }
@@ -443,7 +495,7 @@ int main() {
                 }
             }
             BufQueueDestroy(backboneTrans[i].queue);
-            DestroyQueue(backboneTrans[i].Queue);
+            QueueDestroy(backboneTrans[i].Queue);
         }
         if (pthread_mutex_destroy(&databaseMutex)) {
             perror("mutex delete failed");
