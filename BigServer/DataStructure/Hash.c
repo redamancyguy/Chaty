@@ -15,35 +15,12 @@ struct Hash_ {
     pthread_mutex_t mutex;
     struct Node_ *table;
     long long capacity;
+    long long size;
 };
-
-struct Hash_Iterator NewHash_Iterator(Hash hash){
-    struct Hash_Iterator it;
-    it.hash = hash;
-    it.place = 0;
-    return it;
+long long HashSize(Hash hash){
+    return hash->size;
 }
 
-void *NextHash_Iterator(struct Hash_Iterator *it){
-    while(it->place < it->hash->capacity){
-        if(it->hash->table[it->place].status){
-            return it->hash->table[it->place++].value;
-        }
-        it->place++;
-    }
-    return NULL;
-}
-
-
-ArrayList HashToArrayList(Hash hash){
-    ArrayList array = ArrayListNew();
-    for(unsigned long long i=0;i<hash->capacity;i++){
-        if(hash->table[i].status){
-            ArrayListPushBack(array,hash->table[i].value);
-        }
-    }
-    return array;
-}
 
 int HashLock(Hash hash){
     return pthread_mutex_lock(&hash->mutex);
@@ -69,6 +46,7 @@ Hash HashNew(const long long capacity) {
         return NULL;
     }
     hash->capacity = capacity;
+    hash->size = 0;
     memset(hash->table, 0, sizeof(struct Node_) * capacity);
     if(pthread_mutex_init(&hash->mutex,NULL) != 0){
         free(hash->table);
@@ -105,6 +83,7 @@ bool HashInsert(Hash hash,void *const key,void *const value) {
             hash->table[temp].key = key;
             hash->table[temp].value = value;
             hash->table[temp].status = true;
+            ++hash->size;
             return true;
         } else if (hash->table[temp].key == key) {
             return false;
@@ -114,6 +93,7 @@ bool HashInsert(Hash hash,void *const key,void *const value) {
             hash->table[temp].key = key;
             hash->table[temp].value = value;
             hash->table[temp].status = true;
+            ++hash->size;
             return true;
         } else if (hash->table[temp].key == key) {
             return false;
@@ -127,6 +107,7 @@ bool HashInsert(Hash hash,void *const key,void *const value) {
                 hash->table[i].key = key;
                 hash->table[i].value = value;
                 hash->table[i].status = true;
+                ++hash->size;
                 return true;
             } else if (hash->table[i].key == key) {
                 return false;
@@ -140,6 +121,7 @@ bool HashInsert(Hash hash,void *const key,void *const value) {
                 hash->table[i].key = key;
                 hash->table[i].value = value;
                 hash->table[i].status = true;
+                ++hash->size;
                 return true;
             } else if (hash->table[i].key == key) {
                 return false;
@@ -253,11 +235,13 @@ bool HashErase(Hash hash,void *const key) {
         long long temp = flag + i;
         if (hash->table[temp].status && hash->table[temp].key == key ){
             hash->table[temp].status = false;
+            --hash->size;
             return true;
         }
         temp = flag - i;
         if (hash->table[temp].status && hash->table[temp].key == key ){
             hash->table[temp].status = false;
+            --hash->size;
             return true;
         }
         i++;
@@ -267,6 +251,7 @@ bool HashErase(Hash hash,void *const key) {
         while (i < hash->capacity) {
             if (hash->table[i].status && hash->table[i].key == key ){
                 hash->table[i].status = false;
+                --hash->size;
                 return true;
             }
             i++;
@@ -276,10 +261,20 @@ bool HashErase(Hash hash,void *const key) {
         while (i >= 0) {
             if (hash->table[i].status && hash->table[i].key == key ){
                 hash->table[i].status = false;
+                --hash->size;
                 return true;
             }
             i--;
         }
     }
     return false;
+}
+ArrayList HashToArrayList(Hash hash){
+    ArrayList array = ArrayListNew();
+    for(unsigned long long i=0;i<hash->capacity;i++){
+        if(hash->table[i].status){
+            ArrayListPushBack(array,hash->table[i].value);
+        }
+    }
+    return array;
 }

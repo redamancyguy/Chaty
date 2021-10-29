@@ -3,6 +3,7 @@
 //
 #include <malloc.h>
 #include <pthread.h>
+#include <stdlib.h>
 #include "Tree.h"
 
 struct TreeNode_ {
@@ -19,12 +20,15 @@ struct Tree_ {
 int TreeLock(Tree tree) {
     return pthread_mutex_lock(&tree->mutex);
 }
+
 int TreeUnlock(Tree tree) {
     return pthread_mutex_unlock(&tree->mutex);
 }
+
 int TreeTryLock(Tree tree) {
     return pthread_mutex_trylock(&tree->mutex);
 }
+
 Tree TreeNew() {
     Tree tree = (Tree) malloc(sizeof(struct Tree_));
     if (tree == NULL) {
@@ -32,6 +36,10 @@ Tree TreeNew() {
     }
     tree->root = NULL;
     tree->size = 0;
+    if (pthread_mutex_init(&tree->mutex, NULL) != 0) {
+        free(tree);
+        return NULL;
+    }
     return tree;
 }
 
@@ -147,24 +155,23 @@ struct TreeNode_ *Delete(Tree tree, struct TreeNode_ *node, void *key) {
     } else if (key > node->key) {
         node->right = Delete(tree, node->right, key);
     } else {
-        if(node->left == NULL){
-            if(node->right == NULL){
+        if (node->left == NULL) {
+            if (node->right == NULL) {
                 free(node);
                 --tree->size;
                 return NULL;
-            }else{
+            } else {
                 void *temp = node;
                 node = node->right;
                 free(temp);
                 --tree->size;
             }
-        }else if(node->right == NULL){
+        } else if (node->right == NULL) {
             void *temp = node;
             node = node->left;
             free(temp);
             --tree->size;
-        }
-        else {
+        } else {
             struct TreeNode_ *temp;
             for (temp = node->left; temp->right != NULL; temp = temp->right);
             node->key = temp->key;
@@ -174,18 +181,18 @@ struct TreeNode_ *Delete(Tree tree, struct TreeNode_ *node, void *key) {
     }
     long long difference = Height(node->left) - Height(node->right);
     if (difference > 1) {
-        if (Height(node->left->left)- Height(node->left->right) >=0 ) {
+        if (Height(node->left->left) - Height(node->left->right) >= 0) {
             return LLRotate(node);
         }
-        if (Height(node->left->left)- Height(node->left->right) < 0) {
+        if (Height(node->left->left) - Height(node->left->right) < 0) {
             return LRRotate(node);
         }
     }
     if (difference < -1) {
-        if (Height(node->right->left)- Height(node->right->left) > 0) {
+        if (Height(node->right->left) - Height(node->right->left) > 0) {
             return RLRotate(node);
         }
-        if (Height(node->right->left)- Height(node->right->left) <= 0) {
+        if (Height(node->right->left) - Height(node->right->left) <= 0) {
             return RRRotate(node);
         }
     }
@@ -194,24 +201,25 @@ struct TreeNode_ *Delete(Tree tree, struct TreeNode_ *node, void *key) {
 
 bool TreeDelete(Tree tree, void *key) {
     unsigned long long temp = tree->size;
-    tree->root = Delete(tree,tree->root, key);
+    tree->root = Delete(tree, tree->root, key);
     return temp == tree->size ? false : true;
 }
-void *Get(struct TreeNode_ *node,void *key){
-    if(node == NULL){
+
+void *Get(struct TreeNode_ *node, void *key) {
+    if (node == NULL) {
         return NULL;
     }
-    if(key < node->key){
-        return Get(node->left,key);
-    }else if(key > node->key){
-        return Get(node->right,key);
-    }else{
+    if (key < node->key) {
+        return Get(node->left, key);
+    } else if (key > node->key) {
+        return Get(node->right, key);
+    } else {
         return node->value;
     }
 }
 
-void *TreeGet(Tree tree,void *key){
-    return Get(tree->root,key);
+void *TreeGet(Tree tree, void *key) {
+    return Get(tree->root, key);
 }
 
 static void Show(struct TreeNode_ *node, int num) {
@@ -235,5 +243,24 @@ bool TreeInsert(Tree tree, void *key, void *value) {
 }
 
 void TreeDestroy(Tree tree) {
+    pthread_mutex_destroy(&tree->mutex);
     Destroy(tree->root);
+}
+
+static void ToArrayList(ArrayList array, struct TreeNode_ *node) {
+    if (node == NULL) {
+        return;
+    }
+    ToArrayList(array,node->left);
+    ArrayListPushBack(array,node->value);
+    ToArrayList(array,node->right);
+}
+
+ArrayList TreeToArrayList(Tree tree) {
+    ArrayList array = ArrayListNew();
+    if(array == NULL){
+        return NULL;
+    }
+    ToArrayList(array,tree->root);
+    return array;
 }

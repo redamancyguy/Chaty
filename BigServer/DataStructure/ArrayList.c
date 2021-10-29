@@ -36,6 +36,10 @@ ArrayList ArrayListNew() {
     if (array == NULL) {
         return NULL;
     }
+    if(pthread_mutex_init(&array->mutex,NULL)!=0 ){
+        free(array);
+        return NULL;
+    }
     array->Array = (void *) malloc(sizeof(void *) * 1024);
     if (array->Array == NULL) {
         free(array);
@@ -47,6 +51,7 @@ ArrayList ArrayListNew() {
 }
 
 void ArrayListDestroy(ArrayList array) {
+    pthread_mutex_destroy(&array->mutex);
     free(array->Array);
     free(array);
 }
