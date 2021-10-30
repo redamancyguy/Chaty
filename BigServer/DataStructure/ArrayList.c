@@ -3,11 +3,12 @@
 //
 #include<malloc.h>
 #include<pthread.h>
+#include<string.h>
 #include "ArrayList.h"
 struct ArrayList_{
     pthread_mutex_t mutex;
     void **Array;
-    long long unsigned Size;
+    long long Size;
     long long unsigned Capacity;
 };
 typedef struct ArrayList_* ArrayList;
@@ -27,7 +28,7 @@ void *ArrayListGet(ArrayList array,unsigned long long index){
     return array->Array[index];
 }
 
-unsigned long long ArrayListSize(ArrayList array){
+long long ArrayListSize(ArrayList array){
     return array->Size;
 }
 
@@ -114,4 +115,15 @@ bool ArrayListContain(ArrayList array, void *object) {
         }
     }
     return false;
+}
+Array ArrayListToArray(ArrayList arraylist){
+    Array array;
+    array.data = (void**) malloc(sizeof(void*)*arraylist->Size);
+    if(array.data == NULL){
+        array.size = 0;
+    }else{
+        array.size=arraylist->Size;
+        memcpy(array.data,arraylist->Array,sizeof(void*)*array.size);
+    }
+    return array;
 }

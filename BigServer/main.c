@@ -2,12 +2,14 @@
 #include <stdlib.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <sys/stat.h>
 #include <string.h>
 #include <malloc.h>
 #include <unistd.h>
 #include <stdbool.h>
 #include <time.h>
 #include <pthread.h>
+#include "DataStructure/Array.h"
 #include "DataStructure/ArrayList.h"
 #include "DataStructure/Hash.h"
 #include "DataStructure/Queue.h"
@@ -15,450 +17,503 @@
 #include "DataStructure/Tree.h"
 #include "Database/User.h"
 #include "relevant.h"
-unsigned int MaxGroupNumber = 1024;
-unsigned int BufQueueSize = 1024 * 32;
-unsigned int backboneThreadNumber = 4;
-int k = 10;
-short serverPORT = 9999;
+#include "BufferQueue/BufferQueue.h"
 
-//struct BackboneTran {
-//    struct BufQueue *queue;
-//    Queue Queue;
-//};
-//
-//int serverFileDescriptor;
-//
-//pthread_mutex_t databaseMutex;
-//
-//struct Clients *AllClients;  //自动上锁
-//Hash AllGroup; //手动上锁
-//
-//_Noreturn void *Clear(void *pointer) {
-//    const int TimOut = 5;
-//    const int Pace = 1;
-//    while (true) {
-//        sleep(Pace);
-//        HashLock(AllGroup);
-//        ArrayList array = HashToArrayList(AllGroup);
-//        HashUnlock(AllGroup);
-//        for (unsigned long long i = 0, size = ArrayListSize(array); i < size; i++) {
-//            ArrayList arrayTemp = ((ArrayList) ArrayListGet(array, i));
-//            ArrayListLock(arrayTemp);
-//            for (unsigned long long j = 0, sizeT = ArrayListSize(arrayTemp); j < sizeT; j++) {
-//                if (time(NULL) - ((struct Client *) ArrayListGet(arrayTemp, j))->time > TimOut) {
-//                    ArrayListErase(arrayTemp, j); // delete a user from a group
-//                }
-//            }
-//            if (ArrayListSize(arrayTemp) == 0) {
-//                HashLock(AllGroup);
-//                HashErase(AllGroup, (void *) arrayTemp); //delete a group
-//                HashUnlock(AllGroup);
-//            }
-//            ArrayListUnlock(arrayTemp);
-//        }
-//        ArrayListDestroy(array);
-//        for (int i = 0; i < 65536; i++) {
-//            struct Hash_Iterator it = NewHash_Iterator(AllClients->clients[i]);
-//            HashLock(AllClients->clients[i]);
-//            struct Client *p;
-//            while ((p = NextHash_Iterator(&it)) != NULL) {
-//                if (time(NULL) - p->time > TimOut) {
-//                    HashErase(AllClients->clients[i], (void *) (unsigned long long) p->address.sin_addr.s_addr);
-//                    free(p);//delete user and free the client
-//                }
-//            }
-//            HashUnlock(AllClients->clients[i]);
-//        }
-//    }
-//}
-//
-//int iii = 0;
-//
-//_Noreturn void *Handle(struct BackboneTran *tran) {
-//    Queue Queue = tran->Queue;
-//    unsigned int HandleBufSize = 1024;
-//    unsigned sleepPace = 1024;
-//    while (true) {
-//        if (QueueTryLock(Queue) == 0) {
-//            struct Message *messages[HandleBufSize];
-//            int length = 0;
-//            for (int i = 0; i < HandleBufSize && !QueueIsEmpty(Queue); i++) {
-//                messages[length++] = (struct Message *) QueueFront(Queue);
-//                QueuePop(Queue);
-//            }
-//            QueueUnlock(Queue);
-//            for (int i = 0; i < length; i++) {
-//                printf("%d\n", iii++);
-//                printf("%ld\n", time(NULL));
-//                struct Message message = *messages[i];
-//                free(messages[i]);
-//                switch (message.data.code) {
-//                    case TOUCH: {
-//                        struct Client *client = ClientGet(AllClients, message.address);
-//                        if (client != NULL) {
-//                            client->time = time(NULL);
-//                            strcpy(message.data.data, "Server : YES");
-//                        } else {
-//                            strcpy(message.data.data, "Server : NO");
-//                        }
-//                        break;
-//                    }
-//                    case LOGIN: {
-//                        struct User userBuf;
-//                        memcpy(&userBuf, message.data.data + 64, sizeof(struct User));
-//                        long place = GetUserPlaceByUsername(userBuf.username);
-//                        if (place == -1) {
-//                            strcpy(message.data.data, "Server : None username");
-//                        } else {
-//                            struct User temp;
-//                            GetUserByPlace(&temp, place);
-//                            if (strcmp(temp.password, userBuf.password) == 0) {
-//                                struct Client *client = (struct Client *) malloc(sizeof(struct Client));
-//                                if (ClientsInsert(AllClients, message.address, client)) {
-//                                    client->user = userBuf;
-//                                    client->address = message.address;
-//                                    client->length = message.length;
-//                                    client->time = time(NULL);
-//                                    strcpy(message.data.data, "Server : Login successfully");
-//                                } else {
-//                                    free(client);
-//                                    strcpy(message.data.data, "Server : You're already logged in");
-//                                }
-//                            } else {
-//                                strcpy(message.data.data, "Server : Wrong password");
-//                            }
-//                        }
-//                        break;
-//                    }
-//                    case LOGOUT: {
-//                        struct Client *client = ClientGet(AllClients, message.address);
-//                        if (client != NULL) {
-//                            ClientErase(AllClients, message.address);
-//                            free(client);
-//                            strcpy(message.data.data, "Server : Logout successfully");
-//                        } else {
-//                            strcpy(message.data.data, "Server : You haven't logged in yet");
-//                        }
-//                        break;
-//                    }
-//                    case JOIN: {
-//                        ArrayList array = HashGet(AllGroup, (*(void **) (message.data.data + 64)));
-//                        struct Client *client = ClientGet(AllClients, message.address);
-//                        if (array != NULL) {
-//                            if (client != NULL) {
-//                                if (ArrayListContain(array, (void *) client)) {
-//                                    strcpy(message.data.data, "Server : You have already Joined");
-//                                } else {
-//                                    ArrayListLock(array);
-//                                    ArrayListPushBack(array, (void *) client);
-//                                    ArrayListUnlock(array);
-//                                    strcpy(message.data.data, "Server : Join successfully");
-//                                }
-//                            } else {
-//                                strcpy(message.data.data, "Server : You haven't logged in yet");
-//                            }
-//                        } else {
-//                            strcpy(message.data.data, "Server : Wrong group id");
-//                        }
-//                        break;
-//                    }
-//                    case DETACH: {
-//                        ArrayList array = HashGet(AllGroup, (*(void **) (message.data.data + 64)));
-//                        if (array != NULL) {
-//                            struct Client *client = ClientGet(AllClients, message.address);
-//                            if (client != NULL) {
-//                                for (unsigned long long ii = 0, size = ArrayListSize(array); ii < size; ii++) {
-//                                    if (((struct Client *) ArrayListGet(array, ii)) == client) {
-//                                        ArrayListLock(array);
-//                                        ArrayListErase(array, ii);
-//                                        ArrayListUnlock(array);
-//                                        strcpy(message.data.data, "Server : Detach successfully");
-//                                        goto SEND;
-//                                    }
-//                                }
-//                                strcpy(message.data.data, "Server : You are not in this group");
-//                            } else {
-//                                strcpy(message.data.data, "Server : You haven't logged in yet");
-//                            }
-//                        } else {
-//                            strcpy(message.data.data, "Server : Wrong group id");
-//                        }
-//                        break;
-//                    }
-//                    case REGISTER: {
-//                        struct User userBuf;
-//                        memcpy(&userBuf, message.data.data + 64, sizeof(struct User));
-//                        long place = GetUserReadyPlaceByUsername(userBuf.username);
-//                        if (place != -1) {
-//                            pthread_mutex_lock(&databaseMutex);
-//                            userBuf.id = place;
-//                            if (InsertUserByPlace(&userBuf, place) != -1) {
-//                                strcpy(message.data.data, "Server : Register successfully");
-//                            } else {
-//                                strcpy(message.data.data, "Server : Register by error");
-//                            }
-//                            pthread_mutex_unlock(&databaseMutex);
-//                        } else {
-//                            strcpy(message.data.data, "Server : Duplicate username");
-//                        }
-//                        break;
-//                    }
-//                    case UNREGISTER: {
-//                        struct User userBuf;
-//                        memcpy(&userBuf, message.data.data + 64, sizeof(struct User));
-//                        pthread_mutex_lock(&databaseMutex);
-//                        long place = GetUserPlaceByUsername(userBuf.username);
-//                        if (place == -1) {
-//                            strcpy(message.data.data, "Server : None username");
-//                        } else {
-//                            struct User userTemp;
-//                            GetUserByPlace(&userTemp, place);
-//                            if (strcmp(userBuf.password, userTemp.password) == 0) {
-//                                if (RemoveUserByPlace(place) == place) {
-//                                    strcpy(message.data.data, "Server : Unregister successfully");
-//                                } else {
-//                                    strcpy(message.data.data, "Server : Unregister by error : unknown");
-//                                }
-//                            } else {
-//                                strcpy(message.data.data, "Server : Wrong password");
-//                            }
-//                        }
-//                        pthread_mutex_unlock(&databaseMutex);
-//                        break;
-//                    }
-//                    case NEWGROUP: {
-//                        ArrayList group = ArrayListNew();
-//                        if (group != NULL) {
-//                            struct Client *client = ClientGet(AllClients, message.address);
-//                            if (client != NULL) {
-//                                *((unsigned long long *) (message.data.data + 64)) = (unsigned long long) group;
-//                                HashLock(AllGroup);
-//                                if (HashInsert(AllGroup, (void *) group, (void *) group)
-//                                    && ArrayListPushBack(group, client)) {
-//                                    strcpy(message.data.data, "Server : Create group successfully");
-//                                } else {
-//                                    ArrayListDestroy(group);
-//                                    HashErase(AllGroup, (void *) group);
-//                                    strcpy(message.data.data, "Server : Create group by error : hash insert error");
-//                                }
-//                                HashUnlock(AllGroup);
-//                            } else {
-//                                strcpy(message.data.data, "Server : You haven't logged in yet");
-//                            }
-//                        } else {
-//                            strcpy(message.data.data, "Server : Create group by error");
-//                        }
-//                        break;
-//                    }
-//                    case CHAT: { // 注意这里的群组 要求用户主动在客户端退出,然后就无法再向这个群组发送信息了,如果主动检测,性能损耗过高
-//                        puts(message.data.data + 128);
-//                        ArrayList array = (ArrayList) HashGet(AllGroup, (*(void **) (message.data.data + 64)));
-//                        if (array != NULL) {
-//                            if (ArrayListContain(array, ClientGet(AllClients, message.address))) {
-//                                strcpy(message.data.data, "Server : Chatting");
-//                                for (unsigned long ii = 0, size = ArrayListSize(array); ii < size; ii++) {
-//                                    struct Client *client = ArrayListGet(array, ii);
-//                                    sendto(serverFileDescriptor, &message.data, sizeof(struct CommunicationData), 0,
-//                                           (struct sockaddr *) &client->address, client->length);
-//                                }
-//                                continue;
-//                            } else {
-//                                strcpy(message.data.data, "Server : You are not in this group");
-//                            }
-//                        } else {
-//                            strcpy(message.data.data, "Server : None groupId");
-//                        }
-//                        break;
-//                    }
-//                    default: {
-//                        strcpy(message.data.data, "Server : Unknown");
-//                        break;
-//                    }
-//                }
-//                SEND:
-//                sendto(serverFileDescriptor, &message.data, sizeof(struct CommunicationData), 0,
-//                       (struct sockaddr *) &message.address, message.length);
-//            }
-//        } else {
-//            usleep(sleepPace);
-//        }
-//    }
-//}
-//
-//_Noreturn void *Convert(struct BackboneTran *tran) {
-//    unsigned int ConvertMaximum = 1024;
-//    unsigned int sleepPace = 1024;
-//    struct BufQueue *queue = tran->queue;
-//    Queue Queue = tran->Queue;
-//    while (true) {
-//        QueueLock(Queue);
-//        if (!BufQueueIsEmpty(queue)) {
-//            if (BufQueueTryLock(queue) == 0) {
-//                for (unsigned int i = 0; i < ConvertMaximum && !BufQueueIsEmpty(queue); i++) {
-//                    struct Message *temp = (struct Message *) malloc(sizeof(struct Message));
-//                    *temp = BufQueueFront(queue)->message;
-//                    if (!QueuePush(Queue, (void *) temp)) {
-//                        free(temp);
-//                        break;
-//                    }
-//                    BufQueuePop(queue);
-//                }
-//                BufQueueUnlock(queue);
-//            } else {
-//                usleep(sleepPace);
-//            }
-//        } else {
-//            usleep(sleepPace);
-//        }
-//        QueueUnlock(Queue);
-//    }
-//}
-//
-//_Noreturn void *GetMessage(struct BackboneTran *tran) {
-//    unsigned int sleepPace = 1024;
-//    struct BufQueue *queue = tran->queue;
-//    while (true) {
-//        struct DataBuf *temp = BufQueueBack(queue);
-//        long long count = recvfrom(serverFileDescriptor, &temp->message.data, sizeof(struct DataBuf),
-//                                   0, (struct sockaddr *) &temp->message.address, &temp->message.length);
-//        switch (count) {
-//            case -1: {
-//                perror("Receive data fail");
-//                break;
-//            }
-//            case sizeof(struct CommunicationData): {
-//                BufQueueLock(queue);
-//                while (BufQueueIsFull(queue)) {
-//                    BufQueueUnlock(queue);
-//                    usleep(sleepPace);
-//                    BufQueueLock(queue);
-//                }
-//                BufQueuePush(queue);
-//                BufQueueUnlock(queue);
-//                break;
-//            }
-//            default: {
-//                puts("Invalid data package");
-//                break;
-//            }
-//        }
-//    }
-//}
+enum errorCode {
+    NewSocket = 1,
+    BindSocket = 2,
+    DatabaseMutex = 3,
+    NewThread = 4,
+    StartThread = 5,
+    JoinThread = 6,
+    CancelThread = 7,
+    NewHash = 10,
+    NewQueue = 11,
+};
+
+//server start information
+const short serverPort = 9999;
+const int threadNumber = 10;
+
+
+//server running information
+int serverFileDescriptor;
+pthread_mutex_t databaseMutex;
+
+Hash AllClients[65536];
+Hash AllGroups;//hash->queue
+
+
+
+_Noreturn void *Clear(void *pointer) {
+    const int Pace = 1;
+    while (true) {
+        sleep(Pace);
+        HashLock(AllGroups);
+        Array groups = HashToArray(AllGroups);
+        HashUnlock(AllGroups);
+        int TimOut = 5;
+        puts("+++++++++++++");
+        for (long long i = 0, size = groups.size; i < size; i++) {
+            printf("%lld %lld\n", i, QueueSize((Queue) groups.data[i]));
+            Queue group = (Queue) groups.data[i];
+            QueueLock(group);
+            for (long long j = 0, groupSize = QueueSize(group); j < groupSize; j++) {
+                if (time(NULL) - ((struct Client *) QueueFront(group))->time > TimOut) {
+                    QueuePop(group);
+                } else {
+                    QueuePush(group, QueueFront(group));
+                    QueuePop(group);
+                }
+            }
+            if (QueueSize(group) == 0) {
+                HashLock(AllGroups);
+                HashErase(AllGroups, (void *) group); //delete a group
+                HashUnlock(AllGroups);
+            }
+            QueueUnlock(group);
+        }
+        free(groups.data);
+        TimOut = 7;
+        puts("=============");
+        for (int i = 0; i < 65536; i++) {
+            Hash clientsHash = AllClients[i];
+            HashLock(clientsHash);
+            Array clients = HashToArray(AllClients[i]);
+            if (clients.size > 0) {
+                printf("%d %lld\n", i, clients.size);
+            }
+            for (long long j = 0, size = clients.size; j < size; j++) {
+                struct Client *client = clients.data[j];
+                if (time(NULL) - client->time > TimOut) {
+                    HashErase(clientsHash, (void *) (unsigned long long) client->address.sin_addr.s_addr);
+                    TreeDestroy(client->groups);
+                    free(client);
+                }
+            }
+            HashUnlock(clientsHash);
+            free(clients.data);
+        }
+    }
+}
+
+_Noreturn void *Handle(void *pointer) {
+    BufferQueue queue = *((BufferQueue *) pointer);
+    unsigned int HandleBufSize = 64;
+    unsigned sleepPace = 1024;
+    while (true) {
+        if (BufferQueueTryLock(queue) == 0) {
+            if (!BufferQueueIsEmpty(queue)) {
+                struct Message messages[HandleBufSize];
+                int length = 0;
+                for (int i = 0; i < HandleBufSize && !BufferQueueIsEmpty(queue); i++) {
+                    messages[length++] = *BufferQueueFront(queue);
+                    BufferQueuePop(queue);
+                }
+                BufferQueueUnlock(queue);
+                for (int i = 0; i < length; i++) {
+                    struct Message message = messages[i];
+                    switch (message.data.code) {
+                        case TOUCH: {
+                            struct Client *client = HashGet(AllClients[message.address.sin_port],
+                                                            (void *) (unsigned long long) message.address.sin_addr.s_addr);
+                            if (client != NULL) {
+                                client->time = time(NULL);
+                                strcpy(message.data.data, "Server : YES");
+                            } else {
+                                strcpy(message.data.data, "Server : NO");
+                            }
+                            break;
+                        }
+                        case LOGIN: {
+                            struct User userBuf;
+                            memcpy(&userBuf, message.data.data + 64, sizeof(struct User));
+                            long place = GetUserPlaceByUsername(userBuf.username);
+                            if (place == -1) {
+                                strcpy(message.data.data, "Server : None username");
+                            } else {
+                                struct User temp;
+                                GetUserByPlace(&temp, place);
+                                if (strcmp(temp.password, userBuf.password) == 0) {
+                                    struct Client *client = (struct Client *) malloc(sizeof(struct Client));
+                                    if (client == NULL) {
+                                        message.data.code = ERROR;
+                                        strcpy(message.data.data, "Server : Login by error");
+                                    } else {
+                                        client->groups = TreeNew();
+                                        if (client->groups == NULL) {
+                                            message.data.code = ERROR;
+                                            free(client);
+                                            strcpy(message.data.data, "Server : Login by error");
+                                        } else {
+                                            Hash clients = AllClients[message.address.sin_port];
+                                            HashLock(clients);
+                                            if (HashInsert(clients,
+                                                           (void *) (unsigned long long) message.address.sin_addr.s_addr,
+                                                           client)) {
+                                                client->user = userBuf;
+                                                client->address = message.address;
+                                                client->length = message.length;
+                                                client->time = time(NULL);
+                                                strcpy(message.data.data, "Server : Login successfully");
+                                            } else {
+                                                TreeDestroy(client->groups);
+                                                free(client);
+                                                message.data.code = ERROR;
+                                                strcpy(message.data.data, "Server : You're already logged in");
+                                            }
+                                            HashUnlock(clients);
+                                        }
+                                    }
+                                } else {
+                                    message.data.code = ERROR;
+                                    strcpy(message.data.data, "Server : Wrong password");
+                                }
+                            }
+                            break;
+                        }
+                        case LOGOUT: {
+                            Hash clients = AllClients[message.address.sin_port];
+                            struct Client *client = HashGet(clients,
+                                                            (void *) (unsigned long long) message.address.sin_addr.s_addr);
+                            if (client != NULL) {
+                                HashLock(clients);
+                                HashErase(clients, (void *) (unsigned long long) message.address.sin_addr.s_addr);
+                                HashUnlock(clients);
+                                TreeLock(client->groups);
+                                Array groups = TreeKeyToArray(client->groups);
+                                TreeUnlock(client->groups);
+                                for (long long k = 0; k < groups.size; k++) {
+                                    QueueDelete((Queue) groups.data[k], (void *) client);
+                                }
+                                free(groups.data);
+                                TreeDestroy(client->groups);
+                                free(client);
+                                strcpy(message.data.data, "Server : Logout successfully");
+                            } else {
+                                message.data.code = ERROR;
+                                strcpy(message.data.data, "Server : You haven't logged in yet");
+                            }
+                            break;
+                        }
+                        case REGISTER: {
+                            struct User userBuf;
+                            memcpy(&userBuf, message.data.data + 64, sizeof(struct User));
+                            long place = GetUserReadyPlaceByUsername(userBuf.username);
+                            if (place != -1) {
+                                pthread_mutex_lock(&databaseMutex);
+                                userBuf.id = place;
+                                if (InsertUserByPlace(&userBuf, place) != -1) {
+                                    strcpy(message.data.data, "Server : Register successfully");
+                                } else {
+                                    message.data.code = ERROR;
+                                    strcpy(message.data.data, "Server : Register by error");
+                                }
+                                pthread_mutex_unlock(&databaseMutex);
+                            } else {
+                                message.data.code = ERROR;
+                                strcpy(message.data.data, "Server : Duplicate username");
+                            }
+                            break;
+                        }
+                        case UNREGISTER: {
+                            struct User userBuf;
+                            memcpy(&userBuf, message.data.data + 64, sizeof(struct User));
+                            pthread_mutex_lock(&databaseMutex);
+                            long place = GetUserPlaceByUsername(userBuf.username);
+                            if (place == -1) {
+                                message.data.code = ERROR;
+                                strcpy(message.data.data, "Server : None username");
+                            } else {
+                                struct User userTemp;
+                                GetUserByPlace(&userTemp, place);
+                                if (strcmp(userBuf.password, userTemp.password) == 0) {
+                                    if (RemoveUserByPlace(place) == place) {
+                                        strcpy(message.data.data, "Server : Unregister successfully");
+                                    } else {
+                                        message.data.code = ERROR;
+                                        strcpy(message.data.data, "Server : Unregister by error : unknown");
+                                    }
+                                } else {
+                                    message.data.code = ERROR;
+                                    strcpy(message.data.data, "Server : Wrong password");
+                                }
+                            }
+                            pthread_mutex_unlock(&databaseMutex);
+                            break;
+                        }
+                        case NEWGROUP: {
+                            struct Client *client = HashGet(AllClients[message.address.sin_port],
+                                                            (void *) (unsigned long long) message.address.sin_addr.s_addr);
+                            if (client != NULL) {
+                                Queue group = QueueNew();
+                                if (group != NULL) {
+                                    *((unsigned long long *) (message.data.data + 64)) = (unsigned long long) group;
+                                    HashLock(AllGroups);
+                                    TreeLock(client->groups);
+                                    if (HashInsert(AllGroups, (void *) group, (void *) group)
+                                        && QueuePush(group, (void *) client) &&
+                                        TreeInsert(client->groups, (void *) group, (void *) group)) {
+                                        strcpy(message.data.data, "Server : Create group successfully");
+                                    } else {
+                                        QueueDestroy(group);
+                                        HashErase(AllGroups, (void *) group);
+                                        TreeDelete(client->groups, (void *) group);
+                                        message.data.code = ERROR;
+                                        strcpy(message.data.data, "Server : Create group by error : hash insert error");
+                                    }
+                                    TreeUnlock(client->groups);
+                                    HashUnlock(AllGroups);
+                                } else {
+                                    message.data.code = ERROR;
+                                    strcpy(message.data.data, "Server : Create group by error");
+                                }
+                            } else {
+                                message.data.code = ERROR;
+                                strcpy(message.data.data, "Server : You haven't logged in yet");
+                            }
+                            break;
+                        }
+                        case JOIN: {
+                            Queue group = HashGet(AllGroups, (*(void **) (message.data.data + 64)));
+                            struct Client *client = HashGet(AllClients[message.address.sin_port],
+                                                            (void *) (unsigned long long) message.address.sin_addr.s_addr);
+                            if (group != NULL) {
+                                if (client != NULL) {
+                                    if (TreeGet(client->groups, (void *) group) != NULL) {
+                                        message.data.code = ERROR;
+                                        strcpy(message.data.data, "Server : You have already Joined");
+                                    } else {
+                                        TreeLock(client->groups);
+                                        TreeInsert(client->groups, (void *) group, (void *) group);
+                                        TreeUnlock(client->groups);
+                                        QueueLock(group);
+                                        QueuePush(group, (void *) client);
+                                        QueueUnlock(group);
+                                        strcpy(message.data.data, "Server : Join successfully");
+                                    }
+                                } else {
+                                    message.data.code = ERROR;
+                                    strcpy(message.data.data, "Server : You haven't logged in yet");
+                                }
+                            } else {
+                                message.data.code = ERROR;
+                                strcpy(message.data.data, "Server : Wrong group id");
+                            }
+                            break;
+                        }
+                        case DETACH: {
+                            struct Client *client = HashGet(AllClients[message.address.sin_port],
+                                                            (void *) (unsigned long long) message.address.sin_addr.s_addr);
+                            if (client != NULL) {
+                                Queue group = TreeGet(client->groups, (*(void **) (message.data.data + 64)));
+                                if (group != NULL) {
+                                    TreeDelete(client->groups, (void *) group);
+                                    QueueDelete(group, (void *) client);
+                                    strcpy(message.data.data, "Server : Detach successfully");
+                                } else {
+                                    message.data.code = ERROR;
+                                    strcpy(message.data.data, "Server : You are not in this group");
+                                }
+                            } else {
+                                message.data.code = ERROR;
+                                strcpy(message.data.data, "Server : You haven't logged in yet");
+                            }
+                            break;
+                        }
+                        case CHAT: {
+                            puts(message.data.data + 128);
+                            struct Client* client = HashGet(AllClients[message.address.sin_port],
+                                    (void*)(unsigned long long )message.address.sin_addr.s_addr);
+                            if(client != NULL){
+                                Queue group = TreeGet(client->groups,(*(void **) (message.data.data + 64)));
+                                if (group != NULL) {
+                                    QueueLock(group);
+                                    Array clients = QueueToArray(group);
+                                    QueueUnlock(group);
+                                    for(int k=0;k<clients.size;k++){
+                                        struct Client *clientT = clients.data[k];
+                                        sendto(serverFileDescriptor, &message.data, sizeof(struct CommunicationData), 0,
+                                               (struct sockaddr *) &clientT->address, clientT->length);
+                                    }
+                                    free(clients.data);
+                                    continue;
+                                } else {
+                                    message.data.code = ERROR;
+                                    strcpy(message.data.data, "Server : You are not in this group");
+                                }
+                            }else{
+                                message.data.code = ERROR;
+                                strcpy(message.data.data, "Server : Your have not logged in");
+                            }
+                            break;
+                        }
+                        default: {
+                            message.data.code = UNKNOWN;
+                            strcpy(message.data.data, "Server : Unknown");
+                            break;
+                        }
+                    }
+                    SEND:
+                    sendto(serverFileDescriptor, &message.data, sizeof(struct CommunicationData), 0,
+                           (struct sockaddr *) &message.address, message.length);
+                }
+            } else {
+                BufferQueueUnlock(queue);
+                usleep(sleepPace);
+            }
+        } else {
+            usleep(sleepPace);
+        }
+    }
+}
+
+_Noreturn void *GetMessage(void *pointer) {
+    BufferQueue queue = *((BufferQueue *) pointer);
+    while (true) {
+        struct Message *buffer = BufferQueueEnd(queue);
+        long long count = recvfrom(serverFileDescriptor, &buffer->data, sizeof(struct Buffer),
+                                   0, (struct sockaddr *) &buffer->address, &buffer->length);
+        switch (count) {
+            case -1: {
+                perror("Receive data fail");
+                break;
+            }
+            case sizeof(struct CommunicationData): {
+                while (true) {
+                    BufferQueueLock(queue);
+                    if (BufferQueueIsFull(queue)) {
+                        BufferQueueUnlock(queue);
+                        usleep(1024);
+                    } else {
+                        BufferQueuePush(queue);
+                        BufferQueueUnlock(queue);
+                        break;
+                    }
+                }
+                break;
+            }
+            default: {
+                puts("Invalid data package");
+                break;
+            }
+        }
+    }
+}
 
 int main() {
+    Tree tree = TreeNew();
+    for(int i=0;i<200;i++){
+        TreeInsert(tree,i,i);
+    }
+    for(int i=0;i<200;i++){
+        TreeDelete(tree,200-1-i);
+        ShowTree(tree);
+        sleep(1);
+    }
+    ShowTree(tree);
+    TreeDestroy(tree);
     return 0;
-//    for (int ii = 0; ii < 1000; ii++, usleep(100)) {
-//        printf("%d\n", ii);
-//        serverFileDescriptor = socket(AF_INET, SOCK_DGRAM, 0);
-//        if (serverFileDescriptor < 0) {
-//            perror("Create socket fail!");
-//            exit(-1);
-//        }
-//        struct sockaddr_in serverAddress;
-//        memset(&serverAddress, 0, sizeof(struct sockaddr_in));
-//        serverAddress.sin_family = AF_INET;
-//        serverAddress.sin_addr.s_addr = htonl(INADDR_ANY);
-//        serverAddress.sin_port = htons(serverPORT);
-//        if (bind(serverFileDescriptor, (struct sockaddr *) &serverAddress, sizeof(serverAddress)) < 0) {
-//            perror("Socket bind fail");
-//            close(serverFileDescriptor);
-//            exit(-1);
-//        }
-//        if (pthread_mutex_init(&databaseMutex, NULL)) {
-//            perror("mutex init failed");
-//            exit(-1);
-//        }
-//        AllClients = ClientsNew();
-//        AllGroup = HashNew(MaxGroupNumber);
-//        struct BackboneTran *backboneTrans = (struct BackboneTran *)
-//                malloc(sizeof(struct BackboneTran) * backboneThreadNumber);
-//        pthread_t *GetThreads = (pthread_t *) malloc(sizeof(pthread_t) * backboneThreadNumber);
-//        pthread_t *ConcertThreads = (pthread_t *) malloc(sizeof(pthread_t) * backboneThreadNumber);
-//        pthread_t *HandleThreads = (pthread_t *) malloc(sizeof(pthread_t) * backboneThreadNumber * k);
-//        for (int i = 0; i < backboneThreadNumber; i++) {
-//            if ((backboneTrans[i].queue = BufQueueNew(BufQueueSize)) == NULL) {
-//                perror("create queue failed");
-//                exit(-1);
-//            }
-//            if ((backboneTrans[i].Queue = QueueNew()) == NULL) {
-//                perror("create linkQueue failed");
-//                exit(-1);
-//            }
-//            pthread_attr_t attr;
-//            pthread_attr_init(&attr);
-//            struct sched_param sched = {99};
-//            pthread_attr_setschedpolicy(&attr, SCHED_RR);
-//            pthread_attr_setschedparam(&attr, &sched);
-//            if (pthread_create(&GetThreads[i], &attr, (void *(*)(void *)) GetMessage, &backboneTrans[i]) != 0) {
-//                perror("create GetThread failed");
-//                exit(-1);
-//            }
-//            sched.sched_priority = 98;
-//            pthread_attr_setschedpolicy(&attr, SCHED_RR);
-//            pthread_attr_setschedparam(&attr, &sched);
-//            if (pthread_create(&ConcertThreads[i], &attr, (void *(*)(void *)) Convert, &backboneTrans[i]) != 0) {
-//                perror("create ConvertThread failed");
-//                exit(-1);
-//            }
-//            for (int j = 0; j < k; j++) {
-//                if (pthread_create(&HandleThreads[i * k + j], NULL,
-//                                   (void *(*)(void *)) Handle, &backboneTrans[i]) != 0) {
-//                    perror("create HandleThread failed");
-//                    exit(-1);
-//                }
-//            }
-//        }
-//        pthread_t clearThread;
-//        if (pthread_create(&clearThread, NULL, (void *(*)(void *)) Clear, NULL) != 0) {
-//            perror("create ClearThread failed");
-//            exit(-1);
-//        }
-//
-//        getchar();
-//        getchar();
-//        getchar();
-//
-//        pthread_cancel(clearThread);
-//        if (pthread_join(clearThread, NULL) != 0) {
-//            perror("join ClearThread failed");
-//            exit(-1);
-//        }
-//
-//        for (int i = 0; i < backboneThreadNumber; i++) {
-//            pthread_cancel(ConcertThreads[i]);
-//            if (pthread_join(ConcertThreads[i], NULL) != 0) {
-//                perror("detach thread failed");
-//                exit(-1);
-//            }
-//            pthread_cancel(GetThreads[i]);
-//            if (pthread_join(GetThreads[i], NULL) != 0) {
-//                perror("detach thread failed");
-//                exit(-1);
-//            }
-//            for (int j = 0; j < k; j++) {
-//                pthread_cancel(HandleThreads[i * k + j]);
-//                if (pthread_join(HandleThreads[i * k + j], NULL) != 0) {
-//                    perror("detach thread failed");
-//                    exit(-1);
-//                }
-//            }
-//            BufQueueDestroy(backboneTrans[i].queue);
-//            QueueDestroy(backboneTrans[i].Queue);
-//        }
-//        if (pthread_mutex_destroy(&databaseMutex)) {
-//            perror("mutex delete failed");
-//            exit(-1);
-//        }
-//        free(GetThreads);
-//        free(backboneTrans);
-//        HashLock(AllGroup);
-//        ArrayList array = HashToArrayList(AllGroup);
-//        HashUnlock(AllGroup);
-//        for (unsigned long long i = 0; i < ArrayListSize(array); i++) {
-//            ArrayListDestroy(((ArrayList) ArrayListGet(array, i)));
-//        }
-//        ClientsDestroy(AllClients);
-//        close(serverFileDescriptor);
-//    }
+    for (int ii = 0; ii < 1; ii++) {
+        printf("%d\n", ii);
+        serverFileDescriptor = socket(AF_INET, SOCK_DGRAM, 0);
+        if (serverFileDescriptor < 0) {
+            exit(NewSocket);
+        }
+        struct sockaddr_in serverAddress;
+        memset(&serverAddress, 0, sizeof(struct sockaddr_in));
+        serverAddress.sin_family = AF_INET;
+        serverAddress.sin_addr.s_addr = htonl(INADDR_ANY);
+        serverAddress.sin_port = htons(serverPort);
+        if (bind(serverFileDescriptor, (struct sockaddr *) &serverAddress, sizeof(serverAddress)) < 0) {
+            close(serverFileDescriptor);
+            exit(BindSocket);
+        }
+        if (pthread_mutex_init(&databaseMutex, NULL)) {
+            exit(DatabaseMutex);
+        }
+        AllGroups = HashNew(1024);
+        for (int i = 0; i < 65536; i++) {
+            if ((AllClients[i] = HashNew(1024)) == NULL) {
+                exit(NewHash);
+            }
+        }
+
+        pthread_t clearThread;
+        if (pthread_create(&clearThread, NULL, (void *(*)(void *)) Clear, NULL) != 0) {
+            exit(StartThread);
+        }
+        Queue queues[threadNumber];
+        for (int i = 0; i < threadNumber; i++) {
+            if ((queues[i] = QueueNew()) == NULL) {
+                exit(NewQueue);
+            }
+        }
+        BufferQueue buffers[threadNumber];
+        for (int i = 0; i < threadNumber; i++) {
+            if ((buffers[i] = BufferQueueNew()) == NULL) {
+                exit(NewQueue);
+            }
+        }
+
+        pthread_t GetThreads[threadNumber];
+        for (int i = 0; i < threadNumber; i++) {
+            pthread_attr_t attr;
+            pthread_attr_init(&attr);
+            struct sched_param sched = {99};
+            pthread_attr_setschedpolicy(&attr, SCHED_RR);
+            pthread_attr_setschedparam(&attr, &sched);
+            if (pthread_create(&GetThreads[i], &attr, (void *(*)(void *)) GetMessage, &buffers[i]) != 0) {
+                exit(StartThread);
+            }
+        }
+
+        pthread_t HandleThreads[threadNumber];
+        for (int i = 0; i < threadNumber; i++) {
+            if (pthread_create(&HandleThreads[i], NULL, (void *(*)(void *)) Handle, &buffers[i]) != 0) {
+                exit(StartThread);
+            }
+        }
+
+
+        getchar();
+        getchar();
+
+
+        for (int i = 0; i < threadNumber; i++) {
+            if (pthread_cancel(GetThreads[i]) != 0) {
+                exit(CancelThread);
+            }
+            if (pthread_join(GetThreads[i], NULL) != 0) {
+                exit(JoinThread);
+            }
+        }
+        getchar();
+        getchar();
+        for (int i = 0; i < threadNumber; i++) {
+            if (pthread_cancel(HandleThreads[i]) != 0) {
+                exit(CancelThread);
+            }
+            if (pthread_join(HandleThreads[i], NULL) != 0) {
+                exit(JoinThread);
+            }
+        }
+        pthread_cancel(clearThread);
+        if (pthread_join(clearThread, NULL) != 0) {
+            exit(JoinThread);
+        }
+        for (int i = 0; i < threadNumber; i++) {
+            BufferQueueDestroy(buffers[i]);
+        }
+        for (int i = 0; i < threadNumber; i++) {
+            QueueDestroy(queues[i]);
+        }
+        for (int i = 0; i < 65536; i++) {
+            HashDestroy(AllClients[i]);
+        }
+        HashDestroy(AllGroups);
+        pthread_mutex_destroy(&databaseMutex);
+        close(serverFileDescriptor);
+    }
     return 0;
 }

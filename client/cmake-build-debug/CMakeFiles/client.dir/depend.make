@@ -10,7 +10,5 @@ CMakeFiles/client.dir/include/TreeMap.c.o: ../include/TreeMap.h
 
 CMakeFiles/client.dir/main.c.o: ../include/TreeMap.h
 CMakeFiles/client.dir/main.c.o: ../main.c
-CMakeFiles/client.dir/main.c.o: /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/client.h
-CMakeFiles/client.dir/main.c.o: /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/commondata.h
 CMakeFiles/client.dir/main.c.o: /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/user.h
 

@@ -75,8 +75,8 @@ long GetUserReadyPlaceByUsername(char *username) {
         } else if (result > 0) {
             left = temp + 1;
         } else {
-            temp == -1;
-            goto END;
+            fclose(userFile);
+            return -1;
         }
     }
     fseek(userFile, (long) (sizeof(struct User) * temp), SEEK_SET);

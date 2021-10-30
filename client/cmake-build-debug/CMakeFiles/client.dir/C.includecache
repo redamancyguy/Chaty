@@ -31,24 +31,8 @@ stdlib.h
 -
 ../server-mul/user.h
 /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/user.h
-../server-mul/commondata.h
-/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/commondata.h
 include/TreeMap.h
 /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/client/include/TreeMap.h
-
-/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/client.h
-sys/socket.h
--
-netinet/in.h
--
-stdbool.h
--
-user.h
-/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/user.h
-
-/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/commondata.h
-client.h
-/mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/client.h
 
 /mnt/c/Users/sunwenli/Documents/GitHub/Chaty/server-mul/user.h
 stdbool.h

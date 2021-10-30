@@ -8,12 +8,28 @@
 #include <pthread.h>
 #include <stdlib.h>
 #include "../server-mul/user.h"
-#include "../server-mul/commondata.h"
+
 #include "include/TreeMap.h"
 short SERVER_PORT = 9999+0;
 
 int client_fd;
-
+enum StatusCode {
+    DELETEGROUP = -5,
+    ERROR = -4,
+    UNREGISTER = -3,
+    DETACH = -2,
+    LOGOUT = -1,
+    TOUCH = 0,
+    LOGIN = 1,
+    JOIN = 2,
+    REGISTER = 3,
+    CHAT = 4,
+    NEWGROUP = 5,
+};
+struct CommonData {
+    enum StatusCode code;
+    char data[1024];
+};
 
 void receive() {
     struct sockaddr_in src;
@@ -127,7 +143,7 @@ void Register(struct CommonData buf, struct sockaddr *serverAddress) {
 void Connect(struct CommonData buf, struct sockaddr *serverAddress) {
     socklen_t len = sizeof(struct sockaddr_in);
     memset(&buf,0,sizeof(struct CommonData));
-    buf.code = CONNECT;
+
 //    strcpy(buf.message, "connect");
     printf("connect %d\n",buf.code);
     sendto(client_fd, &buf, sizeof(struct CommonData), 0, serverAddress, len);
@@ -135,7 +151,7 @@ void Connect(struct CommonData buf, struct sockaddr *serverAddress) {
 
 void Disconnect(struct CommonData buf, struct sockaddr *serverAddress) {
     socklen_t len = sizeof(struct sockaddr_in);
-    buf.code = DISCONNECT;
+
 //    strcpy(buf.message, "disconnect");
     sendto(client_fd, &buf, sizeof(struct CommonData), 0, serverAddress, len);
 }
@@ -154,7 +170,7 @@ void Email(struct CommonData buf, struct sockaddr *serverAddress) {
     socklen_t len = sizeof(struct sockaddr_in);
     puts("Input your email");
     scanf("%s",buf.data);
-    buf.code = EMAIL;
+
     sendto(client_fd, &buf, sizeof(struct CommonData), 0, serverAddress, len);
 }
 void Change(struct CommonData buf, struct sockaddr *serverAddress) {
@@ -165,14 +181,14 @@ void Change(struct CommonData buf, struct sockaddr *serverAddress) {
     scanf("%s",buf.data+20);
     puts("Input your new password");
     scanf("%s",buf.data+40);
-    buf.code = CHANGE;
+
     sendto(client_fd, &buf, sizeof(struct CommonData), 0, serverAddress, len);
 }
 
 
 void SetNickName(struct CommonData buf, struct sockaddr *serverAddress) {
     socklen_t len = sizeof(struct sockaddr_in);
-    buf.code = RENAME;
+
     sendto(client_fd, &buf, sizeof(struct CommonData), 0, serverAddress, len);
 }
 void FlushStdin(){
@@ -221,12 +237,14 @@ int main(int argc, char *argv[]) {
 //    Email(buf,&serverAddress);
 //    Change(buf,&serverAddress);
 int i=0;
-    printf("%ld\n", time(NULL));
+    time_t t = time(NULL);
     while (1) {
-        if(i++ > 100000){
-            printf("%ld\n", time(NULL));
-            scanf("%s",buf.data);
+        if(i++ > 10000){
+            printf("%ld\n", time(NULL)-t);
+            getchar();
+            i=0;
         }
+        usleep(10);
         buf.code = i;
         Chat(buf, (struct sockaddr *) &serverAddress);
 //        usleep(1);

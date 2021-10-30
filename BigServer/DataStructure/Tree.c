@@ -13,8 +13,8 @@ struct TreeNode_ {
 };
 struct Tree_ {
     pthread_mutex_t mutex;
-    unsigned long long size;
     struct TreeNode_ *root;
+    long long size;
 };
 
 int TreeLock(Tree tree) {
@@ -130,16 +130,14 @@ static struct TreeNode_ *Insert(Tree tree, struct TreeNode_ *node, void *key, vo
     if (difference > 1) {
         if (key < node->left->key) {
             return LLRotate(node);
-        }
-        if (key > node->left->key) {
+        } else {
             return LRRotate(node);
         }
     }
     if (difference < -1) {
         if (key < node->right->key) {
             return RLRotate(node);
-        }
-        if (key > node->right->key) {
+        } else {
             return RRRotate(node);
         }
     }
@@ -183,16 +181,14 @@ struct TreeNode_ *Delete(Tree tree, struct TreeNode_ *node, void *key) {
     if (difference > 1) {
         if (Height(node->left->left) - Height(node->left->right) >= 0) {
             return LLRotate(node);
-        }
-        if (Height(node->left->left) - Height(node->left->right) < 0) {
+        } else {
             return LRRotate(node);
         }
     }
     if (difference < -1) {
         if (Height(node->right->left) - Height(node->right->left) > 0) {
             return RLRotate(node);
-        }
-        if (Height(node->right->left) - Height(node->right->left) <= 0) {
+        } else {
             return RRRotate(node);
         }
     }
@@ -247,20 +243,46 @@ void TreeDestroy(Tree tree) {
     Destroy(tree->root);
 }
 
-static void ToArrayList(ArrayList array, struct TreeNode_ *node) {
+static void ToArray(void **data, unsigned long long *place, struct TreeNode_ *node) {
     if (node == NULL) {
         return;
     }
-    ToArrayList(array,node->left);
-    ArrayListPushBack(array,node->value);
-    ToArrayList(array,node->right);
+    ToArray(data, place, node->left);
+    data[(*place)++] = node->value;
+    ToArray(data, place, node->right);
 }
 
-ArrayList TreeToArrayList(Tree tree) {
-    ArrayList array = ArrayListNew();
-    if(array == NULL){
-        return NULL;
+Array TreeToArray(Tree tree) {
+    Array array;
+    array.data = (void **) malloc(sizeof(void *) * tree->size);
+    if (array.data == NULL) {
+        array.size = 0;
+    } else {
+        unsigned long long place = 0;
+        ToArray(array.data, &place, tree->root);
+        array.size = tree->size;
     }
-    ToArrayList(array,tree->root);
+    return array;
+}
+
+static void KeyToArray(void **data, unsigned long long *place, struct TreeNode_ *node) {
+    if (node == NULL) {
+        return;
+    }
+    ToArray(data, place, node->left);
+    data[(*place)++] = node->key;
+    ToArray(data, place, node->right);
+}
+
+Array TreeKeyToArray(Tree tree) {
+    Array array;
+    array.data = (void **) malloc(sizeof(void *) * tree->size);
+    if (array.data == NULL) {
+        array.size = 0;
+    } else {
+        unsigned long long place = 0;
+        KeyToArray(array.data, &place, tree->root);
+        array.size = tree->size;
+    }
     return array;
 }

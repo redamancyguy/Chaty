@@ -21,7 +21,7 @@ Stack StackNew() {
     if (stack == NULL) {
         return NULL;
     }
-    if(pthread_mutex_init(&stack->mutex,NULL)!=0){
+    if (pthread_mutex_init(&stack->mutex, NULL) != 0) {
         free(stack);
         return NULL;
     }
@@ -32,15 +32,35 @@ Stack StackNew() {
     }
     return stack;
 }
-int StackLock(Stack stack){
+
+Array StackToArray(Stack stack) {
+    long long length = 0;
+    for (struct StackNode_ *i = stack->top, *bottom = stack->bottom; i != bottom; i = i->below) { length++; }
+    Array array;
+    array.data = (void **) malloc(sizeof(void *) * length);
+    if (array.data == NULL) {
+        array.size = 0;
+    } else {
+        array.size = 0;
+        for (struct StackNode_ *i = stack->top, *bottom = stack->bottom; i != bottom; i = i->below) {
+            array.data[array.size++] = i->data;
+        }
+    }
+    return array;
+}
+
+int StackLock(Stack stack) {
     return pthread_mutex_lock(&stack->mutex);
 }
-int StackUnlock(Stack stack){
+
+int StackUnlock(Stack stack) {
     return pthread_mutex_unlock(&stack->mutex);
 }
-int StackTryLock(Stack stack){
+
+int StackTryLock(Stack stack) {
     return pthread_mutex_trylock(&stack->mutex);
 }
+
 bool StackPush(Stack stack, void *data) {
     struct StackNode_ *temp = (struct StackNode_ *) malloc(sizeof(struct StackNode_));
     if (temp == NULL) {

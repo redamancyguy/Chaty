@@ -14,27 +14,31 @@ struct Node_ {
 struct Hash_ {
     pthread_mutex_t mutex;
     struct Node_ *table;
-    long long capacity;
+    unsigned long long capacity;
     long long size;
 };
-long long HashSize(Hash hash){
+
+long long HashSize(Hash hash) {
     return hash->size;
 }
 
 
-int HashLock(Hash hash){
+int HashLock(Hash hash) {
     return pthread_mutex_lock(&hash->mutex);
 }
-int HashUnlock(Hash hash){
+
+int HashUnlock(Hash hash) {
     return pthread_mutex_unlock(&hash->mutex);
 }
-int HashTryLock(Hash hash){
+
+int HashTryLock(Hash hash) {
     return pthread_mutex_trylock(&hash->mutex);
 }
 
-long long HashCapacity(Hash hash){
+unsigned long long HashCapacity(Hash hash) {
     return hash->capacity;
 }
+
 Hash HashNew(const long long capacity) {
     Hash hash = (Hash) malloc(sizeof(struct Hash_));
     if (hash == NULL) {
@@ -48,7 +52,7 @@ Hash HashNew(const long long capacity) {
     hash->capacity = capacity;
     hash->size = 0;
     memset(hash->table, 0, sizeof(struct Node_) * capacity);
-    if(pthread_mutex_init(&hash->mutex,NULL) != 0){
+    if (pthread_mutex_init(&hash->mutex, NULL) != 0) {
         free(hash->table);
         free(hash);
         return NULL;
@@ -73,8 +77,9 @@ void HashClear(Hash hash) {
     }
 }
 
-bool HashInsert(Hash hash,void *const key,void *const value) {
+bool HashInsert(Hash hash, void *const key, void *const value) {
     long long flag = (long long) key % hash->capacity;
+    bool sign;
     long long doubleLength = hash->capacity - flag < flag ? hash->capacity - flag : flag;
     long long i = 0;
     while (i < doubleLength) {
@@ -133,25 +138,25 @@ bool HashInsert(Hash hash,void *const key,void *const value) {
 }
 
 
-void *HashGet(Hash hash,void *const key) {
-    long long flag = (long long)key % hash->capacity;
+void *HashGet(Hash hash, void *const key) {
+    long long flag = (long long) key % hash->capacity;
     long long doubleLength = hash->capacity - flag < flag ? hash->capacity - flag : flag;
     long long i = 0;
     while (i < doubleLength) {
         long long temp = flag + i;
-        if (hash->table[temp].status && hash->table[temp].key == key ){
+        if (hash->table[temp].status && hash->table[temp].key == key) {
             return hash->table[temp].value;
         }
         temp = flag - i;
-        if (hash->table[temp].status && hash->table[temp].key == key ){
+        if (hash->table[temp].status && hash->table[temp].key == key) {
             return hash->table[temp].value;
         }
         i++;
     }
     if (flag == i) {
-        i =  flag + i;
+        i = flag + i;
         while (i < hash->capacity) {
-            if (hash->table[i].status && hash->table[i].key == key ){
+            if (hash->table[i].status && hash->table[i].key == key) {
                 return hash->table[i].value;
             }
             i++;
@@ -159,7 +164,7 @@ void *HashGet(Hash hash,void *const key) {
     } else {
         i = flag - i - 1;
         while (i >= 0) {
-            if (hash->table[i].status && hash->table[i].key == key ){
+            if (hash->table[i].status && hash->table[i].key == key) {
                 return hash->table[i].value;
             }
             i--;
@@ -168,7 +173,7 @@ void *HashGet(Hash hash,void *const key) {
     return NULL;
 }
 
-bool HashSet(Hash hash,void *const key,void *const value) {
+bool HashSet(Hash hash, void *const key, void *const value) {
     long long flag = (long long) key % hash->capacity;
     long long doubleLength = hash->capacity - flag < flag ? hash->capacity - flag : flag;
     long long i = 0;
@@ -227,19 +232,19 @@ bool HashSet(Hash hash,void *const key,void *const value) {
     return false;
 }
 
-bool HashErase(Hash hash,void *const key) {
-    long long flag = (long long)key % hash->capacity;
+bool HashErase(Hash hash, void *const key) {
+    long long flag = (long long) key % hash->capacity;
     long long doubleLength = hash->capacity - flag < flag ? hash->capacity - flag : flag;
     long long i = 0;
     while (i < doubleLength) {
         long long temp = flag + i;
-        if (hash->table[temp].status && hash->table[temp].key == key ){
+        if (hash->table[temp].status && hash->table[temp].key == key) {
             hash->table[temp].status = false;
             --hash->size;
             return true;
         }
         temp = flag - i;
-        if (hash->table[temp].status && hash->table[temp].key == key ){
+        if (hash->table[temp].status && hash->table[temp].key == key) {
             hash->table[temp].status = false;
             --hash->size;
             return true;
@@ -247,9 +252,9 @@ bool HashErase(Hash hash,void *const key) {
         i++;
     }
     if (flag == i) {
-        i =  flag + i;
+        i = flag + i;
         while (i < hash->capacity) {
-            if (hash->table[i].status && hash->table[i].key == key ){
+            if (hash->table[i].status && hash->table[i].key == key) {
                 hash->table[i].status = false;
                 --hash->size;
                 return true;
@@ -259,7 +264,7 @@ bool HashErase(Hash hash,void *const key) {
     } else {
         i = flag - i - 1;
         while (i >= 0) {
-            if (hash->table[i].status && hash->table[i].key == key ){
+            if (hash->table[i].status && hash->table[i].key == key) {
                 hash->table[i].status = false;
                 --hash->size;
                 return true;
@@ -269,11 +274,18 @@ bool HashErase(Hash hash,void *const key) {
     }
     return false;
 }
-ArrayList HashToArrayList(Hash hash){
-    ArrayList array = ArrayListNew();
-    for(unsigned long long i=0;i<hash->capacity;i++){
-        if(hash->table[i].status){
-            ArrayListPushBack(array,hash->table[i].value);
+
+Array HashToArray(Hash hash) {
+    Array array;
+    array.data = (void **) malloc(sizeof(void *) * hash->size);
+    if (array.data == NULL) {
+        array.size = 0;
+    } else {
+        array.size = 0;
+        for (unsigned long long i = 0, size = hash->capacity; i < size; i++) {
+            if (hash->table[i].status) {
+                array.data[array.size++] = hash->table[i].value;
+            }
         }
     }
     return array;
