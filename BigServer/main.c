@@ -36,25 +36,18 @@ enum errorCode {
 const short serverPort = 9999;
 const int threadNumber = 10;
 
-
 //server running information
 int serverFileDescriptor;
 
-
 Hash AllClients[65536];
 HashList AllGroups;//HashList->Queue
-
-
-
 _Noreturn void *Clear(void *pointer) {
     const int Pace = 1;
     while (true) {
         sleep(Pace);
         Array groups = HashListToArray(AllGroups);
         int TimOut = 5;
-        puts("+++++++++++++");
         for (long long i = 0, size = groups.size; i < size; i++) {
-            printf("%lld %lld\n", i, QueueSize((Queue) groups.data[i]));
             Queue group = (Queue) groups.data[i];
             for (long long j = 0, groupSize = QueueSize(group); j < groupSize; j++) {
                 if (time(NULL) - ((struct Client *) QueueFront(group))->time > TimOut) {
@@ -71,13 +64,9 @@ _Noreturn void *Clear(void *pointer) {
         }
         free(groups.data);
         TimOut = 7;
-        puts("=============");
         for (int i = 0; i < 65536; i++) {
             Hash clientsHash = AllClients[i];
             Array clients = HashToArray(AllClients[i]);
-            if (clients.size > 0) {
-                printf("%d %lld\n", i, clients.size);
-            }
             for (long long j = 0, size = clients.size; j < size; j++) {
                 struct Client *client = clients.data[j];
                 if (time(NULL) - client->time > TimOut) {
@@ -90,7 +79,8 @@ _Noreturn void *Clear(void *pointer) {
         }
     }
 }
-
+int iii=0;
+pthread_mutex_t mutex;
 _Noreturn void *Handle(void *pointer) {
     BufferQueue queue = *((BufferQueue *) pointer);
     unsigned int HandleBufSize = 64;
@@ -100,12 +90,14 @@ _Noreturn void *Handle(void *pointer) {
             struct Message messages[HandleBufSize];
             int length = 0;
             for (int i = 0; i < HandleBufSize && !BufferQueueIsEmpty(queue); i++) {
+                pthread_mutex_lock(&mutex);
+                printf("%lu %d\n",pthread_self(),iii++);
+                pthread_mutex_unlock(&mutex);
                 messages[length++] = *BufferQueueFront(queue);
                 BufferQueuePop(queue);
             }
             for (int i = 0; i < length; i++) {
                 struct Message message = messages[i];
-                Show();
                 switch (message.data.code) {
                     case TOUCH: {
                         struct Client *client = HashGet(AllClients[message.address.sin_port],
@@ -215,13 +207,13 @@ _Noreturn void *Handle(void *pointer) {
                                 if (RemoveUserByPlace(place) == place) {
                                     strcpy(message.data.data, "Server : Unregister successfully");
                                     struct Client *client = HashGet(AllClients[message.address.sin_port],
-                                            (void*)(unsigned long long)message.address.sin_addr.s_addr);
+                                                                    (void *) (unsigned long long) message.address.sin_addr.s_addr);
                                     Array groups = TreeToArray(client->groups);
-                                    for(int k=0;k<groups.size;k++){
-                                        QueueDelete(((Queue) groups.data[k]),(void*)client);
+                                    for (int k = 0; k < groups.size; k++) {
+                                        QueueDelete(((Queue) groups.data[k]), (void *) client);
                                     }
                                     HashErase(AllClients[message.address.sin_port],
-                                              (void*)(unsigned long long)message.address.sin_addr.s_addr);
+                                              (void *) (unsigned long long) message.address.sin_addr.s_addr);
                                     free(groups.data);
                                 } else {
                                     message.data.code = ERROR;
@@ -397,6 +389,7 @@ _Noreturn void *GetMessage(void *pointer) {
         }
     }
 }
+
 int main() {
     for (int ii = 0; ii < 1; ii++) {
         printf("%d\n", ii);
@@ -413,7 +406,7 @@ int main() {
             close(serverFileDescriptor);
             exit(BindSocket);
         }
-        if(!UserDataBaseOpen()){
+        if (!UserDataBaseOpen()) {
             exit(-6);
         }
         AllGroups = HashListNew(1024);
@@ -422,7 +415,6 @@ int main() {
                 exit(NewHash);
             }
         }
-
         pthread_t clearThread;
         if (pthread_create(&clearThread, NULL, (void *(*)(void *)) Clear, NULL) != 0) {
             exit(StartThread);
@@ -451,7 +443,6 @@ int main() {
                 exit(StartThread);
             }
         }
-
         pthread_t HandleThreads[threadNumber];
         for (int i = 0; i < threadNumber; i++) {
             if (pthread_create(&HandleThreads[i], NULL, (void *(*)(void *)) Handle, &buffers[i]) != 0) {
@@ -459,10 +450,8 @@ int main() {
             }
         }
 
-
         getchar();
         getchar();
-
 
         for (int i = 0; i < threadNumber; i++) {
             if (pthread_cancel(GetThreads[i]) != 0) {

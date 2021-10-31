@@ -239,12 +239,13 @@ int main(int argc, char *argv[]) {
 int i=0;
     time_t t = time(NULL);
     while (1) {
-        if(i++ > 10000){
+        if(i++ > 100000){
             printf("%ld\n", time(NULL)-t);
             getchar();
+            t = time(NULL);
             i=0;
         }
-        usleep(10);
+        usleep(1);
         buf.code = i;
         Chat(buf, (struct sockaddr *) &serverAddress);
 //        usleep(1);

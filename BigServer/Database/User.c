@@ -140,7 +140,6 @@ long RemoveUserByPlace(unsigned long place) {
     if(pthread_rwlock_wrlock(&userDatabaseRwlock) !=0){
         exit(-4);
     }
-    FILE *writeFile;
     FILE *readFile;
     long count = GetUserCount();
     if (place >= count) {
@@ -151,21 +150,16 @@ long RemoveUserByPlace(unsigned long place) {
         pthread_rwlock_unlock(&userDatabaseRwlock);
         return -1;
     }
-    if ((writeFile = fopen(userDatabaseFileName, "rb+")) == 0) {
-        pthread_rwlock_unlock(&userDatabaseRwlock);
-        return -1;
-    }
     struct User temp;
     fseek(readFile, (long) (sizeof(struct User) * place), SEEK_SET);
-    fseek(writeFile, (long) (sizeof(struct User) * place), SEEK_SET);
+    fseek(userDatabaseFile, (long) (sizeof(struct User) * place), SEEK_SET);
     if (fread(&temp, sizeof(struct User), 1, readFile) < 0) {
         goto ERROR;
     }
     while (fread(&temp, sizeof(struct User), 1, readFile) > 0) {
-        fwrite(&temp, sizeof(struct User), 1, writeFile);
+        fwrite(&temp, sizeof(struct User), 1, userDatabaseFile);
     }
     fclose(readFile);
-    fclose(writeFile);
     if (truncate(userDatabaseFileName, (long) (sizeof(struct User) * (count - 1))) == -1) {
         pthread_rwlock_unlock(&userDatabaseRwlock);
         return -1;
@@ -174,7 +168,6 @@ long RemoveUserByPlace(unsigned long place) {
     return (long) place;
     ERROR:
     fclose(readFile);
-    fclose(writeFile);
     pthread_rwlock_unlock(&userDatabaseRwlock);
     return -1;
 }
@@ -183,7 +176,6 @@ long InsertUserByPlace(struct User *user, unsigned long place) {
     if(pthread_rwlock_wrlock(&userDatabaseRwlock) !=0){
         exit(-4);
     }
-    FILE *writeFile;
     FILE *readFile;
     long count = GetUserCount();
     if (place > count) {
@@ -198,26 +190,20 @@ long InsertUserByPlace(struct User *user, unsigned long place) {
         fclose(readFile);
         readFile = fopen(userDatabaseFileName, "rb+");
     }
-    if ((writeFile = fopen(userDatabaseFileName, "rb+")) == 0) {
-        pthread_rwlock_unlock(&userDatabaseRwlock);
-        return -1;
-    }
     struct User temp;
     fseek(readFile, (long) (sizeof(struct User) * place), SEEK_SET);
-    fseek(writeFile, (long) (sizeof(struct User) * place), SEEK_SET);
-    if (fwrite(user, sizeof(struct User), 1, writeFile) < 0) {
+    fseek(userDatabaseFile, (long) (sizeof(struct User) * place), SEEK_SET);
+    if (fwrite(user, sizeof(struct User), 1, userDatabaseFile) < 0) {
         goto ERROR;
     }
     while (fread(&temp, sizeof(struct User), 1, readFile) > 0) {
-        fwrite(&temp, sizeof(struct User), 1, writeFile);
+        fwrite(&temp, sizeof(struct User), 1, userDatabaseFile);
     }
     fclose(readFile);
-    fclose(writeFile);
     pthread_rwlock_unlock(&userDatabaseRwlock);
     return (long) place;
     ERROR:
     fclose(readFile);
-    fclose(writeFile);
     pthread_rwlock_unlock(&userDatabaseRwlock);
     return -1;
 }
