@@ -1,16 +1,44 @@
 //
 // Created by sunwenli on 2021/10/8.
 //
+#include <pthread.h>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+#include <stdlib.h>
 #include "User.h"
 
-static const char *fileName = "users";
-
-long GetUserCount() {
+struct UserDataBase_{
+    pthread_rwlock_t rwlock;
+    char fileName[32];
     FILE *userFile;
-    if ((userFile = fopen(fileName, "rb")) == 0) {
+};
+UserDataBase UserDataBaseOpen(char *fileName){
+    UserDataBase dataBase = (UserDataBase)malloc(sizeof(struct UserDataBase_));
+    if(dataBase == NULL){
+        return NULL;
+    }
+    if(pthread_rwlock_init(&dataBase->rwlock,NULL)!=0){
+        free(dataBase);
+        return NULL;
+    }
+    strcpy(dataBase->fileName,fileName);
+    FILE *userFile;
+    if ((userFile = fopen(dataBase->fileName, "rb")) == 0) {
+        if ((userFile = fopen(dataBase->fileName, "wb")) == 0) {
+            return NULL;
+        }
+    }
+    return dataBase;
+}
+void UserDataBaseClose(UserDataBase dataBase){
+    pthread_rwlock_destroy(&dataBase->rwlock);
+    free(dataBase);
+}
+
+long GetUserCount(UserDataBase dataBase) {
+    FILE *userFile;
+    if ((userFile = fopen(dataBase->fileName, "rb")) == 0) {
         return 0;
     }
     fseek(userFile, 0, SEEK_END);
@@ -19,14 +47,18 @@ long GetUserCount() {
     return temp / (long) sizeof(struct User);
 }
 
-long GetUserPlaceByUsername(char *username) {
+long GetUserPlaceByUsername(UserDataBase dataBase,char *username) {
+    if(pthread_rwlock_rdlock(&dataBase->rwlock) !=0){
+        exit(-4);
+    }
     FILE *userFile;
-    if ((userFile = fopen(fileName, "rb")) == 0) {
-        if ((userFile = fopen(fileName, "wb")) == 0) {
+    if ((userFile = fopen(dataBase->fileName, "rb")) == 0) {
+        if ((userFile = fopen(dataBase->fileName, "wb")) == 0) {
+            pthread_rwlock_unlock(&dataBase->rwlock);
             return -1;
         }
     }
-    long right = GetUserCount();
+    long right = GetUserCount(dataBase);
     long left = 0;
     long temp;
     while (left <= right) {
@@ -48,17 +80,22 @@ long GetUserPlaceByUsername(char *username) {
     temp = -1;
     END:
     fclose(userFile);
+    pthread_rwlock_unlock(&dataBase->rwlock);
     return temp;
 }
 
-long GetUserReadyPlaceByUsername(char *username) {
+long GetUserReadyPlaceByUsername(UserDataBase dataBase,char *username) {
+    if(pthread_rwlock_wrlock(&dataBase->rwlock) !=0){
+        exit(-4);
+    }
     FILE *userFile;
-    if ((userFile = fopen(fileName, "rb")) == 0) {
-        if ((userFile = fopen(fileName, "wb")) == 0) {
+    if ((userFile = fopen(dataBase->fileName, "rb")) == 0) {
+        if ((userFile = fopen(dataBase->fileName, "wb")) == 0) {
+            pthread_rwlock_unlock(&dataBase->rwlock);
             return -1;
         }
     }
-    long count = GetUserCount();
+    long count = GetUserCount(dataBase);
     long right = count;
     long left = 0;
     long temp;
@@ -76,6 +113,7 @@ long GetUserReadyPlaceByUsername(char *username) {
             left = temp + 1;
         } else {
             fclose(userFile);
+            pthread_rwlock_unlock(&dataBase->rwlock);
             return -1;
         }
     }
@@ -103,25 +141,32 @@ long GetUserReadyPlaceByUsername(char *username) {
     }
     END:
     fclose(userFile);
+    pthread_rwlock_unlock(&dataBase->rwlock);
     return temp;
 }
 
-long GetUserByPlace(struct User *user, unsigned long place) {
+long GetUserByPlace(UserDataBase dataBase,struct User *user, unsigned long place) {
+    if(pthread_rwlock_rdlock(&dataBase->rwlock) != 0){
+        exit(-4);
+    }
     FILE *userFile;
-    if ((userFile = fopen(fileName, "rb")) == 0) {
+    if ((userFile = fopen(dataBase->fileName, "rb")) == 0) {
+        pthread_rwlock_unlock(&dataBase->rwlock);
         return -1;
     }
     fseek(userFile, (long) (sizeof(struct User) * place), SEEK_SET);
     if (fread(user, sizeof(struct User), 1, userFile) < 0) {
+        pthread_rwlock_unlock(&dataBase->rwlock);
         return -1;
     }
+    pthread_rwlock_unlock(&dataBase->rwlock);
     return (long) place;
 }
 
-void Show() {
+void Show(UserDataBase dataBase) {
     FILE *userFile;
     struct User temp;
-    if ((userFile = fopen(fileName, "rb")) == 0) {
+    if ((userFile = fopen(dataBase->fileName, "rb")) == 0) {
         return;
     }
     while (fread(&temp, sizeof(struct User), 1, userFile) > 0) {
@@ -131,17 +176,23 @@ void Show() {
     fclose(userFile);
 }
 
-long RemoveUserByPlace(unsigned long place) {
+long RemoveUserByPlace(UserDataBase dataBase,unsigned long place) {
+    if(pthread_rwlock_wrlock(&dataBase->rwlock) !=0){
+        exit(-4);
+    }
     FILE *writeFile;
     FILE *readFile;
-    long count = GetUserCount();
+    long count = GetUserCount(dataBase);
     if (place >= count) {
+        pthread_rwlock_unlock(&dataBase->rwlock);
         return -1;
     }
-    if ((readFile = fopen(fileName, "rb")) == 0) {
+    if ((readFile = fopen(dataBase->fileName, "rb")) == 0) {
+        pthread_rwlock_unlock(&dataBase->rwlock);
         return -1;
     }
-    if ((writeFile = fopen(fileName, "rb+")) == 0) {
+    if ((writeFile = fopen(dataBase->fileName, "rb+")) == 0) {
+        pthread_rwlock_unlock(&dataBase->rwlock);
         return -1;
     }
     struct User temp;
@@ -155,31 +206,40 @@ long RemoveUserByPlace(unsigned long place) {
     }
     fclose(readFile);
     fclose(writeFile);
-    if (truncate(fileName, (long) (sizeof(struct User) * (count - 1))) == -1) {
+    if (truncate(dataBase->fileName, (long) (sizeof(struct User) * (count - 1))) == -1) {
+        pthread_rwlock_unlock(&dataBase->rwlock);
         return -1;
     }
+    pthread_rwlock_unlock(&dataBase->rwlock);
     return (long) place;
     ERROR:
     fclose(readFile);
     fclose(writeFile);
+    pthread_rwlock_unlock(&dataBase->rwlock);
     return -1;
 }
 
-long InsertUserByPlace(struct User *user, unsigned long place) {
+long InsertUserByPlace(UserDataBase dataBase,struct User *user, unsigned long place) {
+    if(pthread_rwlock_wrlock(&dataBase->rwlock) !=0){
+        exit(-4);
+    }
     FILE *writeFile;
     FILE *readFile;
-    long count = GetUserCount();
+    long count = GetUserCount(dataBase);
     if (place > count) {
+        pthread_rwlock_unlock(&dataBase->rwlock);
         return -1;
     }
-    if ((readFile = fopen(fileName, "rb+")) == 0) {
-        if ((readFile = fopen(fileName, "w")) == 0) {
+    if ((readFile = fopen(dataBase->fileName, "rb+")) == 0) {
+        if ((readFile = fopen(dataBase->fileName, "w")) == 0) {
+            pthread_rwlock_unlock(&dataBase->rwlock);
             return -1;
         }
         fclose(readFile);
-        readFile = fopen(fileName, "rb+");
+        readFile = fopen(dataBase->fileName, "rb+");
     }
-    if ((writeFile = fopen(fileName, "rb+")) == 0) {
+    if ((writeFile = fopen(dataBase->fileName, "rb+")) == 0) {
+        pthread_rwlock_unlock(&dataBase->rwlock);
         return -1;
     }
     struct User temp;
@@ -193,31 +253,43 @@ long InsertUserByPlace(struct User *user, unsigned long place) {
     }
     fclose(readFile);
     fclose(writeFile);
+    pthread_rwlock_unlock(&dataBase->rwlock);
     return (long) place;
     ERROR:
     fclose(readFile);
     fclose(writeFile);
+    pthread_rwlock_unlock(&dataBase->rwlock);
     return -1;
 }
 
-int CLearUsers() {
+int CLearUsers(UserDataBase dataBase) {
+    if(pthread_rwlock_wrlock(&dataBase->rwlock) !=0){
+        exit(-4);
+    }
     FILE *tempFile;
-    if ((tempFile = fopen(fileName, "wb")) == 0) {
+    if ((tempFile = fopen(dataBase->fileName, "wb")) == 0) {
+        pthread_rwlock_unlock(&dataBase->rwlock);
         return -1;
     }
     fclose(tempFile);
+    pthread_rwlock_unlock(&dataBase->rwlock);
     return 1;
 }
 
-long SetUserByPlace(struct User *user, unsigned long place) {
+long SetUserByPlace(UserDataBase dataBase,struct User *user, unsigned long place) {
+    if(pthread_rwlock_wrlock(&dataBase->rwlock) != 0){
+        exit(-4);
+    }
     FILE *userFile;
-    if ((userFile = fopen(fileName, "rb+")) == 0) {
-        if ((userFile = fopen(fileName, "wb")) == 0) {
+    if ((userFile = fopen(dataBase->fileName, "rb+")) == 0) {
+        if ((userFile = fopen(dataBase->fileName, "wb")) == 0) {
+            pthread_rwlock_unlock(&dataBase->rwlock);
             return -1;
         }
     }
     fseek(userFile, (long) (sizeof(struct User) * place), SEEK_SET);
     fwrite(user, sizeof(struct User), 1, userFile);
     fclose(userFile);
+    pthread_rwlock_unlock(&dataBase->rwlock);
     return (long) place;
 }
