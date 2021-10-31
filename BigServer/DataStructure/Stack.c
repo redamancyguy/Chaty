@@ -3,6 +3,7 @@
 //
 #include <malloc.h>
 #include <pthread.h>
+#include <stdlib.h>
 #include "Stack.h"
 
 struct StackNode_ {
@@ -11,7 +12,7 @@ struct StackNode_ {
 };
 
 struct Stack_ {
-    pthread_mutex_t mutex;
+    pthread_rwlock_t rwlock;
     struct StackNode_ *top, *bottom;
 };
 
@@ -21,7 +22,7 @@ Stack StackNew() {
     if (stack == NULL) {
         return NULL;
     }
-    if (pthread_mutex_init(&stack->mutex, NULL) != 0) {
+    if (pthread_rwlock_init(&stack->rwlock, NULL) != 0) {
         free(stack);
         return NULL;
     }
@@ -34,6 +35,9 @@ Stack StackNew() {
 }
 
 Array StackToArray(Stack stack) {
+    if(pthread_rwlock_rdlock(&stack->rwlock) !=0){
+        exit(-4);
+    }
     long long length = 0;
     for (struct StackNode_ *i = stack->top, *bottom = stack->bottom; i != bottom; i = i->below) { length++; }
     Array array;
@@ -46,44 +50,51 @@ Array StackToArray(Stack stack) {
             array.data[array.size++] = i->data;
         }
     }
+    pthread_rwlock_unlock(&stack->rwlock);
     return array;
 }
 
-int StackLock(Stack stack) {
-    return pthread_mutex_lock(&stack->mutex);
-}
-
-int StackUnlock(Stack stack) {
-    return pthread_mutex_unlock(&stack->mutex);
-}
-
-int StackTryLock(Stack stack) {
-    return pthread_mutex_trylock(&stack->mutex);
-}
-
 bool StackPush(Stack stack, void *data) {
+    if(pthread_rwlock_wrlock(&stack->rwlock) != 0){
+        exit(-4);
+    }
     struct StackNode_ *temp = (struct StackNode_ *) malloc(sizeof(struct StackNode_));
     if (temp == NULL) {
+        pthread_rwlock_unlock(&stack->rwlock);
         return false;
     }
     temp->below = stack->top;
     temp->data = data;
     stack->top = temp;
+    pthread_rwlock_unlock(&stack->rwlock);
     return true;
 }
 
 void StackPop(Stack stack) {
+    if(pthread_rwlock_wrlock(&stack->rwlock) !=0){
+        exit(-4);
+    }
     struct StackNode_ *temp = stack->top;
     stack->top = stack->top->below;
     free(temp);
 }
 
 bool StackIsEmpty(Stack stack) {
-    return stack->top == stack->bottom;
+    if(pthread_rwlock_rdlock(&stack->rwlock) !=0){
+        exit(-4);
+    }
+    bool result = stack->top == stack->bottom;
+    pthread_rwlock_unlock(&stack->rwlock);
+    return result;
 }
 
 void *StackTop(Stack stack) {
-    return stack->top->data;
+    if(pthread_rwlock_rdlock(&stack->rwlock) !=0){
+        exit(-4);
+    }
+    void *result = stack->top->data;
+    pthread_rwlock_unlock(&stack->rwlock);
+    return result;
 }
 
 void StackDestroy(Stack stack) {
@@ -92,7 +103,7 @@ void StackDestroy(Stack stack) {
         stack->top = stack->top->below;
         free(temp);
     }
-    pthread_mutex_destroy(&stack->mutex);
+    pthread_rwlock_destroy(&stack->rwlock);
     free(stack->top);
     free(stack);
 }

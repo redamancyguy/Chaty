@@ -4,6 +4,7 @@
 #include <string.h>
 #include <malloc.h>
 #include <pthread.h>
+#include <stdlib.h>
 #include "Hash.h"
 
 struct Node_ {
@@ -12,31 +13,29 @@ struct Node_ {
     void *value;
 };
 struct Hash_ {
-    pthread_mutex_t mutex;
+    pthread_rwlock_t rwlock;
     struct Node_ *table;
-    unsigned long long capacity;
+    long long capacity;
     long long size;
 };
 
 long long HashSize(Hash hash) {
-    return hash->size;
+    if (pthread_rwlock_rdlock(&hash->rwlock) == 0) {
+        long long result = hash->size;
+        pthread_rwlock_unlock(&hash->rwlock);
+        return result;
+    }
+    exit(-4);
 }
 
 
-int HashLock(Hash hash) {
-    return pthread_mutex_lock(&hash->mutex);
-}
-
-int HashUnlock(Hash hash) {
-    return pthread_mutex_unlock(&hash->mutex);
-}
-
-int HashTryLock(Hash hash) {
-    return pthread_mutex_trylock(&hash->mutex);
-}
-
-unsigned long long HashCapacity(Hash hash) {
-    return hash->capacity;
+long long HashCapacity(Hash hash) {
+    if (pthread_rwlock_rdlock(&hash->rwlock) == 0) {
+        long long result = hash->capacity;
+        pthread_rwlock_unlock(&hash->rwlock);
+        return result;
+    }
+    exit(-4);
 }
 
 Hash HashNew(const long long capacity) {
@@ -52,7 +51,7 @@ Hash HashNew(const long long capacity) {
     hash->capacity = capacity;
     hash->size = 0;
     memset(hash->table, 0, sizeof(struct Node_) * capacity);
-    if (pthread_mutex_init(&hash->mutex, NULL) != 0) {
+    if (pthread_rwlock_init(&hash->rwlock, NULL) != 0) {
         free(hash->table);
         free(hash);
         return NULL;
@@ -61,13 +60,16 @@ Hash HashNew(const long long capacity) {
 }
 
 void HashDestroy(Hash hash) {
-    pthread_mutex_destroy(&hash->mutex);
+    pthread_rwlock_destroy(&hash->rwlock);
     free(hash->table);
     free(hash);
 }
 
 
 void HashClear(Hash hash) {
+    if (pthread_rwlock_rdlock(&hash->rwlock) != 0) {
+        exit(-4);
+    }
     for (long long i = 0, capacity = hash->capacity; i < capacity; i++) {
         if (hash->table[i].status) {
             hash->table[i].status = false;
@@ -75,11 +77,14 @@ void HashClear(Hash hash) {
             hash->table[i].value = NULL;
         }
     }
+    pthread_rwlock_unlock(&hash->rwlock);
 }
 
 bool HashInsert(Hash hash, void *const key, void *const value) {
+    if (pthread_rwlock_wrlock(&hash->rwlock) != 0) {
+        exit(-4);
+    }
     long long flag = (long long) key % hash->capacity;
-    bool sign;
     long long doubleLength = hash->capacity - flag < flag ? hash->capacity - flag : flag;
     long long i = 0;
     while (i < doubleLength) {
@@ -89,8 +94,10 @@ bool HashInsert(Hash hash, void *const key, void *const value) {
             hash->table[temp].value = value;
             hash->table[temp].status = true;
             ++hash->size;
+            pthread_rwlock_unlock(&hash->rwlock);
             return true;
         } else if (hash->table[temp].key == key) {
+            pthread_rwlock_unlock(&hash->rwlock);
             return false;
         }
         temp = flag - i;
@@ -99,8 +106,10 @@ bool HashInsert(Hash hash, void *const key, void *const value) {
             hash->table[temp].value = value;
             hash->table[temp].status = true;
             ++hash->size;
+            pthread_rwlock_unlock(&hash->rwlock);
             return true;
         } else if (hash->table[temp].key == key) {
+            pthread_rwlock_unlock(&hash->rwlock);
             return false;
         }
         i++;
@@ -113,8 +122,10 @@ bool HashInsert(Hash hash, void *const key, void *const value) {
                 hash->table[i].value = value;
                 hash->table[i].status = true;
                 ++hash->size;
+                pthread_rwlock_unlock(&hash->rwlock);
                 return true;
             } else if (hash->table[i].key == key) {
+                pthread_rwlock_unlock(&hash->rwlock);
                 return false;
             }
             i++;
@@ -127,28 +138,36 @@ bool HashInsert(Hash hash, void *const key, void *const value) {
                 hash->table[i].value = value;
                 hash->table[i].status = true;
                 ++hash->size;
+                pthread_rwlock_unlock(&hash->rwlock);
                 return true;
             } else if (hash->table[i].key == key) {
+                pthread_rwlock_unlock(&hash->rwlock);
                 return false;
             }
             i--;
         }
     }
+    pthread_rwlock_unlock(&hash->rwlock);
     return false;
 }
 
 
 void *HashGet(Hash hash, void *const key) {
+    if (pthread_rwlock_rdlock(&hash->rwlock) != 0) {
+        exit(-4);
+    }
     long long flag = (long long) key % hash->capacity;
     long long doubleLength = hash->capacity - flag < flag ? hash->capacity - flag : flag;
     long long i = 0;
     while (i < doubleLength) {
         long long temp = flag + i;
         if (hash->table[temp].status && hash->table[temp].key == key) {
+            pthread_rwlock_unlock(&hash->rwlock);
             return hash->table[temp].value;
         }
         temp = flag - i;
         if (hash->table[temp].status && hash->table[temp].key == key) {
+            pthread_rwlock_unlock(&hash->rwlock);
             return hash->table[temp].value;
         }
         i++;
@@ -157,6 +176,7 @@ void *HashGet(Hash hash, void *const key) {
         i = flag + i;
         while (i < hash->capacity) {
             if (hash->table[i].status && hash->table[i].key == key) {
+                pthread_rwlock_unlock(&hash->rwlock);
                 return hash->table[i].value;
             }
             i++;
@@ -165,15 +185,20 @@ void *HashGet(Hash hash, void *const key) {
         i = flag - i - 1;
         while (i >= 0) {
             if (hash->table[i].status && hash->table[i].key == key) {
+                pthread_rwlock_unlock(&hash->rwlock);
                 return hash->table[i].value;
             }
             i--;
         }
     }
+    pthread_rwlock_unlock(&hash->rwlock);
     return NULL;
 }
 
 bool HashSet(Hash hash, void *const key, void *const value) {
+    if (pthread_rwlock_wrlock(&hash->rwlock) != 0) {
+        exit(-4);
+    }
     long long flag = (long long) key % hash->capacity;
     long long doubleLength = hash->capacity - flag < flag ? hash->capacity - flag : flag;
     long long i = 0;
@@ -183,9 +208,11 @@ bool HashSet(Hash hash, void *const key, void *const value) {
             hash->table[temp].key = key;
             hash->table[temp].value = value;
             hash->table[temp].status = true;
+            pthread_rwlock_unlock(&hash->rwlock);
             return true;
         } else if (hash->table[temp].key == key) {
             hash->table[temp].value = value;
+            pthread_rwlock_unlock(&hash->rwlock);
             return true;
         }
         temp = flag - i;
@@ -193,9 +220,11 @@ bool HashSet(Hash hash, void *const key, void *const value) {
             hash->table[temp].key = key;
             hash->table[temp].value = value;
             hash->table[temp].status = true;
+            pthread_rwlock_unlock(&hash->rwlock);
             return true;
         } else if (hash->table[temp].key == key) {
             hash->table[temp].value = value;
+            pthread_rwlock_unlock(&hash->rwlock);
             return true;
         }
         i++;
@@ -207,9 +236,11 @@ bool HashSet(Hash hash, void *const key, void *const value) {
                 hash->table[i].key = key;
                 hash->table[i].value = value;
                 hash->table[i].status = true;
+                pthread_rwlock_unlock(&hash->rwlock);
                 return true;
             } else if (hash->table[i].key == key) {
                 hash->table[i].value = value;
+                pthread_rwlock_unlock(&hash->rwlock);
                 return true;
             }
             i++;
@@ -221,18 +252,24 @@ bool HashSet(Hash hash, void *const key, void *const value) {
                 hash->table[i].key = key;
                 hash->table[i].value = value;
                 hash->table[i].status = true;
+                pthread_rwlock_unlock(&hash->rwlock);
                 return true;
             } else if (hash->table[i].key == key) {
                 hash->table[i].value = value;
+                pthread_rwlock_unlock(&hash->rwlock);
                 return true;
             }
             i--;
         }
     }
+    pthread_rwlock_unlock(&hash->rwlock);
     return false;
 }
 
 bool HashErase(Hash hash, void *const key) {
+    if (pthread_rwlock_wrlock(&hash->rwlock)) {
+        exit(-4);
+    }
     long long flag = (long long) key % hash->capacity;
     long long doubleLength = hash->capacity - flag < flag ? hash->capacity - flag : flag;
     long long i = 0;
@@ -241,12 +278,14 @@ bool HashErase(Hash hash, void *const key) {
         if (hash->table[temp].status && hash->table[temp].key == key) {
             hash->table[temp].status = false;
             --hash->size;
+            pthread_rwlock_unlock(&hash->rwlock);
             return true;
         }
         temp = flag - i;
         if (hash->table[temp].status && hash->table[temp].key == key) {
             hash->table[temp].status = false;
             --hash->size;
+            pthread_rwlock_unlock(&hash->rwlock);
             return true;
         }
         i++;
@@ -257,6 +296,7 @@ bool HashErase(Hash hash, void *const key) {
             if (hash->table[i].status && hash->table[i].key == key) {
                 hash->table[i].status = false;
                 --hash->size;
+                pthread_rwlock_unlock(&hash->rwlock);
                 return true;
             }
             i++;
@@ -267,15 +307,20 @@ bool HashErase(Hash hash, void *const key) {
             if (hash->table[i].status && hash->table[i].key == key) {
                 hash->table[i].status = false;
                 --hash->size;
+                pthread_rwlock_unlock(&hash->rwlock);
                 return true;
             }
             i--;
         }
     }
+    pthread_rwlock_unlock(&hash->rwlock);
     return false;
 }
 
 Array HashToArray(Hash hash) {
+    if (pthread_rwlock_rdlock(&hash->rwlock) != 0) {
+        exit(-4);
+    }
     Array array;
     array.data = (void **) malloc(sizeof(void *) * hash->size);
     if (array.data == NULL) {
@@ -288,5 +333,6 @@ Array HashToArray(Hash hash) {
             }
         }
     }
+    pthread_rwlock_unlock(&hash->rwlock);
     return array;
 }

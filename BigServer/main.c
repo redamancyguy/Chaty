@@ -49,17 +49,15 @@ _Noreturn void *Clear(void *pointer) {
     const int Pace = 1;
     while (true) {
         sleep(Pace);
-        HashLock(AllGroups);
         Array groups = HashToArray(AllGroups);
-        HashUnlock(AllGroups);
         int TimOut = 5;
         puts("+++++++++++++");
         for (long long i = 0, size = groups.size; i < size; i++) {
             printf("%lld %lld\n", i, QueueSize((Queue) groups.data[i]));
             Queue group = (Queue) groups.data[i];
-            QueueLock(group);
             for (long long j = 0, groupSize = QueueSize(group); j < groupSize; j++) {
                 if (time(NULL) - ((struct Client *) QueueFront(group))->time > TimOut) {
+                    TreeDelete(((struct Client *) QueueFront(group))->groups,(void*)group);
                     QueuePop(group);
                 } else {
                     QueuePush(group, QueueFront(group));
@@ -67,18 +65,14 @@ _Noreturn void *Clear(void *pointer) {
                 }
             }
             if (QueueSize(group) == 0) {
-                HashLock(AllGroups);
                 HashErase(AllGroups, (void *) group); //delete a group
-                HashUnlock(AllGroups);
             }
-            QueueUnlock(group);
         }
         free(groups.data);
         TimOut = 7;
         puts("=============");
         for (int i = 0; i < 65536; i++) {
             Hash clientsHash = AllClients[i];
-            HashLock(clientsHash);
             Array clients = HashToArray(AllClients[i]);
             if (clients.size > 0) {
                 printf("%d %lld\n", i, clients.size);
@@ -91,7 +85,6 @@ _Noreturn void *Clear(void *pointer) {
                     free(client);
                 }
             }
-            HashUnlock(clientsHash);
             free(clients.data);
         }
     }
@@ -102,7 +95,6 @@ _Noreturn void *Handle(void *pointer) {
     unsigned int HandleBufSize = 64;
     unsigned sleepPace = 1024;
     while (true) {
-        if (BufferQueueTryLock(queue) == 0) {
             if (!BufferQueueIsEmpty(queue)) {
                 struct Message messages[HandleBufSize];
                 int length = 0;
@@ -110,7 +102,6 @@ _Noreturn void *Handle(void *pointer) {
                     messages[length++] = *BufferQueueFront(queue);
                     BufferQueuePop(queue);
                 }
-                BufferQueueUnlock(queue);
                 for (int i = 0; i < length; i++) {
                     struct Message message = messages[i];
                     switch (message.data.code) {
@@ -147,7 +138,6 @@ _Noreturn void *Handle(void *pointer) {
                                             strcpy(message.data.data, "Server : Login by error");
                                         } else {
                                             Hash clients = AllClients[message.address.sin_port];
-                                            HashLock(clients);
                                             if (HashInsert(clients,
                                                            (void *) (unsigned long long) message.address.sin_addr.s_addr,
                                                            client)) {
@@ -162,7 +152,6 @@ _Noreturn void *Handle(void *pointer) {
                                                 message.data.code = ERROR;
                                                 strcpy(message.data.data, "Server : You're already logged in");
                                             }
-                                            HashUnlock(clients);
                                         }
                                     }
                                 } else {
@@ -177,12 +166,8 @@ _Noreturn void *Handle(void *pointer) {
                             struct Client *client = HashGet(clients,
                                                             (void *) (unsigned long long) message.address.sin_addr.s_addr);
                             if (client != NULL) {
-                                HashLock(clients);
                                 HashErase(clients, (void *) (unsigned long long) message.address.sin_addr.s_addr);
-                                HashUnlock(clients);
-                                TreeLock(client->groups);
                                 Array groups = TreeKeyToArray(client->groups);
-                                TreeUnlock(client->groups);
                                 for (long long k = 0; k < groups.size; k++) {
                                     QueueDelete((Queue) groups.data[k], (void *) client);
                                 }
@@ -249,8 +234,6 @@ _Noreturn void *Handle(void *pointer) {
                                 Queue group = QueueNew();
                                 if (group != NULL) {
                                     *((unsigned long long *) (message.data.data + 64)) = (unsigned long long) group;
-                                    HashLock(AllGroups);
-                                    TreeLock(client->groups);
                                     if (HashInsert(AllGroups, (void *) group, (void *) group)
                                         && QueuePush(group, (void *) client) &&
                                         TreeInsert(client->groups, (void *) group, (void *) group)) {
@@ -262,8 +245,6 @@ _Noreturn void *Handle(void *pointer) {
                                         message.data.code = ERROR;
                                         strcpy(message.data.data, "Server : Create group by error : hash insert error");
                                     }
-                                    TreeUnlock(client->groups);
-                                    HashUnlock(AllGroups);
                                 } else {
                                     message.data.code = ERROR;
                                     strcpy(message.data.data, "Server : Create group by error");
@@ -284,12 +265,8 @@ _Noreturn void *Handle(void *pointer) {
                                         message.data.code = ERROR;
                                         strcpy(message.data.data, "Server : You have already Joined");
                                     } else {
-                                        TreeLock(client->groups);
                                         TreeInsert(client->groups, (void *) group, (void *) group);
-                                        TreeUnlock(client->groups);
-                                        QueueLock(group);
                                         QueuePush(group, (void *) client);
-                                        QueueUnlock(group);
                                         strcpy(message.data.data, "Server : Join successfully");
                                     }
                                 } else {
@@ -321,16 +298,37 @@ _Noreturn void *Handle(void *pointer) {
                             }
                             break;
                         }
+                        case DELETEGROUP: {
+                            struct Client *client = HashGet(AllClients[message.address.sin_port],
+                                                            (void *) (unsigned long long) message.address.sin_addr.s_addr);
+                            if (client != NULL) {
+                                Queue group = TreeGet(client->groups, (*(void **) (message.data.data + 64)));
+                                if (group != NULL) {
+                                    TreeDelete(client->groups, (void *) group);
+                                    Array temp =QueueToArray(group);
+                                    for(int k=0;k<temp.size;k++){
+                                        TreeDelete(((struct Client *) temp.data[k])->groups,(void*)group);
+                                    }
+                                    QueueDestroy(group);
+                                    HashErase(AllGroups,group);
+                                    strcpy(message.data.data, "Server : Detach successfully");
+                                } else {
+                                    message.data.code = ERROR;
+                                    strcpy(message.data.data, "Server : You are not in this group");
+                                }
+                            } else {
+                                message.data.code = ERROR;
+                                strcpy(message.data.data, "Server : You haven't logged in yet");
+                            }
+                            break;
+                        }
                         case CHAT: {
-                            puts(message.data.data + 128);
                             struct Client* client = HashGet(AllClients[message.address.sin_port],
                                     (void*)(unsigned long long )message.address.sin_addr.s_addr);
                             if(client != NULL){
                                 Queue group = TreeGet(client->groups,(*(void **) (message.data.data + 64)));
                                 if (group != NULL) {
-                                    QueueLock(group);
                                     Array clients = QueueToArray(group);
-                                    QueueUnlock(group);
                                     for(int k=0;k<clients.size;k++){
                                         struct Client *clientT = clients.data[k];
                                         sendto(serverFileDescriptor, &message.data, sizeof(struct CommunicationData), 0,
@@ -359,12 +357,8 @@ _Noreturn void *Handle(void *pointer) {
                            (struct sockaddr *) &message.address, message.length);
                 }
             } else {
-                BufferQueueUnlock(queue);
                 usleep(sleepPace);
             }
-        } else {
-            usleep(sleepPace);
-        }
     }
 }
 
@@ -381,13 +375,10 @@ _Noreturn void *GetMessage(void *pointer) {
             }
             case sizeof(struct CommunicationData): {
                 while (true) {
-                    BufferQueueLock(queue);
                     if (BufferQueueIsFull(queue)) {
-                        BufferQueueUnlock(queue);
                         usleep(1024);
                     } else {
                         BufferQueuePush(queue);
-                        BufferQueueUnlock(queue);
                         break;
                     }
                 }
@@ -400,20 +391,7 @@ _Noreturn void *GetMessage(void *pointer) {
         }
     }
 }
-
 int main() {
-    Tree tree = TreeNew();
-    for(int i=0;i<200;i++){
-        TreeInsert(tree,i,i);
-    }
-    for(int i=0;i<200;i++){
-        TreeDelete(tree,200-1-i);
-        ShowTree(tree);
-        sleep(1);
-    }
-    ShowTree(tree);
-    TreeDestroy(tree);
-    return 0;
     for (int ii = 0; ii < 1; ii++) {
         printf("%d\n", ii);
         serverFileDescriptor = socket(AF_INET, SOCK_DGRAM, 0);
