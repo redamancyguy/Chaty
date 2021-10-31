@@ -39,7 +39,7 @@ const int threadNumber = 10;
 
 //server running information
 int serverFileDescriptor;
-UserDataBase dataBase;
+
 
 Hash AllClients[65536];
 HashList AllGroups;//HashList->Queue
@@ -105,6 +105,7 @@ _Noreturn void *Handle(void *pointer) {
             }
             for (int i = 0; i < length; i++) {
                 struct Message message = messages[i];
+                Show();
                 switch (message.data.code) {
                     case TOUCH: {
                         struct Client *client = HashGet(AllClients[message.address.sin_port],
@@ -120,12 +121,12 @@ _Noreturn void *Handle(void *pointer) {
                     case LOGIN: {
                         struct User userBuf;
                         memcpy(&userBuf, message.data.data + 64, sizeof(struct User));
-                        long place = GetUserPlaceByUsername(dataBase,userBuf.username);
+                        long place = GetUserPlaceByUsername(userBuf.username);
                         if (place == -1) {
                             strcpy(message.data.data, "Server : None username");
                         } else {
                             struct User temp;
-                            GetUserByPlace(dataBase,&temp, place);
+                            GetUserByPlace(&temp, place);
                             if (strcmp(temp.password, userBuf.password) == 0) {
                                 struct Client *client = (struct Client *) malloc(sizeof(struct Client));
                                 if (client == NULL) {
@@ -185,10 +186,10 @@ _Noreturn void *Handle(void *pointer) {
                     case REGISTER: {
                         struct User userBuf;
                         memcpy(&userBuf, message.data.data + 64, sizeof(struct User));
-                        long place = GetUserReadyPlaceByUsername(dataBase,userBuf.username);
+                        long place = GetUserReadyPlaceByUsername(userBuf.username);
                         if (place != -1) {
                             userBuf.id = place;
-                            if (InsertUserByPlace(dataBase,&userBuf, place) != -1) {
+                            if (InsertUserByPlace(&userBuf, place) != -1) {
                                 strcpy(message.data.data, "Server : Register successfully");
                             } else {
                                 message.data.code = ERROR;
@@ -203,16 +204,25 @@ _Noreturn void *Handle(void *pointer) {
                     case UNREGISTER: {
                         struct User userBuf;
                         memcpy(&userBuf, message.data.data + 64, sizeof(struct User));
-                        long place = GetUserPlaceByUsername(dataBase,userBuf.username);
+                        long place = GetUserPlaceByUsername(userBuf.username);
                         if (place == -1) {
                             message.data.code = ERROR;
                             strcpy(message.data.data, "Server : None username");
                         } else {
                             struct User userTemp;
-                            GetUserByPlace(dataBase,&userTemp, place);
+                            GetUserByPlace(&userTemp, place);
                             if (strcmp(userBuf.password, userTemp.password) == 0) {
-                                if (RemoveUserByPlace(dataBase,place) == place) {
+                                if (RemoveUserByPlace(place) == place) {
                                     strcpy(message.data.data, "Server : Unregister successfully");
+                                    struct Client *client = HashGet(AllClients[message.address.sin_port],
+                                            (void*)(unsigned long long)message.address.sin_addr.s_addr);
+                                    Array groups = TreeToArray(client->groups);
+                                    for(int k=0;k<groups.size;k++){
+                                        QueueDelete(((Queue) groups.data[k]),(void*)client);
+                                    }
+                                    HashErase(AllClients[message.address.sin_port],
+                                              (void*)(unsigned long long)message.address.sin_addr.s_addr);
+                                    free(groups.data);
                                 } else {
                                     message.data.code = ERROR;
                                     strcpy(message.data.data, "Server : Unregister by error : unknown");
@@ -403,9 +413,8 @@ int main() {
             close(serverFileDescriptor);
             exit(BindSocket);
         }
-        dataBase = UserDataBaseOpen("users");
-        if(dataBase == NULL){
-            exit(-5);
+        if(!UserDataBaseOpen()){
+            exit(-6);
         }
         AllGroups = HashListNew(1024);
         for (int i = 0; i < 65536; i++) {
@@ -487,7 +496,7 @@ int main() {
             HashDestroy(AllClients[i]);
         }
         HashListDestroy(AllGroups);
-        UserDataBaseClose(dataBase);
+        UserDataBaseClose();
         close(serverFileDescriptor);
     }
     return 0;
