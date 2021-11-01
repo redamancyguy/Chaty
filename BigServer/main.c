@@ -389,7 +389,7 @@ _Noreturn void *GetMessage(void *pointer) {
         }
     }
 }
-
+#include "FileServer/FileServer.h"
 int main() {
     for (int ii = 0; ii < 1; ii++) {
         printf("%d\n", ii);
@@ -450,6 +450,7 @@ int main() {
             }
         }
 
+        fileServer();
         getchar();
         getchar();
 
