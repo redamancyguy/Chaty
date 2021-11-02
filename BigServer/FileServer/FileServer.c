@@ -20,7 +20,7 @@
 #include "FileServer.h"
 
 void *sendToClient(void *pointer) {
-    int clientFD = (int)(long long) pointer;
+    int clientFD = (int) (long long) pointer;
     long long fileSize = 0;
     char fileName[128] = {0};
     char buffer[64 * 1024] = {0};
@@ -41,19 +41,19 @@ void *sendToClient(void *pointer) {
     }
     close(file);
     close(clientFD);
-    return NULL
+    return NULL;
 }
 
 void *receiveFromClient(void *pointer) {
-    int clientFD = (int)(long long)pointer;
+    int clientFD = (int) (long long) pointer;
     char fileSize[64] = {0};
     char fileName[128] = {0};
     char buffer[64 * 1024] = {0};
     read(clientFD, buffer, sizeof(fileSize) + sizeof(fileName)); //main info:(fileSize+fileName)
     memcpy(&fileSize, buffer, sizeof(fileSize));
     strncpy(fileName, buffer + sizeof(fileSize), sizeof(fileName));
-    printf("%s\n",fileSize);
-    printf("%s\n",fileName);
+    printf("%s\n", fileSize);
+    printf("%s\n", fileName);
     sprintf(buffer, "files/%s", fileName);
     int file = open(buffer, O_RDWR | O_CREAT | O_TRUNC, 0666);
     while (1) {
@@ -66,10 +66,11 @@ void *receiveFromClient(void *pointer) {
     }
     close(file);
     close(clientFD);
+    return NULL;
 }
 
 void fileServer() {
-    short PORT = 10000+2;
+    short PORT = 10000 + 2;
     int tcp_socket = socket(AF_INET, SOCK_STREAM, 0);
     if (tcp_socket == -1) {
         perror("create socket file Description failed\n");
@@ -90,6 +91,7 @@ void fileServer() {
     struct sockaddr_in client_address = {0};
     socklen_t len = sizeof(client_address);
     int new_socket;
+    puts("file server !");
     while (1) {
         new_socket = accept(tcp_socket, (struct sockaddr *) &client_address, &len);
         if (new_socket < 0) {
@@ -98,32 +100,34 @@ void fileServer() {
         }
         printf("client connected [%s:%d]\n", inet_ntoa(client_address.sin_addr), ntohs(client_address.sin_port));
         char flag[8];
-        int ret = read(new_socket, flag, sizeof(flag));
-        printf("result %d\n",ret);
-        for(int i=0;i<8;i++){
-            printf("%c\n",flag[i]);
+        long long ret = read(new_socket, flag, sizeof(flag));
+        printf("result %lld\n", ret);
+        ret = read(new_socket, flag, sizeof(flag));
+        printf("result %lld\n", ret);
+        for (int i = 0; i < 8; i++) {
+            printf("%c\n", flag[i]);
         }
-        write(new_socket,"OK", 2);
+        write(new_socket, "OK", 2);
         if (ret < 0) {
             perror("receive failed");
         }
-        if(strcmp(flag,"true") == 0){
+        if (strcmp(flag, "true") == 0) {
             puts("YES");
-        }else{
+            pthread_t thread;
+            if (pthread_create(&thread, NULL, (void *(*)(void *)) receiveFromClient, (void *) (long long) new_socket) !=
+                0) {
+                exit(-7);
+            }
+        } else if (strcmp(flag, "false") == 0) {
             puts("NO");
+            pthread_t thread;
+            if (pthread_create(&thread, NULL, (void *(*)(void *)) sendToClient, (void *) (long long) new_socket) != 0) {
+                exit(-7);
+            }
+        } else {
+            puts("Unknown");
         }
         close(new_socket);
-//        if (flag) {
-//            pthread_t thread;
-//            if (pthread_create(&thread, NULL, (void *(*)(void *)) receiveFromClient, (void *)(long long)new_socket) != 0) {
-//                exit(-7);
-//            }
-//        } else {
-//            pthread_t thread;
-//            if (pthread_create(&thread, NULL, (void *(*)(void *)) sendToClient, (void *)(long long)new_socket) != 0) {
-//                exit(-7);
-//            }
-//        }
     }
     close(tcp_socket);
 }

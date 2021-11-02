@@ -431,7 +431,6 @@ int main() {
                 exit(NewQueue);
             }
         }
-
         pthread_t GetThreads[threadNumber];
         for (int i = 0; i < threadNumber; i++) {
             pthread_attr_t attr;
@@ -450,7 +449,7 @@ int main() {
             }
         }
 
-        fileServer();
+//        fileServer();
         getchar();
         getchar();
 
