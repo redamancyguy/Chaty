@@ -47,3 +47,6 @@ The use of message queue makes the message forwarding easier and more complete
 消息遗漏数量大大减少,
 消耗cpu资源大大减少,
 利用消息队列,让消息转发的更轻松,更完整
+
+减少malloc和free直接用数组队列代替链式队列,用较少的线程,较大的内存获取更高的效率
+模块化
