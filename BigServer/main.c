@@ -15,10 +15,13 @@
 #include "DataStructure/Queue.h"
 #include "DataStructure/Stack.h"
 #include "DataStructure/Tree.h"
-#include "Database/User.h"
 #include "relevant.h"
 #include "BufferQueue/BufferQueue.h"
 #include "DataStructure/HashList.h"
+
+
+//#include "Database/User.h"
+
 
 enum errorCode {
     NewSocket = 1,
@@ -79,8 +82,7 @@ _Noreturn void *Clear(void *pointer) {
         }
     }
 }
-int iii=0;
-pthread_mutex_t mutex;
+
 _Noreturn void *Handle(void *pointer) {
     BufferQueue queue = *((BufferQueue *) pointer);
     unsigned int HandleBufSize = 64;
@@ -90,9 +92,6 @@ _Noreturn void *Handle(void *pointer) {
             struct Message messages[HandleBufSize];
             int length = 0;
             for (int i = 0; i < HandleBufSize && !BufferQueueIsEmpty(queue); i++) {
-                pthread_mutex_lock(&mutex);
-                printf("%lu %d\n",pthread_self(),iii++);
-                pthread_mutex_unlock(&mutex);
                 messages[length++] = *BufferQueueFront(queue);
                 BufferQueuePop(queue);
             }
@@ -111,46 +110,30 @@ _Noreturn void *Handle(void *pointer) {
                         break;
                     }
                     case LOGIN: {
-                        struct User userBuf;
-                        memcpy(&userBuf, message.data.data + 64, sizeof(struct User));
-                        long place = GetUserPlaceByUsername(userBuf.username);
-                        if (place == -1) {
-                            strcpy(message.data.data, "Server : None username");
+                        struct Client *client = (struct Client *) malloc(sizeof(struct Client));
+                        if (client == NULL) {
+                            message.data.code = ERROR;
+                            strcpy(message.data.data, "Server : Login by error");
                         } else {
-                            struct User temp;
-                            GetUserByPlace(&temp, place);
-                            if (strcmp(temp.password, userBuf.password) == 0) {
-                                struct Client *client = (struct Client *) malloc(sizeof(struct Client));
-                                if (client == NULL) {
-                                    message.data.code = ERROR;
-                                    strcpy(message.data.data, "Server : Login by error");
-                                } else {
-                                    client->groups = TreeNew();
-                                    if (client->groups == NULL) {
-                                        message.data.code = ERROR;
-                                        free(client);
-                                        strcpy(message.data.data, "Server : Login by error");
-                                    } else {
-                                        Hash clients = AllClients[message.address.sin_port];
-                                        if (HashInsert(clients,
-                                                       (void *) (unsigned long long) message.address.sin_addr.s_addr,
-                                                       client)) {
-                                            client->user = userBuf;
-                                            client->address = message.address;
-                                            client->length = message.length;
-                                            client->time = time(NULL);
-                                            strcpy(message.data.data, "Server : Login successfully");
-                                        } else {
-                                            TreeDestroy(client->groups);
-                                            free(client);
-                                            message.data.code = ERROR;
-                                            strcpy(message.data.data, "Server : You're already logged in");
-                                        }
-                                    }
-                                }
-                            } else {
+                            client->groups = TreeNew();
+                            if (client->groups == NULL) {
                                 message.data.code = ERROR;
-                                strcpy(message.data.data, "Server : Wrong password");
+                                free(client);
+                                strcpy(message.data.data, "Server : Login by error");
+                            } else {
+                                Hash clients = AllClients[message.address.sin_port];
+                                if (HashInsert(clients, (void *) (unsigned long long) message.address.sin_addr.s_addr,
+                                               client)) {
+                                    client->address = message.address;
+                                    client->length = message.length;
+                                    client->time = time(NULL);
+                                    strcpy(message.data.data, "Server : Login successfully");
+                                } else {
+                                    TreeDestroy(client->groups);
+                                    free(client);
+                                    message.data.code = ERROR;
+                                    strcpy(message.data.data, "Server : You're already logged in");
+                                }
                             }
                         }
                         break;
@@ -172,57 +155,6 @@ _Noreturn void *Handle(void *pointer) {
                         } else {
                             message.data.code = ERROR;
                             strcpy(message.data.data, "Server : You haven't logged in yet");
-                        }
-                        break;
-                    }
-                    case REGISTER: {
-                        struct User userBuf;
-                        memcpy(&userBuf, message.data.data + 64, sizeof(struct User));
-                        long place = GetUserReadyPlaceByUsername(userBuf.username);
-                        if (place != -1) {
-                            userBuf.id = place;
-                            if (InsertUserByPlace(&userBuf, place) != -1) {
-                                strcpy(message.data.data, "Server : Register successfully");
-                            } else {
-                                message.data.code = ERROR;
-                                strcpy(message.data.data, "Server : Register by error");
-                            }
-                        } else {
-                            message.data.code = ERROR;
-                            strcpy(message.data.data, "Server : Duplicate username");
-                        }
-                        break;
-                    }
-                    case UNREGISTER: {
-                        struct User userBuf;
-                        memcpy(&userBuf, message.data.data + 64, sizeof(struct User));
-                        long place = GetUserPlaceByUsername(userBuf.username);
-                        if (place == -1) {
-                            message.data.code = ERROR;
-                            strcpy(message.data.data, "Server : None username");
-                        } else {
-                            struct User userTemp;
-                            GetUserByPlace(&userTemp, place);
-                            if (strcmp(userBuf.password, userTemp.password) == 0) {
-                                if (RemoveUserByPlace(place) == place) {
-                                    strcpy(message.data.data, "Server : Unregister successfully");
-                                    struct Client *client = HashGet(AllClients[message.address.sin_port],
-                                                                    (void *) (unsigned long long) message.address.sin_addr.s_addr);
-                                    Array groups = TreeToArray(client->groups);
-                                    for (int k = 0; k < groups.size; k++) {
-                                        QueueDelete(((Queue) groups.data[k]), (void *) client);
-                                    }
-                                    HashErase(AllClients[message.address.sin_port],
-                                              (void *) (unsigned long long) message.address.sin_addr.s_addr);
-                                    free(groups.data);
-                                } else {
-                                    message.data.code = ERROR;
-                                    strcpy(message.data.data, "Server : Unregister by error : unknown");
-                                }
-                            } else {
-                                message.data.code = ERROR;
-                                strcpy(message.data.data, "Server : Wrong password");
-                            }
                         }
                         break;
                     }
@@ -389,7 +321,9 @@ _Noreturn void *GetMessage(void *pointer) {
         }
     }
 }
+
 #include "FileServer/FileServer.h"
+
 int main() {
     for (int ii = 0; ii < 1; ii++) {
         printf("%d\n", ii);
@@ -405,9 +339,6 @@ int main() {
         if (bind(serverFileDescriptor, (struct sockaddr *) &serverAddress, sizeof(serverAddress)) < 0) {
             close(serverFileDescriptor);
             exit(BindSocket);
-        }
-        if (!UserDataBaseOpen()) {
-            exit(-6);
         }
         AllGroups = HashListNew(1024);
         for (int i = 0; i < 65536; i++) {
@@ -485,7 +416,6 @@ int main() {
             HashDestroy(AllClients[i]);
         }
         HashListDestroy(AllGroups);
-        UserDataBaseClose();
         close(serverFileDescriptor);
     }
     return 0;

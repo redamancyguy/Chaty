@@ -226,6 +226,19 @@ void *Get(struct TreeNode_ *node, void *key) {
     }
 }
 
+void *TreeMinimumKey(Tree tree) {
+    if(pthread_rwlock_rdlock(&tree->rwlock) != 0){
+        exit(-4);
+    }
+    struct TreeNode_ *node = tree->root;
+    while(node->left!=NULL){
+        node = node->left;
+    }
+    void *result = node->key;
+    pthread_rwlock_unlock(&tree->rwlock);
+    return result;
+}
+
 void *TreeGet(Tree tree, void *key) {
     if(pthread_rwlock_rdlock(&tree->rwlock) != 0){
         exit(-4);
