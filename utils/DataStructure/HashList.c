@@ -4,16 +4,15 @@
 
 #include "HashList.h"
 #include <string.h>
-#include <malloc.h>
 #include <pthread.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 struct LinkNode_ {
     bool status;
     void *key;
     void *value;
     struct LinkNode_ *next;
-    char test[1024];
 };
 struct HashList_ {
     pthread_rwlock_t rwlock;
@@ -21,8 +20,17 @@ struct HashList_ {
     long long capacity;
     long long size;
 };
-
+int HashListUnLock(HashList hash){
+    return pthread_rwlock_unlock(&hash->rwlock);
+}
+int HashListRLock(HashList hash){
+    return pthread_rwlock_rdlock(&hash->rwlock);
+}
+int HashListWLock(HashList hash){
+    return pthread_rwlock_wrlock(&hash->rwlock);
+}
 void HashListDestroy(HashList hash) {
+    int ii=0;
     pthread_rwlock_destroy(&hash->rwlock);
     for (long long i = 0; i < hash->capacity; i++) {
         struct LinkNode_ *j = hash->lists[i].next;
@@ -30,6 +38,7 @@ void HashListDestroy(HashList hash) {
             void *temp = j;
             j = j->next;
             free(temp);
+            ii++;
         }
     }
     free(hash->lists);
@@ -58,70 +67,51 @@ HashList HashListNew(const long long capacity) {
 }
 
 bool HashListInsert(HashList hash, void *const key, void *const value) {
-    if (pthread_rwlock_wrlock(&hash->rwlock) != 0) {
-        exit(-4);
-    }
     long long index = (long long) key % hash->capacity;
     struct LinkNode_ *last = &hash->lists[index];
     struct LinkNode_ *head = last->next;
     while (head != NULL) {
         if (head->key == key) {
-            pthread_rwlock_unlock(&hash->rwlock);
             return false;
         }
         last = head;
         head = head->next;
     }
     if ((last->next = (struct LinkNode_ *) malloc(sizeof(struct LinkNode_))) == NULL) {
-        pthread_rwlock_unlock(&hash->rwlock);
         return false;
     }
     last->next->next = NULL;
     last->next->key = key;
     last->next->value = value;
-    pthread_rwlock_unlock(&hash->rwlock);
     ++hash->size;
     return true;
 }
 void *HashListGet(HashList hash, void *const key) {
-    if (pthread_rwlock_rdlock(&hash->rwlock) != 0) {
-        exit(-4);
-    }
     long long index = (long long) key % hash->capacity;
     struct LinkNode_ *head = hash->lists[index].next;
     while (head != NULL) {
         if (head->key == key) {
-            pthread_rwlock_unlock(&hash->rwlock);
             return head->value;
         }
         head = head->next;
     }
-    pthread_rwlock_unlock(&hash->rwlock);
     return NULL;
 }
 
 bool HashListSet(HashList hash, void *const key, void *const value){
-    if (pthread_rwlock_wrlock(&hash->rwlock) != 0) {
-        exit(-4);
-    }
     long long index = (long long) key % hash->capacity;
     struct LinkNode_ *head = hash->lists[index].next;
     while (head != NULL) {
         if (head->key == key) {
-            pthread_rwlock_unlock(&hash->rwlock);
             head->value = value;
             return true;
         }
         head = head->next;
     }
-    pthread_rwlock_unlock(&hash->rwlock);
     return false;
 }
 
 bool HashListErase(HashList hash, void *const key) {
-    if (pthread_rwlock_wrlock(&hash->rwlock) != 0) {
-        exit(-4);
-    }
     long long index = (long long) key % hash->capacity;
     struct LinkNode_ *head = &hash->lists[index];
     while (head->next != NULL) {
@@ -129,19 +119,14 @@ bool HashListErase(HashList hash, void *const key) {
             void *temp = head->next;
             head->next = head->next->next;
             free(temp);
-            pthread_rwlock_unlock(&hash->rwlock);
             --hash->size;
             return true;
         }
         head = head->next;
     }
-    pthread_rwlock_unlock(&hash->rwlock);
     return false;
 }
 Array HashListToArray(HashList hash) {
-    if (pthread_rwlock_rdlock(&hash->rwlock) != 0) {
-        exit(-4);
-    }
     Array array;
     array.data = (void **) malloc(sizeof(void *) * hash->size);
     if (array.data == NULL) {
@@ -156,6 +141,5 @@ Array HashListToArray(HashList hash) {
             }
         }
     }
-    pthread_rwlock_unlock(&hash->rwlock);
     return array;
 }
