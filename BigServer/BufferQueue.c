@@ -6,10 +6,11 @@
 #include <stdlib.h>
 #include "BufferQueue.h"
 
+
 struct BufferQueue_ {
     pthread_rwlock_t rwlock;
     unsigned short head, tail;
-    struct Buffer data[65536];
+    struct Message data[65536];
     bool status;
 };
 
@@ -22,11 +23,11 @@ BufferQueue BufferQueueNew() {
         free(queue);
         return NULL;
     }
+    for(int i=0;i<65536;i++){
+        queue->data[i].length = sizeof(struct sockaddr_in);
+    }
     queue->head = queue->tail = 0;
     queue->status = false;
-    for (int i = 0; i < 65536; i++) {
-        queue->data[i].message.length = sizeof(struct sockaddr_in);
-    }
     return queue;
 }
 
@@ -71,20 +72,20 @@ bool BufferQueueIsEmpty(BufferQueue queue) {
     return result;
 }
 
-struct Message *BufferQueueFront(BufferQueue queue) {
+struct Message* BufferQueueFront(BufferQueue queue) {
     if(pthread_rwlock_rdlock(&queue->rwlock) != 0){
         exit(-4);
     }
-    struct Message *result = &queue->data[queue->head].message;
+    void *result = &queue->data[queue->head];
     pthread_rwlock_unlock(&queue->rwlock);
     return result;
 }
 
-struct Message *BufferQueueEnd(BufferQueue queue) {
+struct Message* BufferQueueEnd(BufferQueue queue) {
     if(pthread_rwlock_rdlock(&queue->rwlock) != 0){
         exit(-4);
     }
-    struct Message *result = &queue->data[queue->tail].message;
+    void *result = &queue->data[queue->tail];
     pthread_rwlock_unlock(&queue->rwlock);
     return result;
 }

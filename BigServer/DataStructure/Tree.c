@@ -272,7 +272,7 @@ bool TreeInsert(Tree tree, void *key, void *value) {
     }
     unsigned long long temp = tree->size;
     tree->root = Insert(tree, tree->root, key, value);
-    bool result = temp == tree->size ? false : true;
+    bool result = temp != tree->size;
     pthread_rwlock_unlock(&tree->rwlock);
     return result;
 }

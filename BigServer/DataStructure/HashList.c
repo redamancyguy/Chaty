@@ -13,7 +13,6 @@ struct LinkNode_ {
     void *key;
     void *value;
     struct LinkNode_ *next;
-    char test[1024];
 };
 struct HashList_ {
     pthread_rwlock_t rwlock;
@@ -41,14 +40,13 @@ HashList HashListNew(const long long capacity) {
     if (hash == NULL) {
         return NULL;
     }
-    hash->lists = (struct LinkNode_ *) malloc(sizeof(struct LinkNode_) * capacity);
+    hash->lists = (struct LinkNode_ *) calloc(sizeof(struct LinkNode_) , capacity);
     if (hash->lists == NULL) {
         free(hash);
         return NULL;
     }
     hash->capacity = capacity;
     hash->size = 0;
-    memset(hash->lists, 0, sizeof(struct LinkNode_) * capacity);
     if (pthread_rwlock_init(&hash->rwlock, NULL) != 0) {
         free(hash->lists);
         free(hash);

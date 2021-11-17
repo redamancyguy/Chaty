@@ -1,0 +1,182 @@
+//
+// Created by sunwenli on 2021/11/16.
+//
+#include <malloc.h>
+#include <pthread.h>
+#include <time.h>
+#include <string.h>
+#include "Clients.h"
+
+struct Index {
+    void *array[0x100];
+    pthread_rwlock_t rwlock;
+};
+
+struct Index *IndexNew() {
+    struct Index *index = malloc(sizeof(struct Index));
+    if (index == NULL) {
+        return NULL;
+    }
+    memset(index->array, 0, sizeof(void *) * 0x100);
+    if (pthread_rwlock_init(&index->rwlock, NULL) != 0) {
+        free(index);
+        return NULL;
+    }
+    return index;
+}
+
+void *IndexSet(struct Index *index, unsigned int id, void *value) {
+
+    printf("set index %u\n",id);
+    if (pthread_rwlock_wrlock(&index->rwlock) != 0) {
+        return NULL;
+    }
+    index->array[id] = value;
+    pthread_rwlock_unlock(&index->rwlock);
+    return value;
+}
+
+void *IndexGet(struct Index *index, unsigned int id) {
+    printf("get index %u\n",id);
+    if (pthread_rwlock_rdlock(&index->rwlock) != 0) {
+        return NULL;
+    }
+    void *result = index->array[id];
+    pthread_rwlock_unlock(&index->rwlock);
+    return result;
+}
+
+void IndexDestroy(struct Index *index) {
+    pthread_rwlock_destroy(&index->rwlock);
+    free(index);
+}
+
+struct Client *ClientNew() {
+    Tree tree = TreeNew();
+    if (tree == NULL) {
+        return NULL;
+    }
+    struct Client *client = (struct Client *) malloc(sizeof(struct Client));
+    if (client == NULL) {
+        return NULL;
+    }
+    client->groups = tree;
+    client->time = time(NULL);
+    return client;
+}
+
+void ClientDestroy(struct Client *client) {
+    TreeDestroy(client->groups);
+    free(client);
+}
+
+Clients ClientsNew() {
+    return IndexNew();
+}
+
+void ClientsDestroy(Clients clients) {
+    for (int i0 = 0; i0 < 0x100; i0++) {
+        if (IndexGet(clients, i0) == NULL) { continue; }
+        struct Index *temp0 = IndexGet(clients, i0);
+        for (int i1 = 0; i1 < 0x100; i1++) {
+            if (IndexGet(temp0, i1) == NULL) { continue; }
+            struct Index *temp1 = IndexGet(temp0, i1);
+            for (int i2 = 0; i2 < 0x100; i2++) {
+                if (IndexGet(temp1, i2) == NULL) { continue; }
+                struct Index *temp2 = IndexGet(temp1, i2);
+                for (int i3 = 0; i3 < 0x100; i3++) {
+                    if (IndexGet(temp2, i3) == NULL) { continue; }
+                    ClientDestroy(IndexGet(temp2, i3));
+                }
+                IndexDestroy(temp2);
+            }
+            IndexDestroy(temp1);
+        }
+        IndexDestroy(temp0);
+    }
+    IndexDestroy(clients);
+}
+
+struct Client *ClientsInsert(Clients clients, unsigned id) {
+    unsigned char index[4];
+    memcpy(index, &id, sizeof(unsigned));
+    for(int k=0;k<4;k++){
+        printf("%u ",index[k]);
+    }
+    puts("");
+    if(ClientsGet(clients, index[3]) == NULL){
+        puts("1");
+        if(IndexSet(clients,index[3],IndexNew()) == NULL){
+            return NULL;
+        }
+        puts("11");
+        if(IndexSet(IndexGet(clients, index[3]),index[2],IndexNew()) == NULL){
+            return NULL;
+        }
+        puts("111");
+        if((IndexSet(IndexGet(IndexGet(clients, index[3]),index[2]),index[1],IndexNew())) == NULL){
+            return NULL;
+        }
+        puts("THERE");
+        return IndexSet(IndexGet(IndexGet(IndexGet(clients, index[3]),index[2]),index[1]),index[0],ClientNew());
+    }
+    puts("?");
+    if(IndexGet(IndexGet(clients, index[3]),index[2]) == NULL){
+        puts("2");
+        if(IndexSet(IndexGet(clients, index[3]),index[2],IndexNew()) == NULL){
+            return NULL;
+        }
+        puts("22");
+        if((IndexSet(IndexGet(IndexGet(clients, index[3]),index[2]),index[1],IndexNew())) == NULL){
+            return NULL;
+        }
+        puts("THERE2");
+        return IndexSet(IndexGet(IndexGet(IndexGet(clients, index[3]),index[2]),index[1]),index[0],ClientNew());
+    }
+    puts("??");
+    if(IndexGet(IndexGet(IndexGet(clients, index[3]),index[2]),index[1]) == NULL){
+        puts("3");
+        if(IndexSet(IndexGet(IndexGet(clients, index[3]),index[2]),index[1],IndexNew()) == NULL){
+            return NULL;
+        }
+        puts("THERE3");
+        return IndexSet(IndexGet(IndexGet(IndexGet(clients, index[3]),index[2]),index[1]),index[0],ClientNew());
+    }
+    puts("THERE4");
+    return IndexSet(IndexGet(IndexGet(IndexGet(clients, index[3]),index[2]),index[1]),index[0],ClientNew());
+}
+
+bool ClientsDelete(Clients clients, unsigned id) {
+    unsigned char index[4];
+    memcpy(index, &id, sizeof(unsigned));
+    for (int i = 0; i < 3; i++) {
+        void *temp = IndexGet(clients, index[3 - i]);
+        if (temp == NULL) {
+            return false;
+        }
+        clients = temp;
+    }
+    if (IndexGet(clients, index[0]) == NULL) {
+        return false;
+    }
+    ClientDestroy(IndexGet(clients, index[0]));
+    IndexSet(clients, index[0], NULL);
+    return true;
+}
+
+struct Client *ClientsGet(Clients clients, unsigned id) {
+    unsigned char index[4];
+    memcpy(index, &id, sizeof(unsigned));
+    for (int i = 0; i < 3; i++) {
+        void *temp = IndexGet(clients, index[0]);
+        if (temp == NULL) {
+            return NULL;
+        }
+        clients = temp;
+    }
+    return ClientsGet(clients, index[0]);
+}
+
+
+
+
