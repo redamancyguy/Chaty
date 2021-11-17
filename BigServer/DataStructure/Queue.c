@@ -17,16 +17,9 @@ struct Queue_ {
     struct Node_ *tail;
     long long size;
 };
-
 long long QueueSize(Queue queue){
-    if(pthread_rwlock_rdlock(&queue->rwlock) !=0){
-        exit(-4);
-    }
-    long long result = queue->size;
-    pthread_rwlock_unlock(&queue->rwlock);
-    return result;
+    return queue->size;
 }
-
 Queue QueueNew() {
     Queue queue = (Queue) malloc(sizeof(struct Queue_));
     if (queue == NULL) {
@@ -48,6 +41,18 @@ Queue QueueNew() {
     return queue;
 }
 
+int QueueWLock(Queue queue) {
+    return pthread_rwlock_wrlock(&queue->rwlock);
+}
+
+int QueueRLock(Queue queue) {
+    return pthread_rwlock_rdlock(&queue->rwlock);
+}
+
+int QueueUnLock(Queue queue) {
+    return pthread_rwlock_unlock(&queue->rwlock);
+}
+
 void QueueDestroy(Queue queue) {
     pthread_rwlock_destroy(&queue->rwlock);
     while (queue->head != queue->tail) {
@@ -60,27 +65,16 @@ void QueueDestroy(Queue queue) {
 }
 
 bool QueueIsEmpty(Queue queue) {
-    if(pthread_rwlock_rdlock(&queue->rwlock) !=0 ){
-        exit(-4);
-    }
     bool result = queue->head == queue->tail;
-    pthread_rwlock_unlock(&queue->rwlock);
     return result;
 }
 
 void *QueueFront(Queue queue) {
-    if(pthread_rwlock_rdlock(&queue->rwlock) != 0){
-        exit(-4);
-    }
     void *result = queue->head->next->data;
-    pthread_rwlock_unlock(&queue->rwlock);
     return result;
 }
 
 bool QueueDelete(Queue queue, void *data) {
-    if(pthread_rwlock_wrlock(&queue->rwlock) != 0){
-        exit(-4);
-    }
     struct Node_ *i = queue->head, *tail = queue->tail;
     for (; i->next != tail; i = i->next) {
         if (i->next->data == data) {
@@ -88,7 +82,6 @@ bool QueueDelete(Queue queue, void *data) {
             i->next = i->next->next;
             free(temp);
             --queue->size;
-            pthread_rwlock_unlock(&queue->rwlock);
             return true;
         }
     }
@@ -96,58 +89,43 @@ bool QueueDelete(Queue queue, void *data) {
         free(i->next);
         queue->tail = i;
         --queue->size;
-        pthread_rwlock_unlock(&queue->rwlock);
         return true;
     }
-    pthread_rwlock_unlock(&queue->rwlock);
     return false;
 }
 
 Array QueueToArray(Queue queue) {
-    if(pthread_rwlock_rdlock(&queue->rwlock) != 0){
-        exit(-4);
-    }
     Array array;
     array.data = (void **) malloc(sizeof(void *) * queue->size);
     if (array.data == NULL) {
         array.size = 0;
     } else {
         array.size = queue->size;
-        unsigned long long place=0;
-        struct Node_ *i,*tail;
-        for (i = queue->head->next,tail = queue->tail; i != tail; i = i->next) {
+        unsigned long long place = 0;
+        struct Node_ *i, *tail;
+        for (i = queue->head->next, tail = queue->tail; i != tail; i = i->next) {
             array.data[place++] = i->data;
         }
         array.data[place] = i->data;
     }
-    pthread_rwlock_unlock(&queue->rwlock);
     return array;
 }
 
 bool QueuePush(Queue queue, void *data) {
-    if(pthread_rwlock_wrlock(&queue->rwlock) != 0){
-        exit(-4);
-    }
     void *temp = malloc(sizeof(struct Node_));
     if (temp == NULL) {
-        pthread_rwlock_unlock(&queue->rwlock);
         return false;
     }
     queue->tail->next = (struct Node_ *) temp;
     ((struct Node_ *) temp)->data = data;
     queue->tail = (struct Node_ *) temp;
     ++queue->size;
-    pthread_rwlock_unlock(&queue->rwlock);
     return true;
 }
 
 void QueuePop(Queue queue) {
-    if(pthread_rwlock_wrlock(&queue->rwlock)!=0){
-        exit(-4);
-    }
     void *temp = queue->head;
     queue->head = queue->head->next;
-    --queue->size;
     free(temp);
-    pthread_rwlock_unlock(&queue->rwlock);
+    --queue->size;
 }

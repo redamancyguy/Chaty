@@ -31,7 +31,15 @@ Tree TreeNew() {
     }
     return tree;
 }
-
+int TreeWLock(Tree tree){
+    return pthread_rwlock_wrlock(&tree->rwlock);
+}
+int TreeRLock(Tree tree){
+    return pthread_rwlock_rdlock(&tree->rwlock);
+}
+int TreeUnLock(Tree tree){
+    return pthread_rwlock_unlock(&tree->rwlock);
+}
 static struct TreeNode_ *NewNode(void *key, void *value) {
     struct TreeNode_ *node = (struct TreeNode_ *) malloc(sizeof(struct TreeNode_));
     if (node == NULL) {
@@ -106,12 +114,7 @@ static struct TreeNode_ *RRRotate(struct TreeNode_ *node) {
 }
 
 unsigned long long TreeSize(Tree tree) {
-    if (pthread_rwlock_rdlock(&tree->rwlock) != 0) {
-        exit(-4);
-    }
-    unsigned long long result = tree->size;
-    pthread_rwlock_unlock(&tree->rwlock);
-    return result;
+    return  tree->size;
 }
 
 
@@ -203,14 +206,9 @@ struct TreeNode_ *Delete(Tree tree, struct TreeNode_ *node, void *key) {
 }
 
 bool TreeDelete(Tree tree, void *key) {
-    if(pthread_rwlock_wrlock(&tree->rwlock) != 0){
-        exit(-4);
-    }
     unsigned long long temp = tree->size;
     tree->root = Delete(tree, tree->root, key);
-    bool result = temp == tree->size ? false : true;
-    pthread_rwlock_unlock(&tree->rwlock);
-    return result;
+    return temp == tree->size ? false : true;
 }
 
 void *Get(struct TreeNode_ *node, void *key) {
@@ -227,25 +225,15 @@ void *Get(struct TreeNode_ *node, void *key) {
 }
 
 void *TreeMinimumKey(Tree tree) {
-    if(pthread_rwlock_rdlock(&tree->rwlock) != 0){
-        exit(-4);
-    }
     struct TreeNode_ *node = tree->root;
     while(node->left!=NULL){
         node = node->left;
     }
-    void *result = node->key;
-    pthread_rwlock_unlock(&tree->rwlock);
-    return result;
+    return node->key;
 }
 
 void *TreeGet(Tree tree, void *key) {
-    if(pthread_rwlock_rdlock(&tree->rwlock) != 0){
-        exit(-4);
-    }
-    void *result = Get(tree->root, key);
-    pthread_rwlock_unlock(&tree->rwlock);
-    return result;
+    return Get(tree->root, key);
 }
 
 static void Show(struct TreeNode_ *node, int num) {
@@ -259,22 +247,13 @@ static void Show(struct TreeNode_ *node, int num) {
 }
 
 void ShowTree(Tree tree) {
-    if(pthread_rwlock_rdlock(&tree->rwlock) != 0){
-        exit(-4);
-    }
     Show(tree->root, 0);
-    pthread_rwlock_unlock(&tree->rwlock);
 }
 
 bool TreeInsert(Tree tree, void *key, void *value) {
-    if(pthread_rwlock_wrlock(&tree->rwlock) !=0){
-        exit(-4);
-    }
     unsigned long long temp = tree->size;
     tree->root = Insert(tree, tree->root, key, value);
-    bool result = temp != tree->size;
-    pthread_rwlock_unlock(&tree->rwlock);
-    return result;
+    return temp == tree->size ? false : true;
 }
 
 void TreeDestroy(Tree tree) {
@@ -293,9 +272,6 @@ static void ToArray(void **data, unsigned long long *place, struct TreeNode_ *no
 }
 
 Array TreeToArray(Tree tree) {
-    if(pthread_rwlock_rdlock(&tree->rwlock) !=0){
-        exit(-4);
-    }
     Array array;
     array.data = (void **) malloc(sizeof(void *) * tree->size);
     if (array.data == NULL) {
@@ -305,7 +281,6 @@ Array TreeToArray(Tree tree) {
         ToArray(array.data, &place, tree->root);
         array.size = tree->size;
     }
-    pthread_rwlock_unlock(&tree->rwlock);
     return array;
 }
 
@@ -319,9 +294,6 @@ static void KeyToArray(void **data, unsigned long long *place, struct TreeNode_ 
 }
 
 Array TreeKeyToArray(Tree tree) {
-    if(pthread_rwlock_rdlock(&tree->rwlock) !=0){
-        exit(-4);
-    }
     Array array;
     array.data = (void **) malloc(sizeof(void *) * tree->size);
     if (array.data == NULL) {
@@ -331,6 +303,5 @@ Array TreeKeyToArray(Tree tree) {
         KeyToArray(array.data, &place, tree->root);
         array.size = tree->size;
     }
-    pthread_rwlock_unlock(&tree->rwlock);
     return array;
 }
