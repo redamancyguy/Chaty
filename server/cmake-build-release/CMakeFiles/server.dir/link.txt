@@ -1,1 +1,0 @@
-/usr/bin/cc -O3 -DNDEBUG   CMakeFiles/server.dir/main.c.o CMakeFiles/server.dir/user.c.o CMakeFiles/server.dir/client.c.o  -o server 

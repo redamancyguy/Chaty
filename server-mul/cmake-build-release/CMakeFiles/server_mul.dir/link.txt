@@ -1,1 +1,0 @@
-/usr/bin/cc -pthread -O3 -DNDEBUG   CMakeFiles/server_mul.dir/main.c.o CMakeFiles/server_mul.dir/user.c.o CMakeFiles/server_mul.dir/client.c.o CMakeFiles/server_mul.dir/messagequeue.c.o  -o server_mul 

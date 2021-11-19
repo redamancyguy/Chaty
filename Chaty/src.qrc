@@ -1,6 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>chaty.ico</file>
-        <file>usericon.jpg</file>
-    </qresource>
-</RCC>

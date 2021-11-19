@@ -1,1 +1,0 @@
-/usr/bin/cc -pthread -O3 -DNDEBUG   CMakeFiles/client.dir/main.c.o CMakeFiles/client.dir/include/Stack.c.o CMakeFiles/client.dir/include/TreeMap.c.o  -o client 
