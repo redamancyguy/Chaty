@@ -10,4 +10,4 @@ add_executable(BigServer main.c DataStructure/Queue.h DataStructure/Queue.c
         DataStructure/Stack.h DataStructure/Tree.c DataStructure/Tree.h DataStructure/Array.h
         BufferQueue.c BufferQueue.h DataStructure/HashList.c
         DataStructure/HashList.h ../utils/FileServer/FileServer.c ../utils/FileServer/FileServer.h
-        User.c User.h Clients.c Clients.h Communication.h FileData/MemoryToFile.h FileData/MemoryToFile.c Groups.c Groups.h)
+        User.c User.h Communication.h FileData/MemoryToFile.h FileData/MemoryToFile.c Client.cpp Client.h)

@@ -18,8 +18,6 @@
 
 #include "BufferQueue.h"
 #include "User.h"
-#include "Clients.h"
-#include "Groups.h"
 #include "Communication.h"
 
 enum errorCode {
@@ -36,8 +34,6 @@ enum errorCode {
 const short serverPort = 9999;
 const int threadNumber = 10;
 int serverFileDescriptor;
-Clients AllClient;
-Groups groups;
 
 _Noreturn void *Handle(void *pointer) {
     BufferQueue queue = *((BufferQueue *) pointer);
